@@ -30,7 +30,7 @@ To explore the SongEvo package, we will use a database of songs from Nuttall’s
 data("WCSP")
 ```
 
-Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see ?WCSP or Danner et al. (year)
+Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?WCSP` or Danner et al. (year)
 ```{r global parameters}
 str(glo.parms)
 ```
@@ -63,8 +63,8 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 ###Specify and call the SongEvo model
 `SongEvo()` includes several settings, which we specify before running the model. We specify running the model for three iterations, over 36 years (i.e. 1969--2005). Each timestep is one year in this model (i.e. individuals complete all components of the model in 1 year). We specify territory turnover rate here as an example of how to adjust parameter values.  We could adjust any other parameter value here also. The learning method specifies that individuals integrate songs heard from adults within the specified integration distance (intigrate.dist, in kilometers). In this example, we do not includ a lifespan, so we assign it NA. In this example, we do not model competition for mates, so specify it as FALSE. Last, specify all as TRUE in order to save data for every single simulated individual because we will use those data later for mapping. If we do not need data for each individual, we set all to FALSE because the all.inds data.frame becomes very large! 
 ```{r Specify SongEvo model}
-iteration <- 3
-years <- 5
+iteration <- 10
+years <- 36
 timestep <- 1
 terr.turnover <- 0.5
 learning.method <- "integrate"
@@ -410,7 +410,7 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 
 Specify and call SongEvo() with validation data
 ```{r Specify and call SongEvo() with validation data}
-iteration <- 3
+iteration <- 10
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
