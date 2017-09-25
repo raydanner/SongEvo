@@ -523,3 +523,25 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 #text and arrows
 text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
+
+##Hypothesis testing with h.test() This function allows hypothesis testing with SongEvo. To test if measured songs from two time points evolved through mechanisms described in the model (e.g. drift or selection), users initialize the model with historical data, parameterize the model based on their understanding of the mechanisms, and test if subsequently observed or predicted data match the simulated data. The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances. We tested the hypothesis that songs of Z. l. nuttalli in Bear Valley, CA evolved through cultural drift from 1969 to 2005.
+
+# Prepare initial song data for Bear Valley.
+
+starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+
+init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
+init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
+init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
+# Specify and call SongEvo() with test data
+
+SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timetep = timetep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+# Specify and call h.test()
+
+target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW
+h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=target.data)
+# The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances.
+
+# Eighty percent of the observed data fell within the central 95% of the simulated values, providing support for the hypothesis that cultural drift as described in this model is sufficient to describe the evolution of trill frequency bandwidth in this population.
+
