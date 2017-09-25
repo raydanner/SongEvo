@@ -143,6 +143,10 @@ plot(results.vars$trait.pop.mean,plot.type="multiple")
 plot(results.vars$trait.pop.mean,plot.type="single")
 plot(results.vars$trait.pop.mean,plot.type="single",col=1:5,lty=rep(2:3,each=5))
 
+
+## Similar to Figure S1
+# Note that model only generates 10 iterations, unlike the paper's 100
+# Oddity, note that population size is often > 40 despite the "n.territories" value
 plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
 axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
 for(p in 1:10){
@@ -157,6 +161,8 @@ lines(quant.means[1,], col="red", lty=2)
 lines(quant.means[2,], col="red", lty=2)
 library("Hmisc")
 
+## Similar to Figure 2
+# Note that model only generates 10 iterations, unlike the paper's 100
 plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36), ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
 iteration=dim(SongEvo1$summary.results)[1]
 for(p in 1:iteration){
@@ -188,6 +194,8 @@ text(x=5, y=2720, labels="Historical songs", pos=1)
 arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 
 #plot variance for each iteration per year
+## Similar to Figure S2
+# Again, only 10 iterations
 plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", ylim=c(min(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE)))
 axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
 for(p in 1:iteration){
@@ -201,6 +209,9 @@ quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.variance"], MARGIN
 lines(quant.means[1,], col="green", lty=2)
 lines(quant.means[2,], col="green", lty=2)
 
+
+
+## Similar to Figure 3
 library("reshape2")
 library("lattice")
 library("sp")
@@ -237,3 +248,17 @@ it1 <- subset(SongEvo1$all.inds, iteration==1)
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
 it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
 xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
+#Alternate call:
+it1$trait_group <- cut(it1$trait, breaks = 10,dig.lab=4)
+xyplot(y1~x1 | timestep,data=it1@data,# groups=trait_group, 
+       asp="iso", 
+       col=it1$Col, xlab="Longitude", ylab="Latitude")
+
+# With factoring:
+xyplot(y1~x1 | equal.count(timestep),data=it1@data,# groups=trait_group, 
+       asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
+it1$trait_group <- cut(it1$trait, breaks = 4,dig.lab=4)
+it1$ts_group<-cut(it1$timestep,breaks=4,dig.lab=2)
+xyplot(y1~x1 | ts_group*trait_group,data=it1@data,# groups=trait_group, 
+       asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
+
