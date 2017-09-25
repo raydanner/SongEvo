@@ -262,3 +262,36 @@ it1$ts_group<-cut(it1$timestep,breaks=4,dig.lab=2)
 xyplot(y1~x1 | ts_group*trait_group,data=it1@data,# groups=trait_group, 
        asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
 
+
+##Test model sensitivity with par.sens() This function allows testing the sensitivity of SongEvo to different parameter values.
+
+###Specify and call par.sens() Here we test the sensitivity of the Acquire a Territory submodel to variation in territory turnover rates, ranging from 0.8–1.2 times the published rate (40–60% of territories turned over). The call for the par.sens function has a format similar to SongEvo. The user specifies the parameter to test and the range of values for that parameter. The function currently allows examination of only one parameter at a time and requires at least two iterations.
+
+parm <- "terr.turnover"
+par.range = seq(from=0.4, to=0.6, by=0.05)
+sens.results <- NULL
+# Now we call the par.sens function with our specifications.
+years=36
+extra_parms <- list(init.inds = init.inds, 
+                    timestep = 1, 
+                    n.territories = nrow(init.inds), 
+                    learning.method = "integrate", 
+                    integrate.dist = 0.1, 
+                    lifespan = NA, 
+                    terr.turnover = 0.5, 
+                    mate.comp = FALSE, 
+                    prin = FALSE,
+                    all = TRUE)
+global_parms_key <- which(!names(glo.parms) %in% names(extra_parms))
+extra_parms[names(glo.parms[global_parms_key])]=glo.parms[global_parms_key]
+par.sens1 <- par.sens(parm = parm, par.range = par.range, 
+                      iteration = iteration, steps = years, mate.comp = FALSE, 
+                      fixed_parms=extra_parms[names(extra_parms)!=parm], all = TRUE)
+###Examine par.sens results Examine results objects, which include two arrays:
+
+# The first array, sens.results, contains the SongEvo model results for each parameter. It has the following dimensions:
+  
+dimnames(par.sens1$sens.results)
+# The second array, sens.results.diff contains the quantile range of trait values across iterations within a parameter value. It has the following dimensions:
+  
+dimnames(par.sens1$sens.results.diff)

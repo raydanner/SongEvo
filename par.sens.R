@@ -1,4 +1,4 @@
-par.sens <- function(parm, par.range, iteration, steps, mate.comp, all) {
+par.sens <- function(parm, par.range, iteration, steps, mate.comp, fixed_parms, all) {
 	par.rangel <- length(par.range)
 	sens.results <- array(NA, dim=c(iteration, steps, 5, par.rangel), dimnames = list(paste("iteration", seq(1:iteration)), 1:steps, c("sample.n", "trait.pop.mean", "trait.pop.variance", "lci", "uci"), paste("par.val", par.range)))
 	for (p in 1:par.rangel) {
@@ -39,7 +39,12 @@ par.sens <- function(parm, par.range, iteration, steps, mate.comp, all) {
 		n.territories=par.range[p]			
 			}
 		print(paste(parm, "= ", par.range[p]))			
-		z <- SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp, learning.method, integrate.dist, learning.error.d, learning.error.sd, mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all)
+		z <- with(fixed_parms[!names(fixed_parms) %in% c(parm,"iteration","steps","mate.comp","all")],
+		          SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp, 
+		                  learning.method, integrate.dist, learning.error.d, learning.error.sd, 
+		                  mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, 
+		                  male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, 
+		                  disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all))
 		#Add summary.results to sens.results array. 
 		sens.results[ , , , p] <- z$summary.results
 		}
