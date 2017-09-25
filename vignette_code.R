@@ -63,7 +63,7 @@ xyplot(x1~y1,data=inds.plot,group=type)
 SongEvo1 <- SongEvo(init.inds = init.inds, 
                     iteration = 10, 
                     steps = 36,  # years / timestep
-                    timetep = 1, # misspelled?
+                    timestep = 1, 
                     n.territories = nrow(init.inds), # perhaps replace with subset argument?
                     terr.turnover = 0.5, 
                     learning.method = "integrate", 
@@ -96,7 +96,7 @@ SongEvo1_alt=list(parms=glo.parms)
 parms_1alt <- list(init.inds = init.inds, 
                    iteration = 10,
                    steps = 36,  # years / timestep
-                   timetep = 1, # misspelled?
+                   timestep = 1, 
                    n.territories = nrow(init.inds), # perhaps replace with subset argument?
                    terr.turnover = 0.5, 
                    learning.method = "integrate", 

@@ -1,4 +1,4 @@
-SongEvo <- function(init.inds, iteration, steps, timetep, terr.turnover, mate.comp, learning.method, integrate.dist, learning.error.d, learning.error.sd, mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all) {
+SongEvo <- function(init.inds, iteration, steps, timestep, terr.turnover, mate.comp, learning.method, integrate.dist, learning.error.d, learning.error.sd, mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all) {
 
 ptm <- proc.time()
 
