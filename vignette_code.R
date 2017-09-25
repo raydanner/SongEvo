@@ -208,3 +208,31 @@ all.inds1 <- subset(SongEvo1$all.inds, iteration==1)
 w <- dcast(as.data.frame(all.inds1), id ~ timestep, value.var="trait", fill=0)
 all.inds1w <- merge(all.inds1, w, by="id")
 names(all.inds1w) <- c(names(all.inds1), paste("Ts", seq(1:years), sep=""))
+
+rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
+
+# Plot maps, including a separate panel for each timestep (each of 36 years). Our example shows that individuals move across the landscape and that regional dialects evolve and move. The x-axis is longitude, the y-axis is latitude, and the color ramp indicates trill bandwidth in Hz.
+spplot(all.inds1w[,-c(1:ncol(all.inds1))], as.table=TRUE, cuts=c(0, seq(from=1500, to=4500, by=10)), ylab="", col.regions=c("transparent", rbPal(1000)), #cuts specifies that the first level (e.g. <1500) is transparent.
+       colorkey=list(
+         right=list(
+           fun=draw.colorkey,
+           args=list( 
+             key=list(
+               at=seq(1500, 4500, 10),
+               col=rbPal(1000),
+               labels=list(
+                 at=c(1500, 2000, 2500, 3000, 3500, 4000, 4500),
+                 labels=c("1500", "2000", "2500", "3000", "3500", "4000", "4500")
+               )
+             )
+           )
+         )
+       )
+)
+# In addition, you can plot simpler multi-panel maps that do not take advantage of the spatial data class.
+
+#Lattice plot (not as a spatial frame)
+it1 <- subset(SongEvo1$all.inds, iteration==1)
+rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
+it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
+xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
