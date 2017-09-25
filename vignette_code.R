@@ -158,6 +158,7 @@ lines(quant.means[2,], col="red", lty=2)
 library("Hmisc")
 
 plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36), ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+iteration=dim(SongEvo1$summary.results)[1]
 for(p in 1:iteration){
   lines(SongEvo1$summary.results[p, , "trait.pop.mean"], col="light gray")
 }
@@ -207,7 +208,7 @@ library("sp")
 all.inds1 <- subset(SongEvo1$all.inds, iteration==1)
 w <- dcast(as.data.frame(all.inds1), id ~ timestep, value.var="trait", fill=0)
 all.inds1w <- merge(all.inds1, w, by="id")
-names(all.inds1w) <- c(names(all.inds1), paste("Ts", seq(1:years), sep=""))
+names(all.inds1w) <- c(names(all.inds1), paste("Ts", seq(1:36), sep=""))
 
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
 
