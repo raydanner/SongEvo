@@ -142,3 +142,69 @@ plot(results.vars$trait.pop.mean,plot.type="multiple")
 #Over plot versions
 plot(results.vars$trait.pop.mean,plot.type="single")
 plot(results.vars$trait.pop.mean,plot.type="single",col=1:5,lty=rep(2:3,each=5))
+
+plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
+axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
+for(p in 1:10){
+  lines(SongEvo1$summary.results[p, , "sample.n"], col="light gray")
+}
+n.mean <- apply(SongEvo1$summary.results[, , "sample.n"], 2, mean, na.rm=TRUE)
+lines(n.mean, col="red")
+
+#Plot 95% quantiles
+quant.means <- apply (SongEvo1$summary.results[, , "sample.n"], MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+lines(quant.means[1,], col="red", lty=2)
+lines(quant.means[2,], col="red", lty=2)
+library("Hmisc")
+
+plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36), ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+for(p in 1:iteration){
+  lines(SongEvo1$summary.results[p, , "trait.pop.mean"], col="light gray")
+}
+freq.mean <- apply(SongEvo1$summary.results[, , "trait.pop.mean"], 2, mean, na.rm=TRUE)
+lines(freq.mean, col="blue")
+axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
+
+#Plot 95% quantiles
+quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+lines(quant.means[1,], col="blue", lty=2)
+lines(quant.means[2,], col="blue", lty=2)
+
+#plot mean and CI for historic songs.  
+#plot original song values
+library("boot")
+sample.mean <- function(d, x) {
+  mean(d[x])
+}
+boot_hist <- boot(starting.trait, statistic=sample.mean, R=100)#, strata=mn.res$iteration)	
+ci.hist <- boot.ci(boot_hist, conf=0.95, type="basic")
+low <- ci.hist$basic[4]
+high <- ci.hist$basic[5]
+points(0, mean(starting.trait), pch=20, cex=0.6, col="black")
+errbar(x=0, y=mean(starting.trait), high, low, add=TRUE)
+#text and arrows
+text(x=5, y=2720, labels="Historical songs", pos=1)
+arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
+
+#plot variance for each iteration per year
+plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", ylim=c(min(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE)))
+axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
+for(p in 1:iteration){
+  lines(SongEvo1$summary.results[p, , "trait.pop.variance"], col="light gray")
+}
+n.mean <- apply(SongEvo1$summary.results[, , "trait.pop.variance"], 2, mean, na.rm=TRUE)
+lines(n.mean, col="green")
+
+#Plot 95% quantiles
+quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.variance"], MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+lines(quant.means[1,], col="green", lty=2)
+lines(quant.means[2,], col="green", lty=2)
+
+library("reshape2")
+library("lattice")
+library("sp")
+
+all.inds1 <- subset(SongEvo1$all.inds, iteration==1)
+w <- dcast(as.data.frame(all.inds1), id ~ timestep, value.var="trait", fill=0)
+all.inds1w <- merge(all.inds1, w, by="id")
+names(all.inds1w) <- c(names(all.inds1), paste("Ts", seq(1:years), sep=""))
