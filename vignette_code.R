@@ -85,6 +85,11 @@ SongEvo1 <- SongEvo(init.inds = init.inds,
                     prin = FALSE, 
                     all = TRUE)
 str(SongEvo1)
+#Save result for repeatable testing
+
+save(SongEvo1, init.inds, 
+     file=(most_recent_SongEvo1<-paste0("SongEvo1_std_",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
+
 
 # Alternative is to load parameters into list and attach to result:
 SongEvo1_alt=list(parms=glo.parms)
@@ -103,3 +108,7 @@ parms_1alt <- list(init.inds = init.inds,
 SongEvo1_alt$parms[names(parms_1alt)]=parms_1alt
 SongEvo1_alt$res=do.call(SongEvo,SongEvo1_alt$parms)
 str(SongEvo1_alt)
+
+#Save result for repeatable testing
+save(SongEvo1_alt,
+     file=(most_recent_SongEvo1_alt<-paste0("SongEvo1_alt_",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
