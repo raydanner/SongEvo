@@ -295,3 +295,29 @@ dimnames(par.sens1$sens.results)
 # The second array, sens.results.diff contains the quantile range of trait values across iterations within a parameter value. It has the following dimensions:
   
 dimnames(par.sens1$sens.results.diff)
+#plot of range in trait quantiles by year by parameter value
+# Similar to Figure S3
+plot(1:years, par.sens1$sens.results.diff[1,], ylim=c(min(par.sens1$sens.results.diff, na.rm=TRUE), max(par.sens1$sens.results.diff, na.rm=TRUE)), type="l", ylab="Quantile range (Hz)", xlab="Year", col="transparent", xaxt="n")
+axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))
+
+#Make a continuous color ramp from gray to black
+grbkPal <- colorRampPalette(c('gray','black'))
+
+#Plot a line for each parameter value
+for(i in 1:length(par.range)){
+  lines(1:years, par.sens1$sens.results.diff[i,], type="l", col=grbkPal(length(par.range))[i])
+}
+
+#Plot values from published parameter values
+lines(1:years, par.sens1$sens.results.diff[2,], type="l", col="black", lwd=4)
+
+#Calculate and plot mean and quantiles
+quant.mean <- apply(par.sens1$sens.results.diff, 2, mean, na.rm=TRUE)
+lines(quant.mean, col="orange")
+
+#Plot 95% quantiles (which are similar to credible intervals)
+#95% quantiles of population means (narrower)
+quant.means <- apply (par.sens1$sens.results.diff, MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+lines(quant.means[1,], col="orange", lty=2)
+lines(quant.means[2,], col="orange", lty=2)
+
