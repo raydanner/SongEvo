@@ -321,3 +321,16 @@ quant.means <- apply (par.sens1$sens.results.diff, MARGIN=2, quantile, probs=c(0
 lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
 
+##Optimize parameter values with par.opt() This function follows par.sens to help users optimize values for imperfectly known parameters for SongEvo. The goals are to maximize accuracy and precision of model prediction. Accuracy is quantified by three different approaches: i) the mean of absolute residuals of the predicted population mean values in relation to target data (e.g. observed or hypothetical values (smaller absolute residuals indicate a more accurate model)), ii) the difference between the bootstrapped mean of predicted population means and the mean of the target data, and iii) the proportion of simulated population trait means that fall within (i.e. are "contained by") the confidence intervals of the target data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of target data (smaller residuals indicate a more precise model).
+
+###Prepare current song values
+
+target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
+###Specify and call par.opt() Users specify the timestep (“ts”) at which to compare simulated trait values to target trait data (“target.data”) and save the results in an object (called par.opt1 here).
+
+ts <- years
+par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts, target.data=target.data, par.range=par.range)
+# Examine results objects (residuals and target match).
+
+par.opt1$Residuals
+par.opt1$Target.match
