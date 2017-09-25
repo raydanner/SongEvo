@@ -60,12 +60,12 @@ hatch <- function(inds){
 				new.bird2$y <- new.bird2$y0 <- inds$y1[i]
 				newinds <- rbind(newinds, new.bird2)
 				}	
-		inds$male.fledglings[i] <- 0 #This will be repopulated 			later in life (in Compete for mates, and potentially 			Reproduce).  
+		inds$male.fledglings[i] <- 0 #This will be repopulated later in life (in Compete for mates, and potentially 			Reproduce).  
 			}
 		}
 	library("sp")
 	coordinates(newinds) = ~x+y 
-	proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 		+datum=WGS84") 
+	proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
 	inds <- rbind(inds, newinds)
 	}
 
