@@ -112,3 +112,33 @@ str(SongEvo1_alt)
 #Save result for repeatable testing
 save(SongEvo1_alt,
      file=(most_recent_SongEvo1_alt<-paste0("SongEvo1_alt_",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
+
+# Compare calculation time from the current runs:
+rbind(SongEvo1$time,SongEvo1_alt$res$time)
+
+# Look at currently alive individuals:
+head(SongEvo1$inds, 5)
+head(SongEvo1_alt$res$inds, 5)
+
+# Breakdown time series of population summaries?
+results.iterations =list()
+for(i_run in 1:10){
+  ts(data=as.data.frame(SongEvo1$summary.results[i_run,,]),
+     start = 1970, end=2005,frequency = 1 
+     )->results.iterations[[i_run]]
+}
+# Look at time series of population trait value, with ci, for iteration 1
+plot(results.iterations[[1]][,c(2,4,5)],plot.type="single")
+results.vars=list()
+for(i_var in c("sample.n","trait.pop.mean","trait.pop.variance","lci","uci")){
+  
+  ts(data=as.data.frame(t(SongEvo1$summary.results[,,i_var])),
+     start = 1970, end=2005,frequency = 1 
+  )->results.vars[[i_var]]
+}
+
+# Look at time series of population trait value, for all iterations
+plot(results.vars$trait.pop.mean,plot.type="multiple")
+#Over plot versions
+plot(results.vars$trait.pop.mean,plot.type="single")
+plot(results.vars$trait.pop.mean,plot.type="single",col=1:5,lty=rep(2:3,each=5))
