@@ -24,6 +24,51 @@ local({
   
 }) -> trill.prbo.1969
 
+
+# Make starting population for Schooner in 1969
+local({
+  data("WCSP")
+  starting.trait.obs <- subset(song.data, Population %in% "Schooner" & Year %in% 1969)$Trill.FBW
+  
+  # Generate additional individuals to reach number of territories for this vignette (40)
+  starting.trait.gen <- rnorm(reg.count-length(starting.trait.obs), 
+                              mean=mean(starting.trait.obs), sd=sd(starting.trait.obs))
+  starting.trait <- c(starting.trait.obs, starting.trait.gen)
+  
+  # Build data frame of territory id, age, and song trait value (in this case trill bandwidth)
+  init.inds <- data.frame(id = 1:reg.count, age = 2, trait = starting.trait,
+                          row.names=paste0("A",formatC(1:reg.count, width=2, flag = "0")))
+  
+  # Generate lat long coordinates for center? of each territory
+  init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
+  init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
+  
+}) -> trill.sb.1969
+
+
+
+
+
+# Make starting population for Bear Valley in 1969
+local({
+  data("WCSP")
+  starting.trait.obs <- subset(song.data, Population %in% "Bear Valley" & Year %in% 1969)$Trill.FBW
+  
+  # Generate additional individuals to reach number of territories for this vignette (40)
+  starting.trait.gen <- rnorm(reg.count-length(starting.trait.obs), 
+                              mean=mean(starting.trait.obs), sd=sd(starting.trait.obs))
+  starting.trait <- c(starting.trait.obs, starting.trait.gen)
+  
+  # Build data frame of territory id, age, and song trait value (in this case trill bandwidth)
+  init.inds <- data.frame(id = 1:reg.count, age = 2, trait = starting.trait,
+                          row.names=paste0("A",formatC(1:reg.count, width=2, flag = "0")))
+  
+  # Generate lat long coordinates for center? of each territory
+  init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
+  init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
+  
+}) -> trill.bear.1969
+
 # n.territories = 40, 
 # lifespan = 2.083333, 
      
@@ -52,10 +97,23 @@ trill.prbo.test=list(parms=default.parms)
 trill.prbo.test$parms$init.inds = trill.prbo.1969 
 trill.prbo.test$parms$steps = 2005-1969
 
-# SongEvo args for prbo 1969
-trill.prbo.test=list(parms=default.parms)
-trill.prbo.test$parms$init.inds = trill.prbo.1969 
-trill.prbo.test$parms$steps = 2005-1969
+# SongEvo args for Schooner Bay 1969
+trill.sb.test=list(parms=default.parms)
+trill.sb.test$parms$init.inds = trill.sb.1969 
+trill.sb.test$parms$steps = 2005-1969
 
+# SongEvo args for Bear Valley 1969
+trill.bear.test=list(parms=default.parms)
+trill.bear.test$parms$init.inds = trill.bear.1969 
+trill.bear.test$parms$steps = 2005-1969
 
+# Execution tests
 trill.prbo.test$res=do.call(SongEvo,trill.prbo.test$parms)
+trill.sb.test$res=  do.call(SongEvo,trill.sb.test$parms)
+trill.bear.test$res=do.call(SongEvo,trill.bear.test$parms)
+
+str(trill.prbo.test)
+str(trill.sb.test)
+str(trill.bear.test)
+
+
