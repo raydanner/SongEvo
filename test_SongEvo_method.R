@@ -19,11 +19,10 @@ local({
                           row.names=paste0("A",formatC(1:reg.count, width=2, flag = "0")))
   
   # Generate lat long coordinates for center? of each territory
-  init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
-  init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
-  
+  init.inds$x1 <-  round(runif(reg.count, min=-122.481858, max=-122.447270), digits=8)
+  init.inds$y1 <-  round(runif(reg.count, min=37.787768, max=37.805645), digits=8)
+  init.inds
 }) -> trill.prbo.1969
-
 
 # Make starting population for Schooner in 1969
 local({
@@ -40,14 +39,10 @@ local({
                           row.names=paste0("A",formatC(1:reg.count, width=2, flag = "0")))
   
   # Generate lat long coordinates for center? of each territory
-  init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
-  init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
-  
+  init.inds$x1 <-  round(runif(reg.count, min=-122.481858, max=-122.447270), digits=8)
+  init.inds$y1 <-  round(runif(reg.count, min=37.787768, max=37.805645), digits=8)
+  init.inds
 }) -> trill.sb.1969
-
-
-
-
 
 # Make starting population for Bear Valley in 1969
 local({
@@ -64,9 +59,9 @@ local({
                           row.names=paste0("A",formatC(1:reg.count, width=2, flag = "0")))
   
   # Generate lat long coordinates for center? of each territory
-  init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
-  init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
-  
+  init.inds$x1 <-  round(runif(reg.count, min=-122.481858, max=-122.447270), digits=8)
+  init.inds$y1 <-  round(runif(reg.count, min=37.787768, max=37.805645), digits=8)
+  init.inds
 }) -> trill.bear.1969
 
 # n.territories = 40, 
@@ -88,9 +83,10 @@ default.parms <- list(init.inds = NULL, iteration = 10, steps = NULL,  # years /
                       phys.lim.min = 1559, phys.lim.max = 4364, 
                       male.fledge.n.mean = 1.35, male.fledge.n.sd = 0.5,
                       male.fledge.n = fledge_counts, disp.age = 2, 
-                      isp.distance.mean = 110, disp.distance.sd = 100,
+                      disp.distance.mean = 110, disp.distance.sd = 100,
                       mate.comp = FALSE, prin = FALSE, all = TRUE)
 
+str(default.parms)
 
 # SongEvo args for prbo 1969
 trill.prbo.test=list(parms=default.parms)
@@ -106,6 +102,10 @@ trill.sb.test$parms$steps = 2005-1969
 trill.bear.test=list(parms=default.parms)
 trill.bear.test$parms$init.inds = trill.bear.1969 
 trill.bear.test$parms$steps = 2005-1969
+
+str(trill.prbo.test)
+str(trill.sb.test)
+str(trill.bear.test)
 
 # Execution tests
 trill.prbo.test$res=do.call(SongEvo,trill.prbo.test$parms)
