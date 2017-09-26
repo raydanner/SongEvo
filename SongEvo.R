@@ -84,35 +84,32 @@ hatch <- function(inds){
 	rbind(inds, newinds)
 	}
 
-learn <- function(inds){
-	ninds <- length(inds$age)
-
-	#1. Young learn from their fathers:
-	if (learning.method=="father") {
-	for (i in 1: ninds) {
-		if (inds$age[i]==1) {
-		tutor <- inds$father[i]
-		inds$trait[i] <- inds[inds$id==tutor, ]$trait + rnorm(1, mean=learning.error.d, sd=learning.error.sd)  
-		}
-	}
-	}
-
-	#2. Young learn by integrating songs from the neighborhood within a specified distance:
-	if (learning.method=="integrate") {
-	for (i in 1: ninds) {
-		if (inds$age[i]==1) {
-			singing.inds <- subset(inds, age>1)
-			tutors <- which(spDistsN1(pts=singing.inds, pt=inds[i,], longlat=TRUE) <= integrate.dist) #distance in km
-			inds$trait[i] <- mean(inds$trait[tutors]) + rnorm(1, mean=learning.error.d, sd=learning.error.sd)  			
-		}
-	}
-	}
-
-	#restrict learned song values such that they cannot exceed range of physical possibility: 
-	inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
-	inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
-	inds <- inds #Not sure why this is needed.  But, if it or print(inds) is not included, inds=NULL.
-}
+if (learning.method=="father") {
+  #1. Young learn from their fathers:
+  learn <- function(inds){
+    
+    child=which(inds$age[i]==1)
+    inds$trait[child]=sapply(child, function(x) inds[inds$id==inds$father[x],"trait" ] ) + 
+      rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
+    #restrict learned song values such that they cannot exceed range of physical possibility: 
+    inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
+    inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
+    return(inds)}
+} else if (learning.method=="integrate") {
+  #2. Young learn by integrating songs from the neighborhood within a specified distance:
+    learn <- function(inds){
+      
+      child=which(inds$age[i]==1)
+      singing.inds <- subset(inds, age>1)
+      inds$trait[child]=sapply(child, function(x) {
+        key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
+        mean(inds[key,"trait" ]) }) + 
+        rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
+      #restrict learned song values such that they cannot exceed range of physical possibility: 
+      inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
+      inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
+      return(inds)
+    } }
 
 die <- function(inds) {
 	j <- subset(inds, age == 1)
