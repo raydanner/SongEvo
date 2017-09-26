@@ -110,6 +110,7 @@ for(r_count in 1:10 ){
   trill.bear.test$res=do.call(SongEvo,trill.bear.test$parms)
   ptm_laps <- do.call(rbind,structure(list(ptm_laps,proc.time()),
                                       .Names=c(NA,paste0("bear",formatC(r_count,width=3,flag="0")) )))
+  print(diff(tail(ptm_laps,4)))
 }
 
 ptm_laps <- do.call(rbind,structure(list(ptm_laps,proc.time()),
@@ -119,4 +120,7 @@ print(ptm_laps)
 write.csv(ptm_laps,
           file=(most_recent_benchmark<-
                   paste0("profile_SongEvo_3x10x10_",
+                         strsplit(x = Sys.info()[["nodename"]],split = ".",fixed = TRUE)[[1]][1],
+                         "_",
                          format(Sys.time(),format="%Y%m%d%H%M"),".csv")))
+print(diff(ptm_laps))
