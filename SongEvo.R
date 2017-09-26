@@ -1,4 +1,9 @@
 
+library("boot")
+sample.mean <- function(d, x) {
+  mean(d[x])
+}
+
 library("sp")
 #add_coordinates <- 
 SongEvo <- function(init.inds, 
@@ -88,8 +93,8 @@ if (learning.method=="father") {
   #1. Young learn from their fathers:
   learn <- function(inds){
     
-    child=which(inds$age[i]==1)
-    inds$trait[child]=sapply(child, function(x) inds[inds$id==inds$father[x],"trait" ] ) + 
+    child=which(inds$age==1)
+    inds$trait[child]=sapply(child, function(x) inds[inds$id==inds$father[x], ]$trait ) + 
       rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
     #restrict learned song values such that they cannot exceed range of physical possibility: 
     inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
@@ -99,11 +104,11 @@ if (learning.method=="father") {
   #2. Young learn by integrating songs from the neighborhood within a specified distance:
     learn <- function(inds){
       
-      child=which(inds$age[i]==1)
+      child=which(inds$age==1)
       singing.inds <- subset(inds, age>1)
       inds$trait[child]=sapply(child, function(x) {
         key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
-        mean(inds[key,"trait" ]) }) + 
+        mean(singing.inds[key, ]$trait) }) + 
         rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
       #restrict learned song values such that they cannot exceed range of physical possibility: 
       inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
@@ -262,11 +267,6 @@ inds <- compete.for.mates(inds)
 summary.results[b, , "sample.n"][k] <- length(inds$age)
 summary.results[b, , "trait.pop.mean"][k] <- mean(subset(inds, age==2)$trait)
 summary.results[b, , "trait.pop.variance"][k] <- var(subset(inds, age==2)$trait)
-
-library("boot")
-sample.mean <- function(d, x) {
-	mean(d[x])
-	}
 
 boot_obj <- boot(inds$trait, statistic=sample.mean, R=100)#, strata=mn.res$iteration)	
 ci.res <- boot.ci(boot_obj, conf=0.95, type="basic")
