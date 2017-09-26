@@ -239,3 +239,95 @@ die_vector_mortal <- function(inds) {
 }
 
 
+compete.for.territories_old <- function(inds){
+  ninds <- length(inds$age)
+  #Allows a flexible population size, but caps breeding territories at a specific number. 
+  without <- which(inds$territory==0)
+  with <- which(inds$territory==1)
+  nwithout <- length(without)
+  nwith <- length(with)
+  nopen <- length(n.territories-nwith)
+  
+  #Bring available territories up to number based on specified turnover rate.  Some have already opened because of death in the Die submodel.
+  if (nwith > n.territories-terr.turnover*n.territories) {		
+    ran <- sample(with, size=round(nwith-(n.territories-terr.turnover*n.territories)), replace=FALSE) 
+    inds[c(ran), "territory"] <- 0		
+  } else
+    
+    with <- which(inds$territory==1)
+  nwith <- length(with)
+  
+  #Give open territories to birds that previously lacked territories. There are two scenarios:
+  #First scenario: There are more open territories than specified by the turnover rate because of mortality in the die submodel:
+  if (nwith < n.territories-terr.turnover*n.territories) {		
+    if (nwithout > 40-nwith) { #open spaces	
+      ran2 <- sample(without, size=n.territories-nwith, replace=FALSE)
+      inds[c(ran2), "territory"] <- 1
+    } 			
+    else if (nwithout <= n.territories-nwith) { #open spaces	
+      ran3 <- without #all get territories!			
+      inds[c(ran3), "territory"] <- 1
+    } 
+    
+  }
+  
+  #Second scenario: The exact turnover is available:
+  if (nwith == n.territories-terr.turnover*n.territories) {		
+    if (nwithout > n.territories-nwith) { 
+      ran4 <- sample(without, size=n.territories-nwith, replace=FALSE)
+      inds[c(ran4), "territory"] <- 1
+    } 			
+    else if (nwithout <= n.territories-nwith) { 	
+      ran5 <- without #all get territories!			
+      inds[c(ran5), "territory"] <- 1
+    } 
+  }
+  inds <- inds
+}
+
+
+compete.for.territories_new <- function(inds){
+  ninds <- length(inds$age)
+  #Allows a flexible population size, but caps breeding territories at a specific number. 
+  without <- which(inds$territory==0)
+  with <- which(inds$territory==1)
+  nwithout <- length(without)
+  nwith <- length(with)
+  nopen <- n.territories-nwith
+  
+  #Bring available territories up to number based on specified turnover rate.  Some have already opened because of death in the Die submodel.
+  if (terr.turnover*n.territories > nopen) {		
+    ran <- sample(with, size=round(terr.turnover*n.territories - nopen), replace=FALSE) 
+    inds[c(ran), "territory"] <- 0		
+  } 
+  
+  with <- which(inds$territory==1)
+  nwith <- length(with)
+  nopen <- n.territories-nwith
+  
+  #Give open territories to birds that previously lacked territories. There are two scenarios:
+  #First scenario: There are more open territories than specified by the turnover rate because of mortality in the die submodel:
+  # if (nwith < n.territories-terr.turnover*n.territories) {		
+  if (nwithout > nopen) { #open spaces	
+    inds[sample(without, size=nopen, replace=FALSE), "territory"] <- 1
+  } else { #open spaces	
+    #ran3 <- without #all get territories!			
+    inds[without, "territory"] <- 1
+  } 
+  
+  # }
+  
+  #  #Second scenario: The exact turnover is available:
+  # 	if (nwith == n.territories-terr.turnover*n.territories) {		
+  # 		if (nwithout > n.territories-nwith) { 
+  # 		ran4 <- sample(without, size=n.territories-nwith, replace=FALSE)
+  # 		inds[c(ran4), "territory"] <- 1
+  # 		} 			
+  # 		else if (nwithout <= n.territories-nwith) { 	
+  # 		ran5 <- without #all get territories!			
+  # 		inds[c(ran5), "territory"] <- 1
+  # 		} 
+  # 	}
+  inds 
+}
+
