@@ -116,22 +116,22 @@ if (learning.method=="father") {
       return(inds)
     } }
 
-die <- function(inds) {
-	j <- subset(inds, age == 1)
-	j2 <- subset(j, runif(j$age) > mortality.j)
-	a <- subset(inds, age > 1)
-	if (!is.na(lifespan)) {
-	a2 <- subset(a, runif(a$age) > mortality.a & a$age <= lifespan)
-		} 
-	if (is.na(lifespan)) {
-	a2 <- subset(a, runif(a$age) > mortality.a)
-	}
-	if ((NROW(a2) > 0) | (NROW(j2) > 0)) { #if/else statement to 	control for special case when no adults and no juveniles survive.
-	inds <- rbind(a2, j2)
-	} else 
-	(inds <- NULL)
+if (is.na(lifespan)) {
+  die <- function(inds) {
+    ninds<-nrow(inds)
+    subset(inds,  runif(ninds) > ifelse(age > 1,
+                                        rep(mortality.a,ninds),
+                                        rep(mortality.j,ninds)))
+  }
+} else {
+  die <- function(inds) {
+    ninds<-nrow(inds)
+    subset(inds,  age <= lifespan & 
+             runif(ninds) > ifelse(age > 1,
+                                   rep(mortality.a,ninds),
+                                   rep(mortality.j,ninds)))
+  }
 }
-
 grow <- function(inds){
 	inds$age <- inds$age + timestep
 inds <- inds

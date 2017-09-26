@@ -203,3 +203,39 @@ learn_slow <- function(inds){
   inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
   inds <- inds #Not sure why this is needed.  But, if it or print(inds) is not included, inds=NULL.
 }
+
+
+
+die_slow <- function(inds) {
+  j <- subset(inds, age == 1)
+  j2 <- subset(j, runif(j$age) > mortality.j)
+  a <- subset(inds, age > 1)
+  if (!is.na(lifespan)) {
+    a2 <- subset(a, runif(a$age) > mortality.a & a$age <= lifespan)
+  } 
+  if (is.na(lifespan)) {
+    a2 <- subset(a, runif(a$age) > mortality.a)
+  }
+  if ((NROW(a2) > 0) | (NROW(j2) > 0)) { 
+    #if/else statement to 	control for special case when no adults and no juveniles survive.
+    inds <- rbind(a2, j2)
+  } else 
+    (inds <- NULL)
+}
+
+die_vector_immortal <- function(inds) {
+  ninds<-nrow(inds)
+  subset(inds,  runif(ninds) > ifelse(age > 1,
+                                      rep(mortality.a,ninds),
+                                      rep(mortality.j,ninds)))
+}
+
+die_vector_mortal <- function(inds) {
+  ninds<-nrow(inds)
+  subset(inds,  age <= lifespan & 
+           runif(ninds) > ifelse(age > 1,
+                                 rep(mortality.a,ninds),
+                                 rep(mortality.j,ninds)))
+}
+
+
