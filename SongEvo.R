@@ -56,7 +56,14 @@ all.inds <- inds0 <- init.inds
 #Add timestep and iteration
 all.inds$timestep <- 0
 all.inds$iteration <- 0
-all.inds <- all.inds[which(is.na(all.inds$trait)),] #This removes all data from all.inds.  
+all.inds0 <- all.inds[which(is.na(all.inds$trait)),] #This removes all data from all.inds.  
+all.inds<-NULL
+step_list=list()
+length(step_list)<-steps
+names(step_list)<-paste0("T",1:steps)
+inds.all_list<-lapply(1:iteration,function(x) step_list)
+names(inds.all_list)<-paste0("I",1:iteration)
+
 maxid <- 0
 
 #Template for one individual
@@ -242,8 +249,8 @@ if (prin==TRUE){
 timestep.inds <- inds
 timestep.inds$timestep <- k
 timestep.inds$iteration <- b
-all.inds <- rbind(all.inds, timestep.inds)
-	
+# all.inds <- rbind(all.inds, timestep.inds)
+	inds.all_list[[b]][[k]]<-timestep.inds
 inds <- hatch(inds)
 
 maxid <- max(inds$id)
@@ -276,6 +283,7 @@ summary.results[b, , "uci"][k] <- ci.res$basic[5]
 	}
 	} 
 if (all==TRUE){
+  all.inds=rbind(init=all.inds0,  do.call(rbind,do.call(c,inds.all_list)))
 z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "time"=proc.time()-ptm)}
 if (all!=TRUE){
 z <- list("summary.results"=summary.results, "inds"=inds, "time"=proc.time()-ptm)}
