@@ -1,13 +1,38 @@
-SongEvo <- function(init.inds, iteration, steps, timestep, terr.turnover, mate.comp, learning.method, integrate.dist, learning.error.d, learning.error.sd, mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all) {
+
+library("sp")
+#add_coordinates <- 
+SongEvo <- function(init.inds, 
+                    iteration, 
+                    steps,
+                    timestep,
+                    terr.turnover,
+                    mate.comp,
+                    learning.method,
+                    integrate.dist,
+                    learning.error.d,
+                    learning.error.sd,
+                    mortality.a,
+                    mortality.j,
+                    lifespan,
+                    phys.lim.min,
+                    phys.lim.max,
+                    male.fledge.n.mean,
+                    male.fledge.n.sd,
+                    male.fledge.n,
+                    disp.age,
+                    disp.distance.mean,
+                    disp.distance.sd,
+                    n.territories,
+                    prin,
+                    all){
 
 ptm <- proc.time()
 
-#===============================================
-# (1) Create data structures
-#===============================================
-#steps <- 5
-
-summary.results <- array(NA, dim=c(iteration, steps, 5), dimnames = list(paste("iteration", seq(1:iteration)), 1:steps, c("sample.n", "trait.pop.mean", "trait.pop.variance", "lci", "uci"))) 
+summary.results <- array(NA, 
+                         dim=c(iteration, steps, 5), 
+                         dimnames = list(iteration=paste("iteration", seq(1:iteration)), 
+                                         step=1:steps, 
+                                         feature=c("sample.n", "trait.pop.mean", "trait.pop.variance", "lci", "uci"))) 
 trait.results <- NULL
 
 #Further prepare initial individuals 
@@ -18,7 +43,6 @@ init.inds$x0 <- 0
 init.inds$y0 <- 0
 init.inds$x <- init.inds$x1
 init.inds$y <- init.inds$y1
-library("sp")
 coordinates(init.inds) = ~x+y 
 proj4string(init.inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
 
@@ -43,30 +67,21 @@ y0 = 0, #starting Latitude
 x1 = 0, #ending Longitude
 y1 = 0) #ending Latitude
 
-#===============================================
-# (2) life methods of the individuals
-#===============================================
-
 hatch <- function(inds){
-	ninds <- length(inds$age)
-	newinds <- NULL
-	for (i in 1: ninds) {
-		if (inds$male.fledglings[i] > 0){
-			for (j in 1:inds$male.fledglings[i]) {
-				new.bird2 <- new.bird
-				new.bird2$id <- maxid + NROW(newinds) + 1
-				new.bird2$father <- inds$id[i]
-				new.bird2$x <- new.bird2$x0 <- inds$x1[i] 
-				new.bird2$y <- new.bird2$y0 <- inds$y1[i]
-				newinds <- rbind(newinds, new.bird2)
-				}	
-		inds$male.fledglings[i] <- 0 #This will be repopulated later in life (in Compete for mates, and potentially 			Reproduce).  
-			}
-		}
-	library("sp")
+	ninds <- nrow(inds)
+	n.hatch<- sum(inds$male.fledglings)
+	if(n.hatch==0) return(inds)
+	newinds <- new.bird[rep(1,n.hatch),]
+	newinds$id <- maxid +(1:n.hatch)
+	row.names(newinds)<-as.character(newinds$id)
+	map.key<-do.call(c,mapply(rep,1:ninds,inds$male.fledglings, SIMPLIFY = FALSE))
+	newinds$father <- inds$id[map.key]
+	newinds$x <- newinds$x0 <- inds$x1[map.key] 
+	newinds$y <- newinds$y0 <- inds$y1[map.key]
 	coordinates(newinds) = ~x+y 
 	proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-	inds <- rbind(inds, newinds)
+	inds$male.fledglings <- 0
+	rbind(inds, newinds)
 	}
 
 learn <- function(inds){
