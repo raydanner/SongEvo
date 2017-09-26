@@ -116,4 +116,7 @@ str(trill.prbo.test)
 str(trill.sb.test)
 str(trill.bear.test)
 
+save(trill.prbo.test,trill.sb.test,trill.bear.test,
+     file=(most_recent_SongEvo_test<-paste0("test_SongEvo",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
+
 
