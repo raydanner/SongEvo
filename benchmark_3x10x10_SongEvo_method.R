@@ -7,7 +7,7 @@ fledge_counts=c(1, 1, 2, 1, 0, 2, 2, 2, 2, 1, 1, 2, 1,
                 1, 1, 1, 2, 1, 1, 
                 1, 2, 2, 1, 1, 2, 1, 1)
 
-default.parms <- list(init.inds = NULL, iteration = 10, steps = NULL,  # years / timestep
+default.parms <- list(init.inds = NULL, iteration = 100, steps = NULL,  # years / timestep
                       timestep = 1, #steps in years by default
                       n.territories = reg.count, terr.turnover = 0.5, 
                       learning.method = "integrate", integrate.dist = 0.1, 
@@ -119,7 +119,7 @@ print(ptm_laps)
 
 write.csv(ptm_laps,
           file=(most_recent_benchmark<-
-                  paste0("profile_SongEvo_3x10x10_",
+                  paste0("profile_SongEvo_3x100x10_",
                          strsplit(x = Sys.info()[["nodename"]],split = ".",fixed = TRUE)[[1]][1],
                          "_",
                          format(Sys.time(),format="%Y%m%d%H%M"),".csv")))

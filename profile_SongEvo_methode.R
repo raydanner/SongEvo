@@ -76,7 +76,7 @@ fledge_counts=c(1, 1, 2, 1, 0, 2, 2, 2, 2, 1, 1, 2, 1,
                 1, 1, 1, 2, 1, 1, 
                 1, 2, 2, 1, 1, 2, 1, 1)
 
-default.parms <- list(init.inds = NULL, iteration = 10, steps = NULL,  # years / timestep
+default.parms <- list(init.inds = NULL, iteration = 100, steps = NULL,  # years / timestep
                       timestep = 1, #steps in years by default
                       n.territories = reg.count, terr.turnover = 0.5, 
                       learning.method = "integrate", integrate.dist = 0.1, 
@@ -112,7 +112,11 @@ str(trill.bear.test)
 # Execution tests
 profvis::profvis({
 trill.prbo.test$res=do.call(SongEvo,trill.prbo.test$parms)
+})
+profvis::profvis({
 trill.sb.test$res=  do.call(SongEvo,trill.sb.test$parms)
+})
+profvis::profvis({
 trill.bear.test$res=do.call(SongEvo,trill.bear.test$parms)
 })
 str(trill.prbo.test)
