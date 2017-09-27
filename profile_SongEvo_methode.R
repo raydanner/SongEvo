@@ -1,5 +1,5 @@
 #Profiler
-
+library(profvis)
 # Basic tests for SongEvo correctness
 
 source("SongEvo.R")

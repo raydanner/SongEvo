@@ -6,46 +6,7 @@ sample.mean <- function(d, x) {
 
 library("geosphere")
 library("sp")
-#add_coordinates <- 
 
-# benchmark_checkpoint <- local({
-  # out_file<-paste0("profile_",Sys.getpid(),"_",format(Sys.time(),format="%Y%m%d%H%M"),".csv")
-  # cat(out_file,sep="\n")
-  # out_fields=c("marker","user.self", "sys.self", "elapsed", "user.child", "sys.child" ) 
-  # mark_names=c("load","init","iter","hatch","learn","die","grow","move","comp1","comp2","stat")
-  # mark_types=factor(mark_names)
-  # names(mark_types)<-mark_names
-  # next_row=1
-  # #old_events=list()
-  # 
-  # events=as.data.frame(array(NA,dim =c(1024,6),dimnames = list(rep("",1024),out_fields) ))
-  # events[[1]]<-factor(events[[1]],levels = levels(mark_types))
-  # junk<-list(out_file=out_file,
-  #      add_mark_simple=function(mark){
-  #   events[next_row,1]<<-mark_types[mark]
-  #   events[next_row,-1]<<-proc.time()
-  #   next_row<<-next_row+1
-  #   invisible()
-  # } , get_events=function(){
-  #   events[1:(next_row-1),]
-  # }, event_stats=function(t_stat="user.self"){
-  #   tmp=diff(events[1:(next_row-1),t_stat])
-  #   key=events[2:(next_row-1),1]
-  #   data.frame(accum=tapply(tmp,key,sum),
-  #              mean=tapply(tmp,key,mean),
-  #              count=tapply(tmp,key,length),
-  #              dev=tapply(tmp,key,sd))
-  # })
-  # junk$add_mark_simple("load")
-  # junk$dump<-function(){
-  #   write.csv(events,file = out_file,row.names = FALSE)
-  # }
-  # junk$all_event_stats<-function(){
-  #   do.call(cbind,sapply(out_fields[-1],junk$event_stats,simplify = FALSE))
-  # }
-  # junk
-  # })
-# m_pnt=benchmark_checkpoint$add_mark_simple
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -255,22 +216,25 @@ inds
 compete.for.mates <- function(inds){
 	ninds <- length(inds$age)
 	prev.songs <- subset(inds, age > 1)$trait
-	avg.song <- mean(prev.songs)
-	for (i in 1: ninds) {
-	 if (mate.comp){
-		if (abs(inds$trait[i]-avg.song) < (2*sd(prev.songs))){ 
-			if (inds$territory[i]==1){
-			inds$male.fledglings[i] <- round(rnorm(1, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
-		 	inds$male.fledglings[inds$male.fledglings < 0] <- 0						 }
-		 							 }
-		  } 
-	 if (!mate.comp){
-		if (inds$territory[i]==1){
-			inds$male.fledglings[i] <- round(rnorm(1, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
-			inds$male.fledglings[inds$male.fledglings < 0] <- 0
-			}
-		  }
-	}
+	# avg.song <- mean(prev.songs)
+	comp.res<- (!mate.comp | abs(inds$trait-mean(prev.songs)) < (2*sd(prev.songs)))
+	inds$male.fledglings <- (inds$territory==1) * comp.res * round(rnorm(ninds, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
+	# for (i in 1: ninds) {
+	#  if (mate.comp){
+	# 	if (abs(inds$trait[i]-avg.song) < (2*sd(prev.songs))){ 
+	# 		if (inds$territory[i]==1){
+	# 		inds$male.fledglings[i] <- round(rnorm(1, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
+	# 	 	inds$male.fledglings[inds$male.fledglings < 0] <- 0						 }
+	# 	 							 }
+	# 	  } 
+	#  if (!mate.comp){
+	# 	if (inds$territory[i]==1){
+	# 		inds$male.fledglings[i] <- round(rnorm(1, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
+	# 		inds$male.fledglings[inds$male.fledglings < 0] <- 0
+	# 		}
+	# 	  }
+	# }
+	inds$male.fledglings[inds$male.fledglings < 0] <- 0	
 inds 
 }
 
