@@ -7,6 +7,16 @@ sample.mean <- function(d, x) {
 library("geosphere")
 library("sp")
 
+fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
+  coor.cols=c(which(colnames(data.src)%in% x.col),
+              which(colnames(data.src)%in% y.col));
+  SpatialPointsDataFrame(coords = data.src[,coor.cols],
+                         data = data.src[,-coor.cols],
+                         coords.nrs = coor.cols,
+                         match.ID = FALSE,
+                         proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) 
+}
+
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -49,8 +59,8 @@ init.inds$x0 <- 0
 init.inds$y0 <- 0
 init.inds$x <- init.inds$x1
 init.inds$y <- init.inds$y1
-coordinates(init.inds) = ~x+y 
-proj4string(init.inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+# coordinates(init.inds) = ~x+y 
+# proj4string(init.inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
 
 all.inds <- inds0 <- init.inds
 
@@ -117,7 +127,7 @@ if (learning.method=="father") {
       # stopifnot(children$father==tutors$id[map.key])
       # child=which(inds$age==1)
       # singing.inds <- subset(inds, age>1)
-      key=spDists(tutors,tutors,longlat = TRUE)[map.key,] <= integrate.dist
+      key=spDists(as.matrix(tutors[,c("x","y")]),longlat = TRUE)[map.key,] <= integrate.dist
       children$trait=
         key%*%tutors$trait /rowSums(key) +
         # sapply(1:nrow(children), function(x) {
@@ -163,8 +173,8 @@ disperse <- function(inds){
 		  destPoint(inds[key, c("x0", "y0")], disp.direction, disp.dist)
   #   }
   # }
-	coordinates(inds) = ~x+y 
-	proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+	# coordinates(inds) = ~x+y 
+	# proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
 inds 
 }
 
@@ -299,12 +309,33 @@ summary.results[b, , "uci"][k] <- ci.res$basic[5]
 	}
 	}
 	}
-	} 
+} 
 if (all==TRUE){
   all.inds=rbind(init=all.inds0,  do.call(rbind,do.call(c,inds.all_list)))
-z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "time"=proc.time()-ptm)}
-if (all!=TRUE){
-z <- list("summary.results"=summary.results, "inds"=inds, "time"=proc.time()-ptm)}
+  # coordinates(all.inds) = ~x+y 
+  # proj4string(all.inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+  all.inds=fast.coords.frame(all.inds)
+  # coordinates(inds) = ~x+y 
+  # proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+  inds=fast.coords.frame(inds)
+z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "time"=proc.time()-ptm)
+}else if (all=="sparse"){
+  # all.inds0=fast.coords.frame(all.inds0)
+  inds=fast.coords.frame(inds)
+  all.inds<-rapply(inds.all_list,fast.coords.frame,classes = "data.frame",how = "replace")
+  # all.inds=rbind(init=all.inds0,  do.call(rbind,do.call(c,inds.all_list)))
+  # coordinates(all.inds0) = ~x+y 
+  # proj4string(all.inds0) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+  # coordinates(inds) = ~x+y 
+  # proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+  # 
+  z <- list(summary.results=summary.results, inds.last=inds, inds.init=all.inds0, inds.slices=all.inds, time=proc.time()-ptm)
+}else{
+  inds=fast.coords.frame(inds)
+  # coordinates(inds) = ~x+y 
+  # proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+z <- list("summary.results"=summary.results, "inds"=inds, "time"=proc.time()-ptm)
+}
 # m_pnt(11)
 
 z
