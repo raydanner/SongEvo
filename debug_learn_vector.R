@@ -1,0 +1,333 @@
+
+# Default arguments:
+fledge_counts=c(1, 1, 2, 1, 0, 2, 2, 2, 2, 1, 1, 2, 1, 
+                1, 1, 1, 1, 1, 0, 2, 1, 2, 1, 2, 2, 2, 
+                1, 1, 1, 2, 1, 1, 
+                1, 2, 2, 1, 1, 2, 1, 1)
+default.parms <- list(init.inds = NULL, iteration = 10, steps = NULL,  # years / timestep
+                      timestep = 1, #steps in years by default
+                      n.territories = 40, terr.turnover = 0.5, 
+                      learning.method = "integrate", integrate.dist = 0.1, 
+                      learning.error.d = 0, learning.error.sd = 430, 
+                      mortality.a = 0.468, mortality.j = 0.5, lifespan = NA, 
+                      phys.lim.min = 1559, phys.lim.max = 4364, 
+                      male.fledge.n.mean = 1.35, male.fledge.n.sd = 0.5,
+                      male.fledge.n = fledge_counts, disp.age = 2, 
+                      disp.distance.mean = 110, disp.distance.sd = 100,
+                      mate.comp = FALSE, prin = FALSE, all = TRUE)
+
+test_inds<-
+structure(list(id = 1:93, 
+age = c(2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 
+2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1), 
+trait = c(4004.8, 3765, 3237.4, 3621.1, 3285.4, 3573.1, 3836.9, 
+3573.1, 3381.3, 3429.3, 3501.2, 3309.3, 2973.7, 3309.4, 3597.1, 
+3525.2, 3573.2, 3405.3, 3357.3, 3309.3, 3501.2, 3237.4, 3669, 
+3285.4, 3836.9, 3021.6, 3093.5, 2853.7, 2973.6, 3381.3, 3227.87807189696, 
+3718.49624192241, 3766.95407510801, 3472.52850078345, 3487.86291758442, 
+3621.11594971987, 3260.43313880077, 4017.11545312195, 3720.4201474368, 
+3278.06529033312, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+x1 = c(-122.46304045, 
+-122.47945415, -122.46810769, -122.46626187, -122.47103851, -122.45702505, 
+-122.45608113, -122.47700273, -122.4816132, -122.47010441, -122.4474374, 
+-122.469514, -122.47832597, -122.45669724, -122.46281864, -122.46016651, 
+-122.45352435, -122.46520659, -122.46889102, -122.45194586, -122.45357795, 
+-122.4768614, -122.45870937, -122.46302676, -122.47220568, -122.44944743, 
+-122.45557057, -122.46842312, -122.46524143, -122.46924473, -122.45507962, 
+-122.47707835, -122.47875621, -122.46114481, -122.46932484, -122.46197694, 
+-122.47719781, -122.46219565, -122.45593468, -122.44889574, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+y1 = c(37.79590278, 37.79599043, 
+37.80506281, 37.80071314, 37.80173301, 37.79096117, 37.80341661, 
+37.78900217, 37.80563812, 37.80467017, 37.80182812, 37.79655569, 
+37.79588211, 37.79072816, 37.794477, 37.79974971, 37.79018434, 
+37.78841411, 37.78833242, 37.80316272, 37.79392403, 37.80462089, 
+37.80527697, 37.79908842, 37.79846534, 37.79567004, 37.7958698, 
+37.80520564, 37.8040491, 37.79860955, 37.79749435, 37.78851587, 
+37.7950637, 37.79049041, 37.79327839, 37.80531846, 37.7939119, 
+37.79217867, 37.80398324, 37.79577329, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0), 
+male.fledglings = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0), 
+territory = c(1, 
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 
+1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0), 
+father = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 2, 3, 3, 4, 6, 6, 7, 7, 8, 8, 
+9, 9, 10, 11, 12, 12, 13, 14, 15, 16, 17, 18, 20, 20, 21, 22, 
+22, 23, 24, 24, 25, 25, 26, 26, 27, 28, 29, 30, 30, 31, 32, 33, 
+34, 34, 35, 35, 36, 37, 38, 38, 39, 40), 
+x0 = c(0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -122.46304045, -122.47945415, 
+-122.46810769, -122.46810769, -122.46626187, -122.45702505, -122.45702505, 
+-122.45608113, -122.45608113, -122.47700273, -122.47700273, -122.4816132, 
+-122.4816132, -122.47010441, -122.4474374, -122.469514, -122.469514, 
+-122.47832597, -122.45669724, -122.46281864, -122.46016651, -122.45352435, 
+-122.46520659, -122.45194586, -122.45194586, -122.45357795, -122.4768614, 
+-122.4768614, -122.45870937, -122.46302676, -122.46302676, -122.47220568, 
+-122.47220568, -122.44944743, -122.44944743, -122.45557057, -122.46842312, 
+-122.46524143, -122.46924473, -122.46924473, -122.45507962, -122.47707835, 
+-122.47875621, -122.46114481, -122.46114481, -122.46932484, -122.46932484, 
+-122.46197694, -122.47719781, -122.46219565, -122.46219565, -122.45593468, 
+-122.44889574), 
+y0 = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 37.79590278, 37.79599043, 37.80506281, 37.80506281, 
+37.80071314, 37.79096117, 37.79096117, 37.80341661, 37.80341661, 
+37.78900217, 37.78900217, 37.80563812, 37.80563812, 37.80467017, 
+37.80182812, 37.79655569, 37.79655569, 37.79588211, 37.79072816, 
+37.794477, 37.79974971, 37.79018434, 37.78841411, 37.80316272, 
+37.80316272, 37.79392403, 37.80462089, 37.80462089, 37.80527697, 
+37.79908842, 37.79908842, 37.79846534, 37.79846534, 37.79567004, 
+37.79567004, 37.7958698, 37.80520564, 37.8040491, 37.79860955, 
+37.79860955, 37.79749435, 37.78851587, 37.7950637, 37.79049041, 
+37.79049041, 37.79327839, 37.79327839, 37.80531846, 37.7939119, 
+37.79217867, 37.79217867, 37.80398324, 37.79577329), 
+x = c(-122.46304045, 
+-122.47945415, -122.46810769, -122.46626187, -122.47103851, -122.45702505, 
+-122.45608113, -122.47700273, -122.4816132, -122.47010441, -122.4474374, 
+-122.469514, -122.47832597, -122.45669724, -122.46281864, -122.46016651, 
+-122.45352435, -122.46520659, -122.46889102, -122.45194586, -122.45357795, 
+-122.4768614, -122.45870937, -122.46302676, -122.47220568, -122.44944743, 
+-122.45557057, -122.46842312, -122.46524143, -122.46924473, -122.45507962, 
+-122.47707835, -122.47875621, -122.46114481, -122.46932484, -122.46197694, 
+-122.47719781, -122.46219565, -122.45593468, -122.44889574, -122.46304045, 
+-122.47945415, -122.46810769, -122.46810769, -122.46626187, -122.45702505, 
+-122.45702505, -122.45608113, -122.45608113, -122.47700273, -122.47700273, 
+-122.4816132, -122.4816132, -122.47010441, -122.4474374, -122.469514, 
+-122.469514, -122.47832597, -122.45669724, -122.46281864, -122.46016651, 
+-122.45352435, -122.46520659, -122.45194586, -122.45194586, -122.45357795, 
+-122.4768614, -122.4768614, -122.45870937, -122.46302676, -122.46302676, 
+-122.47220568, -122.47220568, -122.44944743, -122.44944743, -122.45557057, 
+-122.46842312, -122.46524143, -122.46924473, -122.46924473, -122.45507962, 
+-122.47707835, -122.47875621, -122.46114481, -122.46114481, -122.46932484, 
+-122.46932484, -122.46197694, -122.47719781, -122.46219565, -122.46219565, 
+-122.45593468, -122.44889574), 
+y = c(37.79590278, 37.79599043, 
+37.80506281, 37.80071314, 37.80173301, 37.79096117, 37.80341661, 
+37.78900217, 37.80563812, 37.80467017, 37.80182812, 37.79655569, 
+37.79588211, 37.79072816, 37.794477, 37.79974971, 37.79018434, 
+37.78841411, 37.78833242, 37.80316272, 37.79392403, 37.80462089, 
+37.80527697, 37.79908842, 37.79846534, 37.79567004, 37.7958698, 
+37.80520564, 37.8040491, 37.79860955, 37.79749435, 37.78851587, 
+37.7950637, 37.79049041, 37.79327839, 37.80531846, 37.7939119, 
+37.79217867, 37.80398324, 37.79577329, 37.79590278, 37.79599043, 
+37.80506281, 37.80506281, 37.80071314, 37.79096117, 37.79096117, 
+37.80341661, 37.80341661, 37.78900217, 37.78900217, 37.80563812, 
+37.80563812, 37.80467017, 37.80182812, 37.79655569, 37.79655569, 
+37.79588211, 37.79072816, 37.794477, 37.79974971, 37.79018434, 
+37.78841411, 37.80316272, 37.80316272, 37.79392403, 37.80462089, 
+37.80462089, 37.80527697, 37.79908842, 37.79908842, 37.79846534, 
+37.79846534, 37.79567004, 37.79567004, 37.7958698, 37.80520564, 
+37.8040491, 37.79860955, 37.79860955, 37.79749435, 37.78851587, 
+37.7950637, 37.79049041, 37.79049041, 37.79327839, 37.79327839, 
+37.80531846, 37.7939119, 37.79217867, 37.79217867, 37.80398324, 
+37.79577329)), 
+.Names = c("id", "age", "trait", "x1", "y1", "male.fledglings", 
+"territory", "father", "x0", "y0", "x", "y"), 
+row.names = c("A01", 
+"A02", "A03", "A04", "A05", "A06", "A07", "A08", "A09", "A10", 
+"A11", "A12", "A13", "A14", "A15", "A16", "A17", "A18", "A19", 
+"A20", "A21", "A22", "A23", "A24", "A25", "A26", "A27", "A28", 
+"A29", "A30", "A31", "A32", "A33", "A34", "A35", "A36", "A37", 
+"A38", "A39", "A40", "41", "42", "43", "44", "45", "46", "47", 
+"48", "49", "50", "51", "52", "53", "54", "55", "56", "57", "58", 
+"59", "60", "61", "62", "63", "64", "65", "66", "67", "68", "69", 
+"70", "71", "72", "73", "74", "75", "76", "77", "78", "79", "80", 
+"81", "82", "83", "84", "85", "86", "87", "88", "89", "90", "91", 
+"92", "93"), 
+class = "data.frame")
+
+coordinates(test_inds) = ~x+y 
+proj4string(test_inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+
+learn_vector <- function(inds){
+  
+  child=which(inds$age==1)
+  singing.inds <- subset(inds, age>1)
+  inds$trait[child]=sapply(child, function(x) {
+    key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
+    mean(singing.inds[key, ]$trait) }) + 
+    rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
+  #restrict learned song values such that they cannot exceed range of physical possibility: 
+  inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
+  inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
+  return(inds)
+}
+
+
+
+learn_slow <- function(inds){
+  ninds <- length(inds$age)
+  
+  #1. Young learn from their fathers:
+  if (learning.method=="father") {
+    for (i in 1: ninds) {
+      if (inds$age[i]==1) {
+        tutor <- inds$father[i]
+        inds$trait[i] <- inds[inds$id==tutor, ]$trait + rnorm(1, mean=learning.error.d, sd=learning.error.sd)  
+      }
+    }
+  }
+  
+  #2. Young learn by integrating songs from the neighborhood within a specified distance:
+  if (learning.method=="integrate") {
+    for (i in 1: ninds) {
+      if (inds$age[i]==1) {
+        singing.inds <- subset(inds, age>1)
+        tutors <- which(spDistsN1(pts=singing.inds, pt=inds[i,], longlat=TRUE) <= integrate.dist) #distance in km
+        inds$trait[i] <- mean(inds$trait[tutors]) + rnorm(1, mean=learning.error.d, sd=learning.error.sd)  			
+      }
+    }
+  }
+  
+  #restrict learned song values such that they cannot exceed range of physical possibility: 
+  inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
+  inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
+  inds <- inds #Not sure why this is needed.  But, if it or print(inds) is not included, inds=NULL.
+}
+
+
+
+die_slow <- function(inds) {
+  j <- subset(inds, age == 1)
+  j2 <- subset(j, runif(j$age) > mortality.j)
+  a <- subset(inds, age > 1)
+  if (!is.na(lifespan)) {
+    a2 <- subset(a, runif(a$age) > mortality.a & a$age <= lifespan)
+  } 
+  if (is.na(lifespan)) {
+    a2 <- subset(a, runif(a$age) > mortality.a)
+  }
+  if ((NROW(a2) > 0) | (NROW(j2) > 0)) { 
+    #if/else statement to 	control for special case when no adults and no juveniles survive.
+    inds <- rbind(a2, j2)
+  } else 
+    (inds <- NULL)
+}
+
+die_vector_immortal <- function(inds) {
+  ninds<-nrow(inds)
+  subset(inds,  runif(ninds) > ifelse(age > 1,
+                                      rep(mortality.a,ninds),
+                                      rep(mortality.j,ninds)))
+}
+
+die_vector_mortal <- function(inds) {
+  ninds<-nrow(inds)
+  subset(inds,  age <= lifespan & 
+           runif(ninds) > ifelse(age > 1,
+                                 rep(mortality.a,ninds),
+                                 rep(mortality.j,ninds)))
+}
+
+
+compete.for.territories_old <- function(inds){
+  ninds <- length(inds$age)
+  #Allows a flexible population size, but caps breeding territories at a specific number. 
+  without <- which(inds$territory==0)
+  with <- which(inds$territory==1)
+  nwithout <- length(without)
+  nwith <- length(with)
+  nopen <- length(n.territories-nwith)
+  
+  #Bring available territories up to number based on specified turnover rate.  Some have already opened because of death in the Die submodel.
+  if (nwith > n.territories-terr.turnover*n.territories) {		
+    ran <- sample(with, size=round(nwith-(n.territories-terr.turnover*n.territories)), replace=FALSE) 
+    inds[c(ran), "territory"] <- 0		
+  } else
+    
+    with <- which(inds$territory==1)
+  nwith <- length(with)
+  
+  #Give open territories to birds that previously lacked territories. There are two scenarios:
+  #First scenario: There are more open territories than specified by the turnover rate because of mortality in the die submodel:
+  if (nwith < n.territories-terr.turnover*n.territories) {		
+    if (nwithout > 40-nwith) { #open spaces	
+      ran2 <- sample(without, size=n.territories-nwith, replace=FALSE)
+      inds[c(ran2), "territory"] <- 1
+    } 			
+    else if (nwithout <= n.territories-nwith) { #open spaces	
+      ran3 <- without #all get territories!			
+      inds[c(ran3), "territory"] <- 1
+    } 
+    
+  }
+  
+  #Second scenario: The exact turnover is available:
+  if (nwith == n.territories-terr.turnover*n.territories) {		
+    if (nwithout > n.territories-nwith) { 
+      ran4 <- sample(without, size=n.territories-nwith, replace=FALSE)
+      inds[c(ran4), "territory"] <- 1
+    } 			
+    else if (nwithout <= n.territories-nwith) { 	
+      ran5 <- without #all get territories!			
+      inds[c(ran5), "territory"] <- 1
+    } 
+  }
+  inds <- inds
+}
+
+
+compete.for.territories_new <- function(inds){
+  ninds <- length(inds$age)
+  #Allows a flexible population size, but caps breeding territories at a specific number. 
+  without <- which(inds$territory==0)
+  with <- which(inds$territory==1)
+  nwithout <- length(without)
+  nwith <- length(with)
+  nopen <- n.territories-nwith
+  
+  #Bring available territories up to number based on specified turnover rate.  Some have already opened because of death in the Die submodel.
+  if (terr.turnover*n.territories > nopen) {		
+    ran <- sample(with, size=round(terr.turnover*n.territories - nopen), replace=FALSE) 
+    inds[c(ran), "territory"] <- 0		
+  } 
+  
+  with <- which(inds$territory==1)
+  nwith <- length(with)
+  nopen <- n.territories-nwith
+  
+  #Give open territories to birds that previously lacked territories. There are two scenarios:
+  #First scenario: There are more open territories than specified by the turnover rate because of mortality in the die submodel:
+  # if (nwith < n.territories-terr.turnover*n.territories) {		
+  if (nwithout > nopen) { #open spaces	
+    inds[sample(without, size=nopen, replace=FALSE), "territory"] <- 1
+  } else { #open spaces	
+    #ran3 <- without #all get territories!			
+    inds[without, "territory"] <- 1
+  } 
+  
+  # }
+  
+  #  #Second scenario: The exact turnover is available:
+  # 	if (nwith == n.territories-terr.turnover*n.territories) {		
+  # 		if (nwithout > n.territories-nwith) { 
+  # 		ran4 <- sample(without, size=n.territories-nwith, replace=FALSE)
+  # 		inds[c(ran4), "territory"] <- 1
+  # 		} 			
+  # 		else if (nwithout <= n.territories-nwith) { 	
+  # 		ran5 <- without #all get territories!			
+  # 		inds[c(ran5), "territory"] <- 1
+  # 		} 
+  # 	}
+  inds 
+}
+

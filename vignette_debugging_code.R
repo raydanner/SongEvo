@@ -2,7 +2,8 @@
 
 #Load functions from files, keeping source references for future debugging
 
-SongEvo <- dget("SongEvo.R", TRUE)
+#SongEvo <- dget("SongEvo.R", TRUE)
+source("SongEvo.R")
 par.sens <- dget("par.sens.R", TRUE)
 par.opt <- dget("par.opt.R", TRUE)
 mod.val <- dget("mod.val.R", TRUE)
@@ -423,8 +424,8 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 
 ##Model validation with mod.val()
 # Specify and call SongEvo() with validation data
-
-iteration <- 10
+{
+iteration <- 100
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
@@ -442,7 +443,7 @@ terr.turnover <- 0.5
 #                     disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
 SongEvo2_alt=list(parms=glo.parms)
 parms_2alt <- list(init.inds = init.inds, 
-                   iteration = 10,
+                   iteration = 100,
                    steps = 36,  # years / timestep
                    timestep = 1, 
                    n.territories = 40,
@@ -523,7 +524,7 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 #text and arrows
 text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
-
+}
 ##Hypothesis testing with h.test() This function allows hypothesis testing with SongEvo. To test if measured songs from two time points evolved through mechanisms described in the model (e.g. drift or selection), users initialize the model with historical data, parameterize the model based on their understanding of the mechanisms, and test if subsequently observed or predicted data match the simulated data. The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances. We tested the hypothesis that songs of Z. l. nuttalli in Bear Valley, CA evolved through cultural drift from 1969 to 2005.
 
 # Prepare initial song data for Bear Valley.
