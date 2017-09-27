@@ -117,7 +117,7 @@ if (learning.method=="father") {
       # stopifnot(children$father==tutors$id[map.key])
       # child=which(inds$age==1)
       # singing.inds <- subset(inds, age>1)
-      key=spDists(tutors[map.key,],tutors,longlat=TRUE) <= integrate.dist
+      key=spDists(tutors,tutors,longlat = TRUE)[map.key,] <= integrate.dist
       children$trait=
         key%*%tutors$trait /rowSums(key) +
         # sapply(1:nrow(children), function(x) {
@@ -279,7 +279,8 @@ if (NROW(inds)+NROW(chicks) >= 3){
 inds <- grow(inds)
 chicks <- grow(chicks)
 # m_pnt(7)
-inds <- rbind(inds,disperse(chicks))
+chicks<-disperse(chicks)
+inds <- rbind(inds,chicks)
 # m_pnt(8)
 inds <- compete.for.territories(inds)
 # m_pnt(9)
