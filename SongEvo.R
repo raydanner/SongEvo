@@ -6,6 +6,45 @@ sample.mean <- function(d, x) {
 
 library("sp")
 #add_coordinates <- 
+
+benchmark_checkpoint <- local({
+  out_file<-paste0("profile_",Sys.getpid(),"_",format(Sys.time(),format="%Y%m%d%H%M"),".csv")
+  cat(out_file,sep="\n")
+  out_fields=c("marker","user.self", "sys.self", "elapsed", "user.child", "sys.child" ) 
+  mark_names=c("load","init","iter","hatch","learn","die","grow","move","comp1","comp2","stat")
+  mark_types=factor(mark_names)
+  names(mark_types)<-mark_names
+  next_row=1
+  #old_events=list()
+  
+  events=as.data.frame(array(NA,dim =c(1024,6),dimnames = list(rep("",1024),out_fields) ))
+  events[[1]]<-factor(events[[1]],levels = levels(mark_types))
+  junk<-list(out_file=out_file,
+       add_mark_simple=function(mark){
+    events[next_row,1]<<-mark_types[mark]
+    events[next_row,-1]<<-proc.time()
+    next_row<<-next_row+1
+    invisible()
+  } , get_events=function(){
+    events[1:(next_row-1),]
+  }, event_stats=function(t_stat="user.self"){
+    tmp=diff(events[1:(next_row-1),t_stat])
+    key=events[2:(next_row-1),1]
+    data.frame(accum=tapply(tmp,key,sum),
+               mean=tapply(tmp,key,mean),
+               count=tapply(tmp,key,length),
+               dev=tapply(tmp,key,sd))
+  })
+  junk$add_mark_simple("load")
+  junk$dump<-function(){
+    write.csv(events,file = out_file,row.names = FALSE)
+  }
+  junk$all_event_stats<-function(){
+    do.call(cbind,sapply(out_fields[-1],junk$event_stats,simplify = FALSE))
+  }
+  junk
+  })
+m_pnt=benchmark_checkpoint$add_mark_simple
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -32,7 +71,7 @@ SongEvo <- function(init.inds,
                     all){
 
 ptm <- proc.time()
-
+m_pnt(2)
 summary.results <- array(NA, 
                          dim=c(iteration, steps, 5), 
                          dimnames = list(iteration=paste("iteration", seq(1:iteration)), 
@@ -239,7 +278,8 @@ inds <- init.inds
 maxid <- max(inds$id) #store max id, which determines new id numbers in Hatch
 
 for (k in 1:steps) {
-
+  m_pnt(3)
+  
 if (prin==TRUE){
 	print(paste("iteration ", b, ", timestep ", k, ", n males ", NROW(inds), ", n territorial males ", length(which(inds$territory==1)), sep=""))}
 
@@ -252,22 +292,25 @@ timestep.inds$iteration <- b
 # all.inds <- rbind(all.inds, timestep.inds)
 	inds.all_list[[b]][[k]]<-timestep.inds
 inds <- hatch(inds)
+m_pnt(4)
 
 maxid <- max(inds$id)
 
 inds <- learn(inds)
-
+m_pnt(5)
 inds <- die(inds)
+m_pnt(6)
 
 if (NROW(inds) >= 3){
 
 inds <- grow(inds)
-
+m_pnt(7)
 inds <- disperse(inds)
-
+m_pnt(8)
 inds <- compete.for.territories(inds)
-
+m_pnt(9)
 inds <- compete.for.mates(inds)
+m_pnt(10)
 
 #Calculate summary values
 summary.results[b, , "sample.n"][k] <- length(inds$age)
@@ -287,6 +330,8 @@ if (all==TRUE){
 z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "time"=proc.time()-ptm)}
 if (all!=TRUE){
 z <- list("summary.results"=summary.results, "inds"=inds, "time"=proc.time()-ptm)}
+m_pnt(11)
+
 z
 }
 #End of I. SongEvo function
