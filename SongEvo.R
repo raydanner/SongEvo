@@ -156,10 +156,12 @@ if (learning.method=="father") {
       # stopifnot(children$father==tutors$id[map.key])
       # child=which(inds$age==1)
       # singing.inds <- subset(inds, age>1)
-      key=spDists(tutors, tutors[map.key,], longlat=TRUE) <= integrate.dist
-      children$trait=sapply(1:nrow(children), function(x) {
+      key=spDists(tutors[map.key,],tutors,longlat=TRUE) <= integrate.dist
+      children$trait=
+        key%*%tutors$trait /rowSums(key) +
+        # sapply(1:nrow(children), function(x) {
         # key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
-        mean(tutors[key[,x], ]$trait) }) + 
+        # mean(tutors[key[,x], ]$trait) }) + 
         rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
       #restrict learned song values such that they cannot exceed range of physical possibility: 
       children$trait[children$trait < phys.lim.min] <- phys.lim.min
