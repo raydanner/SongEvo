@@ -130,8 +130,8 @@ hatch <- function(inds){
 	newinds$father <- inds$id[map.key]
 	newinds$x <- newinds$x0 <- inds$x1[map.key] 
 	newinds$y <- newinds$y0 <- inds$y1[map.key]
-	coordinates(newinds) = ~x+y 
-	proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+	# coordinates(newinds) = ~x+y 
+	# proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
 	# inds$male.fledglings <- 0
 	# rbind(inds, newinds)
 	newinds
@@ -152,9 +152,11 @@ if (learning.method=="father") {
   #2. Young learn by integrating songs from the neighborhood within a specified distance:
     learn <- function(children,tutors){
       
+      map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$male.fledglings, SIMPLIFY = FALSE))
+      # stopifnot(children$father==tutors$id[map.key])
       # child=which(inds$age==1)
       # singing.inds <- subset(inds, age>1)
-      key=spDists(tutors, children, longlat=TRUE) <= integrate.dist
+      key=spDists(tutors, tutors[map.key,], longlat=TRUE) <= integrate.dist
       children$trait=sapply(1:nrow(children), function(x) {
         # key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
         mean(tutors[key[,x], ]$trait) }) + 
@@ -188,7 +190,7 @@ inds <- inds
 
 disperse <- function(inds){
 	ninds <- sum(key<-(inds$age == disp.age))
-	inds <- as.data.frame(inds)
+	# inds <- as.data.frame(inds)
 	# for (i in 1: ninds) {
 	# 	if (inds$age[i] == disp.age){
 		disp.dist <- rnorm(ninds, mean=disp.distance.mean, sd=disp.distance.sd)  
