@@ -124,5 +124,3 @@ write.csv(ptm_laps,
                          "_",
                          format(Sys.time(),format="%Y%m%d%H%M"),".csv")))
 print(diff(ptm_laps))
-benchmark_checkpoint$all_event_stats()
-benchmark_checkpoint$dump()

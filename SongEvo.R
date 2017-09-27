@@ -4,46 +4,47 @@ sample.mean <- function(d, x) {
   mean(d[x])
 }
 
+library("geosphere")
 library("sp")
 #add_coordinates <- 
 
-benchmark_checkpoint <- local({
-  out_file<-paste0("profile_",Sys.getpid(),"_",format(Sys.time(),format="%Y%m%d%H%M"),".csv")
-  cat(out_file,sep="\n")
-  out_fields=c("marker","user.self", "sys.self", "elapsed", "user.child", "sys.child" ) 
-  mark_names=c("load","init","iter","hatch","learn","die","grow","move","comp1","comp2","stat")
-  mark_types=factor(mark_names)
-  names(mark_types)<-mark_names
-  next_row=1
-  #old_events=list()
-  
-  events=as.data.frame(array(NA,dim =c(1024,6),dimnames = list(rep("",1024),out_fields) ))
-  events[[1]]<-factor(events[[1]],levels = levels(mark_types))
-  junk<-list(out_file=out_file,
-       add_mark_simple=function(mark){
-    events[next_row,1]<<-mark_types[mark]
-    events[next_row,-1]<<-proc.time()
-    next_row<<-next_row+1
-    invisible()
-  } , get_events=function(){
-    events[1:(next_row-1),]
-  }, event_stats=function(t_stat="user.self"){
-    tmp=diff(events[1:(next_row-1),t_stat])
-    key=events[2:(next_row-1),1]
-    data.frame(accum=tapply(tmp,key,sum),
-               mean=tapply(tmp,key,mean),
-               count=tapply(tmp,key,length),
-               dev=tapply(tmp,key,sd))
-  })
-  junk$add_mark_simple("load")
-  junk$dump<-function(){
-    write.csv(events,file = out_file,row.names = FALSE)
-  }
-  junk$all_event_stats<-function(){
-    do.call(cbind,sapply(out_fields[-1],junk$event_stats,simplify = FALSE))
-  }
-  junk
-  })
+# benchmark_checkpoint <- local({
+  # out_file<-paste0("profile_",Sys.getpid(),"_",format(Sys.time(),format="%Y%m%d%H%M"),".csv")
+  # cat(out_file,sep="\n")
+  # out_fields=c("marker","user.self", "sys.self", "elapsed", "user.child", "sys.child" ) 
+  # mark_names=c("load","init","iter","hatch","learn","die","grow","move","comp1","comp2","stat")
+  # mark_types=factor(mark_names)
+  # names(mark_types)<-mark_names
+  # next_row=1
+  # #old_events=list()
+  # 
+  # events=as.data.frame(array(NA,dim =c(1024,6),dimnames = list(rep("",1024),out_fields) ))
+  # events[[1]]<-factor(events[[1]],levels = levels(mark_types))
+  # junk<-list(out_file=out_file,
+  #      add_mark_simple=function(mark){
+  #   events[next_row,1]<<-mark_types[mark]
+  #   events[next_row,-1]<<-proc.time()
+  #   next_row<<-next_row+1
+  #   invisible()
+  # } , get_events=function(){
+  #   events[1:(next_row-1),]
+  # }, event_stats=function(t_stat="user.self"){
+  #   tmp=diff(events[1:(next_row-1),t_stat])
+  #   key=events[2:(next_row-1),1]
+  #   data.frame(accum=tapply(tmp,key,sum),
+  #              mean=tapply(tmp,key,mean),
+  #              count=tapply(tmp,key,length),
+  #              dev=tapply(tmp,key,sd))
+  # })
+  # junk$add_mark_simple("load")
+  # junk$dump<-function(){
+  #   write.csv(events,file = out_file,row.names = FALSE)
+  # }
+  # junk$all_event_stats<-function(){
+  #   do.call(cbind,sapply(out_fields[-1],junk$event_stats,simplify = FALSE))
+  # }
+  # junk
+  # })
 # m_pnt=benchmark_checkpoint$add_mark_simple
 SongEvo <- function(init.inds, 
                     iteration, 
@@ -184,19 +185,20 @@ inds <- inds
 }
 
 disperse <- function(inds){
-	ninds <- length(inds$age)
+	ninds <- sum(key<-(inds$age == disp.age))
 	inds <- as.data.frame(inds)
-	for (i in 1: ninds) {
-		if (inds$age[i] == disp.age){
-		disp.dist <- rnorm(1, mean=disp.distance.mean, sd=disp.distance.sd)  
-		disp.direction <- runif(1, min=0, max=360) #Assume 0 is due North.
-		library("geosphere")
-		inds[i, c("x", "y")] <- inds[i, c("x1", "y1")] <- destPoint(inds[i, c("x0", "y0")], disp.direction, disp.dist)
-    }
-  }
+	# for (i in 1: ninds) {
+	# 	if (inds$age[i] == disp.age){
+		disp.dist <- rnorm(ninds, mean=disp.distance.mean, sd=disp.distance.sd)  
+		disp.direction <- runif(ninds, min=0, max=360) #Assume 0 is due North.
+		inds[key, c("x", "y")] <- 
+		  inds[key, c("x1", "y1")] <- 
+		  destPoint(inds[key, c("x0", "y0")], disp.direction, disp.dist)
+  #   }
+  # }
 	coordinates(inds) = ~x+y 
 	proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-inds <- inds
+inds 
 }
 
 compete.for.territories <- function(inds){
