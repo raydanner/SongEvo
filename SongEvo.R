@@ -132,35 +132,37 @@ hatch <- function(inds){
 	newinds$y <- newinds$y0 <- inds$y1[map.key]
 	coordinates(newinds) = ~x+y 
 	proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-	inds$male.fledglings <- 0
-	rbind(inds, newinds)
+	# inds$male.fledglings <- 0
+	# rbind(inds, newinds)
+	newinds
 	}
 
 if (learning.method=="father") {
   #1. Young learn from their fathers:
-  learn <- function(inds){
+  learn <- function(children,tutors){
     
-    child=which(inds$age==1)
-    inds$trait[child]=sapply(child, function(x) inds[inds$id==inds$father[x], ]$trait ) + 
-      rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
+    # child=which(inds$age==1)
+    children$trait=sapply(children$father, function(x) tutors[tutors$id==x, ]$trait ) + 
+      rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
     #restrict learned song values such that they cannot exceed range of physical possibility: 
-    inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
-    inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
-    return(inds)}
+    children$trait[children$trait < phys.lim.min] <- phys.lim.min
+    children$trait[children$trait > phys.lim.max] <- phys.lim.max
+    return(children)}
 } else if (learning.method=="integrate") {
   #2. Young learn by integrating songs from the neighborhood within a specified distance:
-    learn <- function(inds){
+    learn <- function(children,tutors){
       
-      child=which(inds$age==1)
-      singing.inds <- subset(inds, age>1)
-      inds$trait[child]=sapply(child, function(x) {
-        key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
-        mean(singing.inds[key, ]$trait) }) + 
-        rnorm(sum(inds$age==1), mean=learning.error.d, sd=learning.error.sd) 
+      # child=which(inds$age==1)
+      # singing.inds <- subset(inds, age>1)
+      key=spDists(tutors, children, longlat=TRUE) <= integrate.dist
+      children$trait=sapply(1:nrow(children), function(x) {
+        # key=spDistsN1(pts=singing.inds, pt=inds[x,], longlat=TRUE) <= integrate.dist
+        mean(tutors[key[,x], ]$trait) }) + 
+        rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
       #restrict learned song values such that they cannot exceed range of physical possibility: 
-      inds$trait[inds$trait < phys.lim.min] <- phys.lim.min
-      inds$trait[inds$trait > phys.lim.max] <- phys.lim.max
-      return(inds)
+      children$trait[children$trait < phys.lim.min] <- phys.lim.min
+      children$trait[children$trait > phys.lim.max] <- phys.lim.max
+      return(children)
     } }
 
 if (is.na(lifespan)) {
@@ -265,7 +267,7 @@ compete.for.mates <- function(inds){
 			}
 		  }
 	}
-inds <- inds
+inds 
 }
 
 reproduce <- NULL #allows mated individuals to have differential reproductive success, depending on chance, environmental variables, etc. Not currently implemented
@@ -293,21 +295,23 @@ timestep.inds$timestep <- k
 timestep.inds$iteration <- b
 # all.inds <- rbind(all.inds, timestep.inds)
 	inds.all_list[[b]][[k]]<-timestep.inds
-inds <- hatch(inds)
+chicks <- hatch(inds)
 # m_pnt(4)
 
-maxid <- max(inds$id)
+maxid <- max(chicks$id)
 
-inds <- learn(inds)
+chicks <- learn(chicks,inds)
 # m_pnt(5)
 inds <- die(inds)
+chicks <- die(chicks)
 # m_pnt(6)
 
-if (NROW(inds) >= 3){
+if (NROW(inds)+NROW(chicks) >= 3){
 
 inds <- grow(inds)
+chicks <- grow(chicks)
 # m_pnt(7)
-inds <- disperse(inds)
+inds <- rbind(inds,disperse(chicks))
 # m_pnt(8)
 inds <- compete.for.territories(inds)
 # m_pnt(9)
