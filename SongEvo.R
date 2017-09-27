@@ -44,7 +44,7 @@ benchmark_checkpoint <- local({
   }
   junk
   })
-m_pnt=benchmark_checkpoint$add_mark_simple
+# m_pnt=benchmark_checkpoint$add_mark_simple
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -71,7 +71,7 @@ SongEvo <- function(init.inds,
                     all){
 
 ptm <- proc.time()
-m_pnt(2)
+# m_pnt(2)
 summary.results <- array(NA, 
                          dim=c(iteration, steps, 5), 
                          dimnames = list(iteration=paste("iteration", seq(1:iteration)), 
@@ -278,7 +278,7 @@ inds <- init.inds
 maxid <- max(inds$id) #store max id, which determines new id numbers in Hatch
 
 for (k in 1:steps) {
-  m_pnt(3)
+  # m_pnt(3)
   
 if (prin==TRUE){
 	print(paste("iteration ", b, ", timestep ", k, ", n males ", NROW(inds), ", n territorial males ", length(which(inds$territory==1)), sep=""))}
@@ -292,25 +292,25 @@ timestep.inds$iteration <- b
 # all.inds <- rbind(all.inds, timestep.inds)
 	inds.all_list[[b]][[k]]<-timestep.inds
 inds <- hatch(inds)
-m_pnt(4)
+# m_pnt(4)
 
 maxid <- max(inds$id)
 
 inds <- learn(inds)
-m_pnt(5)
+# m_pnt(5)
 inds <- die(inds)
-m_pnt(6)
+# m_pnt(6)
 
 if (NROW(inds) >= 3){
 
 inds <- grow(inds)
-m_pnt(7)
+# m_pnt(7)
 inds <- disperse(inds)
-m_pnt(8)
+# m_pnt(8)
 inds <- compete.for.territories(inds)
-m_pnt(9)
+# m_pnt(9)
 inds <- compete.for.mates(inds)
-m_pnt(10)
+# m_pnt(10)
 
 #Calculate summary values
 summary.results[b, , "sample.n"][k] <- length(inds$age)
@@ -330,7 +330,7 @@ if (all==TRUE){
 z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "time"=proc.time()-ptm)}
 if (all!=TRUE){
 z <- list("summary.results"=summary.results, "inds"=inds, "time"=proc.time()-ptm)}
-m_pnt(11)
+# m_pnt(11)
 
 z
 }
