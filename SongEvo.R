@@ -179,9 +179,17 @@ inds
 }
 
 compete.for.territories <- function(inds){
+  # (assuming turnover rate of 0.5 and 40 available territories)
+  # 1. Set A may contain at most 20 birds (N_T*(1-t_rate))
+  # 2. If set (A U B) has less than 20 birds then set B has no birds
+  # 3. Set (A U C) may contain at most 40 birds (N_t)
+  # 5. Sets A, B, C and D are mutually exclusive (ie every bird is in exactly on of these four sets)
+  # 6. Set C can contain at most 20 birds 
+  # 7. Set C can only contain first year birds
+   
 	ninds <- length(inds$age)
 	#Allows a flexible population size, but caps breeding territories at a specific number. 
-	without <- which(inds$territory==0)
+	without <- which(inds$territory==0 & (inds$age >= disp.age) &  (inds$age < disp.age+timestep))
 	with <- which(inds$territory==1)
 	nwithout <- length(without)
 	nwith <- length(with)
@@ -190,12 +198,12 @@ compete.for.territories <- function(inds){
 	#Bring available territories up to number based on specified turnover rate.  Some have already opened because of death in the Die submodel.
 	if (terr.turnover*n.territories > nopen) {		
 		ran <- sample(with, size=round(terr.turnover*n.territories - nopen), replace=FALSE) 
-		inds[c(ran), "territory"] <- 0		
+		inds[c(ran), "territory"] <- 0	
+		with <- which(inds$territory==1)
+		nwith <- length(with)
+		nopen <- n.territories-nwith	
 	} 
-
-	with <- which(inds$territory==1)
-	nwith <- length(with)
-	nopen <- n.territories-nwith
+ nopen=max(c(nopen,round(terr.turnover*n.territories)))
 
  #Give open territories to birds that previously lacked territories. There are two scenarios:
  #First scenario: There are more open territories than specified by the turnover rate because of mortality in the die submodel:
