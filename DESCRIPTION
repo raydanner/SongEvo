@@ -17,6 +17,6 @@ Description: SongEvo simulates the cultural evolution of quantitative
     and tested against, measured song data. Functions are available 
     for model implementation, sensitivity analyses, parameter 
     optimization, model validation, and hypothesis testing. 
-Depends: R (>= 3.1.0)
-License: GNU
+Depends: R (>= 3.1.0), sp, 
+License: GNU General Public License v3.0
 LazyData: true
