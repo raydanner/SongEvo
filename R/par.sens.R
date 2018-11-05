@@ -1,3 +1,20 @@
+#' Parameter sensitivity
+#' 
+#' This function allows testing the sensitivity of SongEvo to different parameter values.
+#'
+#' @param par The parameter for which to test sensitivity over one or more values. 
+#' @param par.range Range of parameter values over which to test sensitivity.
+#' @param steps The number of steps (e.g. years) per iteration.
+#' @param ... other parameters from SongEvo()
+#'
+#'The function currently allows examination of only one parameter at a time and requires at least two iterations.
+#'
+#' @return array named sens.results. The sens.results array from par.sens(), which includes summary.results from SongEvo() for a range of parameter values.  summary.results from SongEvo() includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  
+#'
+#' @example 
+#' @export
+#' @references
+
 par.sens <- function(parm, par.range, iteration, steps, mate.comp, fixed_parms, all) {
 	par.rangel <- length(par.range)
 	sens.results <- array(NA, dim=c(iteration, steps, 5, par.rangel), dimnames = list(paste("iteration", seq(1:iteration)), 1:steps, c("sample.n", "trait.pop.mean", "trait.pop.variance", "lci", "uci"), paste("par.val", par.range)))
