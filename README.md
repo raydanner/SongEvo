@@ -10,8 +10,9 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Load the `SongEvo` package
+##Install and load the `SongEvo` package
 ```{r SongEvo}
+install.packages(devtools)
 library(devtools)
 devtools::install_github("raydanner/SongEvo")
 library(SongEvo)
@@ -569,4 +570,4 @@ arrows(x0=25, y0=2920, x1=years, y1=mean(target.data), length=0.1)
 
 ### Issues
 
-Find a bug?  Want to request an enhancement? Check out our [issues]() page!
+Find a bug?  Want to request an enhancement? Check out our [issues](https://github.com/raydanner/SongEvo/issues) page!
