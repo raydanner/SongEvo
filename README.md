@@ -12,17 +12,10 @@ knitr::opts_chunk$set(echo = TRUE)
 
 ##Load the `SongEvo` package
 ```{r SongEvo}
-#library(SongEvo)
+library(devtools)
+devtools::install_github("raydanner/SongEvo")
+library(SongEvo)
 ```
-
-```{r prep while in development stage--remove this after using the package, include=FALSE}
-setwd("~/Dropbox/SongEvo")
-SongEvo <- dget("SongEvo.R")
-par.sens <- dget("par.sens.R")
-par.opt <- dget("par.opt.R")
-mod.val <- dget("mod.val.R")
-h.test <- dget("h.test.R")
-``` 
 
 ##Load the example data: WCSP
 To explore the SongEvo package, we will use a database of songs from Nuttall’s white-crowned sparrow (*Zonotrichia leucophrys nuttalli*) recorded at three locations in 1969 and 2005. 
