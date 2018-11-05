@@ -1,3 +1,17 @@
+#' Test hypotheses about song evolution
+#' 
+#' Test if cultural traits evolve through specific mechanisms (e.g. drift or selection).
+#' 
+#' @param summary.results The summary.results array (i.e. a multi-dimensional table) from SongEvo(), which includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  
+#' @param ts The number of time steps (e.g. years) over which the trait will evolve.
+#' @param empir.trait Trait values to compare to simulated results. May be measured (i.e. empirical) or hypothetical. 
+#' 
+#' @return a list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.
+#' 
+#' @example 
+#' 
+#' @references
+
 h.test <- function(summary.results, ts, target.data) {
  
   #Calculate residuals
