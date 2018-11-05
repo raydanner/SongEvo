@@ -1,3 +1,17 @@
+#' Model validation
+#' 
+#' This function allows users to assess the validity of the specified model by testing model performance with a population different from the population used to build the model. The user first runs SongEvo with initial trait values from the validation population. 
+#' 
+#' @param summary.results summary.results from SongEvo
+#' 
+#' @param empirical values from a specified timestep
+#'
+#' @return 
+#'
+#' @example 
+#' @export
+#' @references
+
 mod.val <- function(summary.results, ts, target.data) {
   #Calculate residuals
 val.res <- array(NA, dim=c(iteration, 2), dimnames=list(paste("Iteration", seq(1:iteration), sep=" "), c("Residuals of mean", "Residuals of variance")))
