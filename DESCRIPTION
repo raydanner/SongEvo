@@ -27,4 +27,5 @@ Suggests:
 License: GNU General Public License v3.0
 LazyData: true
 VignetteBuilder: knitr
+Encoding: UTF-8
 RoxygenNote: 6.1.0
