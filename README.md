@@ -6,7 +6,7 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-##Install and load the `SongEvo` package
+## Install and load the `SongEvo` package
 ```{r SongEvo}
 install.packages(devtools)
 library(devtools)
@@ -14,7 +14,7 @@ devtools::install_github("raydanner/SongEvo")
 library(SongEvo)
 ```
 
-##Load the example data: WCSP
+## Load the example data: WCSP
 To explore the SongEvo package, we will use a database of songs from Nuttall’s white-crowned sparrow (*Zonotrichia leucophrys nuttalli*) recorded at three locations in 1969 and 2005. 
 ```{r WCSP}
 data("WCSP")
@@ -29,15 +29,15 @@ Share global parameters with the global environment. We make these parameters av
 list2env(glo.parms, globalenv())
 ```
 
-###Examine song data
+### Examine song data
 Data include the population name (Bear Valley, PRBO, or Schooner), year of song recording (1969 or 2005), and the frequency bandwidth of the trill.
 ```{r song data}
 str(song.data)
 ```
 
-##Simulate bird song evolution with `SongEvo()`
+## Simulate bird song evolution with `SongEvo()`
 
-###Define initial individuals
+### Define initial individuals
 In this example, we use songs from individual birds recorded in one population (PRBO) in the year 1969, which we will call `starting.trait`.
 ```{r subset initial song values}
 starting.trait <- subset(song.data, Population=="PRBO" & Year==1969)$Trill.FBW
@@ -50,7 +50,7 @@ init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), d
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 ```
 
-###Specify and call the SongEvo model
+### Specify and call the SongEvo model
 `SongEvo()` includes several settings, which we specify before running the model. For this example, we run the model for 10 iterations, over 36 years (i.e. 1969--2005). When conducting research with `SongEvo()`, users will want to increase the number iterations (e.g. to 100 or 1000). Each timestep is one year in this model (i.e. individuals complete all components of the model in 1 year). We specify territory turnover rate here as an example of how to adjust parameter values.  We could adjust any other parameter value here also. The learning method specifies that individuals integrate songs heard from adults within the specified integration distance (intigrate.dist, in kilometers). In this example, we do not includ a lifespan, so we assign it NA. In this example, we do not model competition for mates, so specify it as FALSE. Last, specify all as TRUE in order to save data for every single simulated individual because we will use those data later for mapping. If we do not need data for each individual, we set all to FALSE because the all.inds data.frame becomes very large! 
 ```{r Specify SongEvo model}
 iteration <- 10
@@ -69,7 +69,7 @@ Now we call SongEvo with our specifications and save it in an object called Song
 SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
 ```
 
-###Examine results from SongEvo model
+### Examine results from SongEvo model
 The model required the following time to run on your computer:
 ```{r Examine results from SongEvo model}
 SongEvo1$time
@@ -90,7 +90,7 @@ Third, individual values may optionally be concatenated and saved to one data fr
 head(SongEvo1$all.inds, 5)
 ```
 
-####Simulated population size
+#### Simulated population size
 We see that the simulated population size remains relatively stable over the course of 36 years. This code uses the summary.results array.
 ```{r Examine population size over time}
 plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
@@ -112,7 +112,7 @@ Load Hmisc package for plotting functions.
 library("Hmisc")
 ```
 
-####Simulated trait values
+#### Simulated trait values
 We see that the mean trait values per iteration varied widely, though mean trait values over all iterations remained relatively stable. This code uses the summary.results array.
 ```{r Examine simulated trait evolution}
 plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36), ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
@@ -145,7 +145,7 @@ text(x=5, y=2720, labels="Historical songs", pos=1)
 arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 ```
 
-####Trait variance
+#### Trait variance
 We see that variance for each iteration per year increased in the first few years and then stabilized. This code uses the summary.results array.
 ```{r Examine simulated trait variance}
  #plot variance for each iteration per year
@@ -163,7 +163,7 @@ lines(quant.means[1,], col="green", lty=2)
 lines(quant.means[2,], col="green", lty=2)
 ```
 
-####Maps
+#### Maps
 The simulation results include geographical coordinates and are in a standard spatial data format, thus allowing calculation of a wide variety of spatial statistics. 
 
 Load packages for making maps.
@@ -216,10 +216,10 @@ it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
 xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
 ```
 
-##Test model sensitivity with `par.sens()`
+## Test model sensitivity with `par.sens()`
 This function allows testing the sensitivity of SongEvo to different parameter values. 
 
-###Specify and call `par.sens()`
+### Specify and call `par.sens()`
 Here we test the sensitivity of the Acquire a Territory submodel to variation in territory turnover rates, ranging from 0.8–1.2 times the published rate (40–60% of territories turned over). The call for the par.sens function has a format similar to SongEvo. The user specifies the parameter to test and the range of values for that parameter. The function currently allows examination of only one parameter at a time and requires at least two iterations.
 ```{r Specify the par.sens model}
 parm <- "terr.turnover"
@@ -246,7 +246,7 @@ par.sens1 <- par.sens(parm = parm, par.range = par.range,
                       fixed_parms=extra_parms[names(extra_parms)!=parm], all = TRUE)
 ```
 
-###Examine par.sens results
+### Examine par.sens results
 Examine results objects, which include two arrays: 
 
 The first array, `sens.results`, contains the SongEvo model results for each parameter. It has the following dimensions:
@@ -288,15 +288,15 @@ lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
 ```
 
-##Optimize parameter values with `par.opt()`
+## Optimize parameter values with `par.opt()`
 This function follows par.sens to help users optimize values for imperfectly known parameters for SongEvo. The goals are to maximize accuracy and precision of model prediction. Accuracy is quantified by three different approaches: i) the mean of absolute residuals of the predicted population mean values in relation to target data (e.g. observed or hypothetical values (smaller absolute residuals indicate a more accurate model)), ii) the difference between the bootstrapped mean of predicted population means and the mean of the target data, and iii) the proportion of simulated population trait means that fall within (i.e. are "contained by") the confidence intervals of the target data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of target data (smaller residuals indicate a more precise model). 
 
-###Prepare current song values
+### Prepare current song values
 ```{r prepare current songs}
 target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
 ```
 
-###Specify and call `par.opt()`
+### Specify and call `par.opt()`
 Users specify the timestep (“ts”) at which to compare simulated trait values to target trait data (“target.data”) and save the results in an object (called `par.opt1` here).
 ```{r Specify and call par.opt()}
 ts <- years
@@ -309,8 +309,8 @@ par.opt1$Residuals
 par.opt1$Target.match
 ```
 
-###Plot results of `par.opt()`
-####Accuracy
+### Plot results of `par.opt()`
+#### Accuracy
 
   1. Difference in means.
 ```{r par.opt() difference in means}
@@ -333,7 +333,7 @@ lines(par.range, res.mean.quants[1,], col="orange", lty=2)
 lines(par.range, res.mean.quants[2,], col="orange", lty=2)
 ```
 
-####Precision
+#### Precision
 ```{r par.opt() residuals of the variance}
 #Calculate and plot mean and quantiles of residuals of variance of trait values
 res.var.mean <- apply(par.opt1$Residuals[, , 2], MARGIN=1, mean, na.rm=TRUE)
@@ -345,7 +345,7 @@ lines(par.range, res.var.quants[1,], col="purple", lty=2)
 lines(par.range, res.var.quants[2,], col="purple", lty=2)
 ```
 
-####Visual inspection of accuracy and precision: plot trait values for range of parameters
+#### Visual inspection of accuracy and precision: plot trait values for range of parameters
 ```{r par.opt() visual inspection of simulated data}
 par(mfcol=c(3,2))
 par(mar=c(4.1, 4.1, 1, 1))
@@ -396,7 +396,7 @@ text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100
 }
 ```
 
-##Model validation with `mod.val()`
+## Model validation with `mod.val()`
 This function allows users to assess the validity of the specified model by testing model performance with a population different from the population used to build the model. The user first runs SongEvo with initial trait values from the validation population. `mod.val()` uses the summary.results array from SongEvo, along with target values from a specified timestep, to calculate the same three measures of accuracy and one measure of precision that are calculated in par.opt. 
 
 We parameterized SongEvo with initial song data from Schooner Bay, CA in 1969, and then compared simulated data to target (i.e. observed) data in 2005.
@@ -482,7 +482,7 @@ arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
 
 The model did reasonably well predicting trait evolution in the validation population, suggesting that it is valid for our purposes: the mean bandwidth was `abs(mean(target.data)-freq.mean)`Hz from the observed values, ~21% of predicted population means fell within the 95% confidence intervals of the observed data, and residuals of means (~545 Hz) and variances (~415181 Hz) were similar to those produced by the training data set.
 
-##Hypothesis testing with `h.test()`
+## Hypothesis testing with `h.test()`
 This function allows hypothesis testing with SongEvo.  To test if measured songs from two time points evolved through mechanisms described in the model (e.g. drift or selection), users initialize the model with historical data, parameterize the model based on their understanding of the mechanisms, and test if subsequently observed or predicted data match the simulated data. The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances. We tested the hypothesis that songs of *Z. l. nuttalli* in Bear Valley, CA evolved through cultural drift from 1969 to 2005. 
 
 Prepare initial song data for Bear Valley.
