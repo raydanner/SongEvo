@@ -20,6 +20,10 @@ Imports:
     boot, 
     geosphere, 
     sp 
+Suggests:
+    reshape2,
+    lattice,
+    Hmisc
 License: GNU General Public License v3.0
 LazyData: true
 VignetteBuilder: knitr
