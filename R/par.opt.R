@@ -1,3 +1,18 @@
+#' Parameter optimization
+#' 
+#' This function follows par.sens to help users optimize values for imperfectly known parameters for SongEvo. The goals are to maximize accuracy and precision of model prediction.
+#'
+#' @param sens.results The sens.results array from par.sens(), which includes summary.results from SongEvo() for a range of parameter values.  summary.results from SongEvo() includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  
+#' @param ts The timestep (“ts”) at which to compare simulated trait values to target trait values (“target.data”).
+#' @param target.data A set of trait values against which to compare simulated values. target.data may be measured (e.g. from a training population) or hypothetical.
+#' @param par.range Range of parameter values over which to optimize.
+#'
+#' @return Three measurements of accuracy and one measure of precision.  Accuracy is quantified by three different approaches: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model).
+#'
+#' @example 
+#' @export
+#' @references
+
 par.opt <- function(sens.results, ts, target.data, par.range) {
   #Calculate residuals
 res <- array(NA, dim=c(length(par.range), iteration, 2), dimnames=list(paste("par.val", par.range), paste("Iteration", seq(1:iteration), sep=" "), c("Residuals of mean", "Residuals of variance")))
