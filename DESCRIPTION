@@ -11,12 +11,14 @@ Authors@R: c(person("Raymond", "Danner", email = "dannerR@uncw.edu",
                   role = c("aut")),
              person("David", "Luther",
                   role = c("aut")))
+BugReports: https://github.com/raydanner/SongEvo/issues
 Description: SongEvo simulates the cultural evolution of quantitative 
     traits of bird song. SongEvo is an individual- (agent-) based model.
     SongEvo is spatially-explicit and can be parameterized with, 
     and tested against, measured song data. Functions are available 
     for model implementation, sensitivity analyses, parameter 
     optimization, model validation, and hypothesis testing. 
-Depends: R (>= 3.1.0), sp, 
+Depends: R (>= 3.1.0)
+Imports: boot, geosphere, sp 
 License: GNU General Public License v3.0
 LazyData: true
