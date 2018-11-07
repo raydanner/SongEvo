@@ -2,7 +2,7 @@
 #' 
 #' This function allows testing the sensitivity of SongEvo to different parameter values.
 #'
-#' @name par.opt
+#' @name par.sens
 #' @param par The parameter for which to test sensitivity over one or more values. 
 #' @param par.range Range of parameter values over which to test sensitivity.
 #' @param steps The number of steps (e.g. years) per iteration.
