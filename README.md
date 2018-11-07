@@ -4,7 +4,7 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
     
 ## Install and load the `SongEvo` package
 ```{r SongEvo}
-install.packages(devtools)
+install.packages("devtools")
 library(devtools)
 devtools::install_github("raydanner/SongEvo")
 library(SongEvo)
