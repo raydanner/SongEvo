@@ -32,6 +32,7 @@
 #' 
 #' @references
 
+#' @export
 library("boot")
 sample.mean <- function(d, x) {
   mean(d[x])
