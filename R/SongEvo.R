@@ -1,6 +1,8 @@
 #' Model bird song evolution
+#'
 #' This function simulates bird song evolution. Submodels are performed once per time step, and include fledging from the nest, song learning, ageing and death, dispersal, competition for territories, mate attraction, and reproduction.
 #'
+#' @name SongEvo
 #' @param init.inds Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude). 
 #' @param iteration The number of iterations that the model will run. 
 #' @param steps The number of steps per iteration.
@@ -31,7 +33,7 @@
 #' @example 
 #' 
 #' @references
-
+#' 
 #' @export
 library("boot")
 sample.mean <- function(d, x) {
