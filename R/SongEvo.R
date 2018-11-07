@@ -33,7 +33,10 @@
 #' @example 
 #' 
 #' @references
-#' 
+#'
+#' @import boot
+#' @import sp
+#' @import geosphere
 #' @export
 library("boot")
 sample.mean <- function(d, x) {
