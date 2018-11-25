@@ -11,7 +11,7 @@
 #'
 #' @return Three measurements of accuracy: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model). Users specify the timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).
 #'
-#' @example SongEvo/inst/examples/mod.valExamples.R
+#' @example inst/examples/mod.valExamples.R
 #' @references
 #' @export
 mod.val <- function(summary.results, ts, target.data) {
