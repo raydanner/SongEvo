@@ -1,3 +1,5 @@
+### See vignette for an example that uses all functions in SongEvo.
+
 #Prepare initial song data for Bear Valley.
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
 starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
