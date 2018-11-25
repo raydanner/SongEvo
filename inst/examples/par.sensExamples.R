@@ -1,3 +1,5 @@
+### See vignette for an example that uses all functions in SongEvo.
+
 #### Specify and call `par.sens()`
 #Here we test the sensitivity of the Acquire a Territory submodel to variation in territory turnover rates, ranging from 0.8–1.2 times the published rate (40–60% of territories turned over). The call for the par.sens function has a format similar to SongEvo. The user specifies the parameter to test and the range of values for that parameter. The function currently allows examination of only one parameter at a time and requires at least two iterations.
 parm <- "terr.turnover"
