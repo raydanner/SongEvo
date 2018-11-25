@@ -9,7 +9,7 @@
 #' 
 #' @return a list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.
 #' 
-#' @example SongEvo/inst/examples/h.testExamples.R
+#' @example inst/examples/h.testExamples.R
 #' 
 #' @references
 #' @export
