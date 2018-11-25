@@ -208,6 +208,7 @@ The simulation results include geographical coordinates and are in a standard sp
 
 Load packages for making maps.
 ```{r Load packages for making maps, message=FALSE, warning=TRUE}
+library("sp")
 library("reshape2")
 library("lattice")
 ```
