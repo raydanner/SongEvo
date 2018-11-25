@@ -1,3 +1,5 @@
+### See vignette for an example that uses all functions in SongEvo.
+
 #### Prepare current song values
 target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
 
