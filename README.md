@@ -14,12 +14,6 @@ devtools::install_github("raydanner/SongEvo", build_vignettes = TRUE)
 library(SongEvo)
 ```
 
-```{r,warning=FALSE,message=FALSE,echo=FALSE}
-library(SongEvo)
-```
-
 ## Issues
 
 Find a bug?  Want to request an enhancement? Check out our [issues](https://github.com/raydanner/SongEvo/issues) page!
-
-
