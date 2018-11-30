@@ -13,6 +13,7 @@
 #'
 #' @example inst/examples/mod.valExamples.R
 #' @references
+#' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' @export
 mod.val <- function(summary.results, ts, target.data) {
   #Calculate residuals
