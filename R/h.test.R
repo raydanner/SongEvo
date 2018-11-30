@@ -12,6 +12,7 @@
 #' @example inst/examples/h.testExamples.R
 #' 
 #' @references
+#' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], 'browseVignettes("SongEvo")'
 #' @export
 h.test <- function(summary.results, ts, target.data) {
  
