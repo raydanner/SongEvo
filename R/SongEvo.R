@@ -32,6 +32,8 @@
 #' 
 #' @example inst/examples/SongEvoExamples.R
 #' 
+#' @seealso [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+#' 
 #' @references
 #'
 #' @import boot
