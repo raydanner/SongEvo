@@ -12,6 +12,7 @@
 #'
 #' @example inst/examples/par.optExamples.R
 #' @references
+#' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' @export
 
 par.opt <- function(sens.results, ts, target.data, par.range) {
