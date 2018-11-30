@@ -14,6 +14,7 @@
 #'
 #' @example inst/examples/par.sensExamples.R
 #' @references
+#' @seealso [SongEvo::SongEvo()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' @export
 
 par.sens <- function(parm, par.range, iteration, steps, mate.comp, fixed_parms, all) {
