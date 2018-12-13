@@ -1,4 +1,45 @@
-
+#' Model bird song evolution
+#'
+#' This function simulates bird song evolution. Submodels are performed once per time step, and include fledging from the nest, song learning, ageing and death, dispersal, competition for territories, mate attraction, and reproduction.
+#'
+#' @name SongEvo
+#' @param init.inds Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude). 
+#' @param iteration The number of iterations that the model will run. 
+#' @param steps The number of steps per iteration.
+#' @param timestep The length of time that passes in each step. For annually breeding species, timestep = 1 year.
+#' @param terr.turnover The proportion of territories that change ownership during a step.
+#' @param mate.comp Female preference for mates. Currently specified as “Yes” or “No”. 
+#' @param learning.method If an individual learns from their (“father”) or all males within a specified radius (“integrate”).
+#' @param integrate.dist Distance over which song learning is integrated.
+#' @param learning.error.d Direction of learning error.
+#' @param learning.error.sd The standard deviation of imitation error.  
+#' @param mortality.a Annual mortality of adults (after the first time step).
+#' @param mortality.j Annual mortality of juvenile birds (in the first time step).
+#' @param lifespan Maximum age for individuals; any number is accepted. “NA” causes SongEvo to disregard lifespan and sets population size based on mortality rates alone.
+#' @param phys.lim.min The minimum physical limit of trait production.
+#' @param phys.lim.max The maximum physical limit of trait production.
+#' @param male.fledge.n.mean The mean number of offspring produced per time step per individual breeding male. Includes only offspring raised in that breeding male’s nest (i.e. it does not account for extra-pair offspring in other nests).
+#' @param male.fledge.n.sd Standard deviation of the number of male fledglings.
+#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd
+#' @param disp.age The age at which individual males disperse from their birth location.
+#' @param disp.distance.mean The distance that individual males disperse (meters).
+#' @param disp.distance.sd The standard deviation of dispersal distance.
+#' @param n.territories The number of territories in the population. This number is fixed for all iterations.
+#' @param prin Print summary values after each timestep has completed? Options are TRUE or FALSE. 
+#' @param all Save data for all individuals? Options are TRUE or FALSE. 
+#' 
+#' @return three objects. First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.  Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired. 
+#' 
+#' @example inst/examples/SongEvoExamples.R
+#' 
+#' @seealso [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+#' 
+#' @references
+#'
+#' @import boot
+#' @import sp
+#' @import geosphere
+#' @export
 library("boot")
 sample.mean <- function(d, x) {
   mean(d[x])
