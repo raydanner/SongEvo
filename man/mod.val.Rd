@@ -80,7 +80,8 @@ freq.mean <- apply(SongEvo2$summary.results[, , "trait.pop.mean"], 2, mean, na.r
 lines(freq.mean, col="blue")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
 #Plot 95\% quantiles 
-quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, 
+                      quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 #plot mean and CI for historic songs.  

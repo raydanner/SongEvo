@@ -3,10 +3,13 @@
 #' This function allows testing the sensitivity of SongEvo to different parameter values.
 #'
 #' @name par.sens
-#' @param par The parameter for which to test sensitivity over one or more values. 
-#' @param par.range Range of parameter values over which to test sensitivity.
+#' @param parm The parameter for which to test sensitivity over one or more values. 
+#' @param par.range List of ranges of parameter values over which to test sensitivity.
+#' @param iteration The number of iterations that the model will run. 
 #' @param steps The number of steps (e.g. years) per iteration.
-#' @param ... other parameters from SongEvo()
+#' @param mate.comp Female preference for mates. Currently specified as “Yes” or “No”. 
+#' @param fixed_parms Named boolean vector identifying which parameters to keep fixed.
+#' @param all Save data for all individuals? Options are TRUE or FALSE. 
 #'
 #'The function currently allows examination of only one parameter at a time and requires at least two iterations.
 #'

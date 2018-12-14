@@ -7,13 +7,19 @@
 par.sens(parm, par.range, iteration, steps, mate.comp, fixed_parms, all)
 }
 \arguments{
-\item{par.range}{Range of parameter values over which to test sensitivity.}
+\item{parm}{The parameter for which to test sensitivity over one or more values.}
+
+\item{par.range}{List of ranges of parameter values over which to test sensitivity.}
+
+\item{iteration}{The number of iterations that the model will run.}
 
 \item{steps}{The number of steps (e.g. years) per iteration.}
 
-\item{par}{The parameter for which to test sensitivity over one or more values.}
+\item{mate.comp}{Female preference for mates. Currently specified as “Yes” or “No”.}
 
-\item{...}{other parameters from SongEvo()
+\item{fixed_parms}{Named boolean vector identifying which parameters to keep fixed.}
+
+\item{all}{Save data for all individuals? Options are TRUE or FALSE. 
 
 The function currently allows examination of only one parameter at a time and requires at least two iterations.}
 }

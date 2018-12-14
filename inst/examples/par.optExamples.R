@@ -9,7 +9,8 @@ target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
 # to target trait data (“target.data”) and save the results in an object (called
 # `par.opt1` here).
 ts <- years
-par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts, target.data=target.data, par.range=par.range)
+par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts, 
+                    target.data=target.data, par.range=par.range)
 
 # Examine results objects (residuals and target match).  
 par.opt1$Residuals
