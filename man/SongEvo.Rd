@@ -288,6 +288,7 @@ lines(quant.means[2,], col="green", lty=2)
 # Load packages for making maps.
 library("reshape2")
 library("lattice")
+library("sp")
 
 # Convert data frame from long to wide format. This is necessary for making a
 # multi-panel plot.
