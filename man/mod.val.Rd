@@ -89,3 +89,6 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
 }
+\seealso{
+[SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+}

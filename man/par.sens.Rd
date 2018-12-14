@@ -82,3 +82,6 @@ quant.means <- apply (par.sens1$sens.results.diff, MARGIN=2, quantile, probs=c(0
 lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
 }
+\seealso{
+[SongEvo::SongEvo()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+}

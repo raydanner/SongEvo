@@ -85,3 +85,6 @@ arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 text(x=25, y=2900, labels="Current songs", pos=1)
 arrows(x0=25, y0=2920, x1=years, y1=mean(target.data), length=0.1)
 }
+\seealso{
+[SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], 'browseVignettes("SongEvo")'
+}

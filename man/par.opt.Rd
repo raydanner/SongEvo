@@ -110,3 +110,6 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100, labels=paste("Par = ", par.range[i], sep=""))  
 }
 }
+\seealso{
+[SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+}
