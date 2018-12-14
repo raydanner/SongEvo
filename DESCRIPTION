@@ -19,7 +19,7 @@ Depends:
 Imports: 
     boot, 
     geosphere, 
-    sp 
+    sp
 Suggests:
     reshape2,
     lattice,
