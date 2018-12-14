@@ -1,4 +1,4 @@
-Version: 1.0.0
+Version: 1.0
 
 RestoreWorkspace: Default
 SaveWorkspace: Default
@@ -11,3 +11,7 @@ Encoding: UTF-8
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+
+BuildType: Package
+PackageUseDevtools: Yes
+PackageInstallArgs: --no-multiarch --with-keep.source
