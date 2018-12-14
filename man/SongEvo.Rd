@@ -3,6 +3,13 @@
 \name{SongEvo}
 \alias{SongEvo}
 \title{Model bird song evolution}
+\usage{
+SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
+  learning.method, integrate.dist, learning.error.d, learning.error.sd,
+  mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max,
+  male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age,
+  disp.distance.mean, disp.distance.sd, n.territories, prin, all)
+}
 \arguments{
 \item{init.inds}{Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude).}
 
@@ -220,9 +227,6 @@ it1 <- subset(SongEvo1$all.inds, iteration==1)
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
 it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
 xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
-}
-\references{
-
 }
 \seealso{
 [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'

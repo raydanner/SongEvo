@@ -9,11 +9,9 @@ mod.val(summary.results, ts, target.data)
 \arguments{
 \item{summary.results}{The summary.results array (i.e. a multi-dimensional table) from SongEvo(), which includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.}
 
-\item{ts}{The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).}
+\item{ts}{The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“target.data”).}
 
-\item{empir.trait}{Trait values from the validation population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
-
-\item{empirical}{values from a specified timestep}
+\item{target.data}{Trait values from the validation population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
 }
 \value{
 Three measurements of accuracy: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model). Users specify the timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).

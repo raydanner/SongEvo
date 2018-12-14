@@ -11,9 +11,9 @@
 #' @return Three measurements of accuracy and one measure of precision.  Accuracy is quantified by three different approaches: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model).
 #'
 #' @example inst/examples/par.optExamples.R
-#' @references
 #' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' @export
+#' @importFrom stats var
 
 par.opt <- function(sens.results, ts, target.data, par.range) {
   #Calculate residuals

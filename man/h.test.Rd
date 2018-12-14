@@ -11,7 +11,7 @@ h.test(summary.results, ts, target.data)
 
 \item{ts}{The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).}
 
-\item{empir.trait}{Trait values from the test population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
+\item{target.data}{Trait values from the test population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
 }
 \value{
 a list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.

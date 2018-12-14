@@ -34,30 +34,12 @@
 #' 
 #' @seealso [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' 
-#' @references
 #'
 #' @import boot
 #' @import sp
 #' @import geosphere
+#' @importFrom stats runif rnorm
 #' @export
-library("boot")
-sample.mean <- function(d, x) {
-  mean(d[x])
-}
-
-library("geosphere")
-library("sp")
-
-fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
-  coor.cols=c(which(colnames(data.src)%in% x.col),
-              which(colnames(data.src)%in% y.col));
-  SpatialPointsDataFrame(coords = data.src[,coor.cols],
-                         data = data.src[,-coor.cols],
-                         coords.nrs = coor.cols,
-                         match.ID = FALSE,
-                         proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) 
-}
-
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -391,3 +373,16 @@ z
 }
 #End of I. SongEvo function
 #########################
+
+fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
+  coor.cols=c(which(colnames(data.src)%in% x.col),
+              which(colnames(data.src)%in% y.col));
+  SpatialPointsDataFrame(coords = data.src[,coor.cols],
+                         data = data.src[,-coor.cols],
+                         coords.nrs = coor.cols,
+                         match.ID = FALSE,
+                         proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) 
+}
+sample.mean <- function(d, x) {
+  mean(d[x])
+}
