@@ -1,10 +1,13 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-#Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and then compare simulated data to target (i.e. observed) data in 2005.
+#Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
+#then compare simulated data to target (i.e. observed) data in 2005.
 
 #Prepare initial song data for Schooner Bay.
 starting.trait <- subset(song.data, Population=="Schooner" & Year==1969)$Trill.FBW
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 
+                                           mean=mean(starting.trait), 
+                                           sd=sd(starting.trait)))
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
@@ -14,7 +17,30 @@ iteration <- 10
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
-SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo2 <- SongEvo(init.inds = init.inds,
+                    iteration = iteration,
+                    steps = years,
+                    timestep = timestep,
+                    n.territories = n.territories,
+                    terr.turnover = terr.turnover,
+                    learning.method = learning.method,
+                    integrate.dist = integrate.dist,
+                    learning.error.d = learning.error.d,
+                    learning.error.sd = learning.error.sd,
+                    mortality.a = mortality.a,
+                    mortality.j = mortality.j,
+                    lifespan = lifespan,
+                    phys.lim.min = phys.lim.min,
+                    phys.lim.max = phys.lim.max,
+                    male.fledge.n.mean = male.fledge.n.mean,
+                    male.fledge.n.sd = male.fledge.n.sd,
+                    male.fledge.n = male.fledge.n, 
+                    disp.age = disp.age, 
+                    disp.distance.mean = disp.distance.mean, 
+                    disp.distance.sd = disp.distance.sd, 
+                    mate.comp = mate.comp, 
+                    prin = prin,
+                    all)
 
 #Specify and call mod.val
 ts <- 36
@@ -22,7 +48,9 @@ target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, target.data=target.data)
 
 #Plot results from `mod.val()`
-plot(SongEvo2$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36.5), ylim=c(min(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo2$summary.results[1, , "trait.pop.mean"], 
+     xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", 
+     xlim=c(-0.5, 36.5), ylim=range(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE))
 	for(p in 1:iteration){
 		lines(SongEvo2$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}

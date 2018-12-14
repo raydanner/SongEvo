@@ -24,26 +24,59 @@ Test if cultural traits evolve through specific mechanisms (e.g. drift or select
 
 #Prepare initial song data for Bear Valley.
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait),
+                                           mean=mean(starting.trait), sd=sd(starting.trait)))
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
 #Specify and call SongEvo() with test data
-SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo3 <- SongEvo(init.inds = init.inds,
+                    iteration = iteration,
+                    steps = years,
+                    timestep = timestep,
+                    n.territories = n.territories,
+                    terr.turnover = terr.turnover,
+                    learning.method = learning.method,
+                    integrate.dist = integrate.dist,
+                    learning.error.d = learning.error.d,
+                    learning.error.sd = learning.error.sd,
+                    mortality.a = mortality.a,
+                    mortality.j = mortality.j,
+                    lifespan = lifespan,
+                    phys.lim.min = phys.lim.min,
+                    phys.lim.max = phys.lim.max,
+                    male.fledge.n.mean = male.fledge.n.mean,
+                    male.fledge.n.sd = male.fledge.n.sd,
+                    male.fledge.n = male.fledge.n,
+                    disp.age = disp.age,
+                    disp.distance.mean = disp.distance.mean,
+                    disp.distance.sd = disp.distance.sd,
+                    mate.comp = mate.comp,
+                    prin = prin,
+                    all)
 
 #Specify and call `h.test()`
 target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW
 h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=target.data)
 
-#The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances.
+# The output data list includes two measures of accuracy: the proportion of
+# observed points that fall within the confidence intervals of the simulated
+# data and the residuals between simulated and observed population trait means.
+# Precision is measured as the residuals between simulated and observed
+# population trait variances.
 
-#Eighty percent of the observed data fell within the central 95\% of the simulated values, providing support for the hypothesis that cultural drift as described in this model is sufficient to describe the evolution of trill frequency bandwidth in this population.
+# Eighty percent of the observed data fell within the central 95\% of the
+# simulated values, providing support for the hypothesis that cultural drift as
+# described in this model is sufficient to describe the evolution of trill
+# frequency bandwidth in this population.
 h.test1
 
 #Plot simulated data in relation to measured data.
 #Plot
-plot(SongEvo3$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 35.5), ylim=c(min(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo3$summary.results[1, , "trait.pop.mean"], 
+     xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n",
+     xlim=c(-0.5, 35.5), ylim=range(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE))
 	for(p in 1:iteration){
 		lines(SongEvo3$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}
@@ -51,7 +84,8 @@ freq.mean <- apply(SongEvo3$summary.results[, , "trait.pop.mean"], 2, mean, na.r
 lines(freq.mean, col="blue")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
 #Plot 95\% quantiles (which are similar to credible intervals)
-quant.means <- apply (SongEvo3$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo3$summary.results[, , "trait.pop.mean"], MARGIN=2, 
+                      quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
  #plot original song values
