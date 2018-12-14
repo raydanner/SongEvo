@@ -15,7 +15,7 @@
 #' @export
 #' @importFrom stats quantile
 h.test <- function(summary.results, ts, target.data) {
- 
+  iteration <- dim(summary.results)[1]
   #Calculate residuals
 h.test.res <- array(NA, dim=c(iteration, 2), dimnames=list(paste("Iteration", seq(1:iteration), sep=" "), c("Residuals of mean", "Residuals of variance")))
 		h.test.res[,1] <- abs(mean(target.data)-summary.results[, ts, "trait.pop.mean"])
