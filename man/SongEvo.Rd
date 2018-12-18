@@ -21,7 +21,7 @@ SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
 
 \item{terr.turnover}{The proportion of territories that change ownership during a step.}
 
-\item{mate.comp}{Female preference for mates. Currently specified as “Yes” or “No”.}
+\item{mate.comp}{Female preference for mates. Options are TRUE or FALSE.}
 
 \item{learning.method}{If an individual learns from their (“father”) or all males within a specified radius (“integrate”).}
 

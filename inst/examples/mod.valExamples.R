@@ -3,6 +3,10 @@
 #Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
 #then compare simulated data to target (i.e. observed) data in 2005.
 
+data("song.data")
+data("glo.parms")
+
+list2env(glo.parms, globalenv()) 
 #Prepare initial song data for Schooner Bay.
 starting.trait <- subset(song.data, Population=="Schooner" & Year==1969)$Trill.FBW
 starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 

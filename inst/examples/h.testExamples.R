@@ -1,7 +1,8 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
 #Prepare initial song data for Bear Valley.
-data(glo.parms)
+data("song.data")
+data("glo.parms")
 years=2005-1969
 iteration=1
 timestep=1
@@ -22,7 +23,7 @@ SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     n.territories = n.territories,
                     terr.turnover = terr.turnover,
                     learning.method = "father",
-                    integrate.dist = NULL,
+                    integrate.dist = 10,
                     learning.error.d = learning.error.d,
                     learning.error.sd = learning.error.sd,
                     mortality.a = mortality.a,
@@ -36,9 +37,9 @@ SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     disp.age = disp.age,
                     disp.distance.mean = disp.distance.mean,
                     disp.distance.sd = disp.distance.sd,
-                    mate.comp = "No",
-                    prin = F,
-                    all))
+                    mate.comp = FALSE,
+                    prin = TRUE,
+                    all = FALSE))
 
 #Specify and call `h.test()`
 target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW

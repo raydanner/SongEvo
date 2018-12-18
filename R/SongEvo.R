@@ -8,7 +8,7 @@
 #' @param steps The number of steps per iteration.
 #' @param timestep The length of time that passes in each step. For annually breeding species, timestep = 1 year.
 #' @param terr.turnover The proportion of territories that change ownership during a step.
-#' @param mate.comp Female preference for mates. Currently specified as “Yes” or “No”. 
+#' @param mate.comp Female preference for mates. Options are TRUE or FALSE.
 #' @param learning.method If an individual learns from their (“father”) or all males within a specified radius (“integrate”).
 #' @param integrate.dist Distance over which song learning is integrated.
 #' @param learning.error.d Direction of learning error.
