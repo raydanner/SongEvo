@@ -22,13 +22,13 @@ SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     timestep = timestep,
                     n.territories = n.territories,
                     terr.turnover = terr.turnover,
-                    learning.method = "father",
-                    integrate.dist = 10,
+                    learning.method = "integrate",
+                    integrate.dist = 50,
                     learning.error.d = learning.error.d,
                     learning.error.sd = learning.error.sd,
                     mortality.a = mortality.a,
                     mortality.j = mortality.j,
-                    lifespan = lifespan,
+                    lifespan = NA,
                     phys.lim.min = phys.lim.min,
                     phys.lim.max = phys.lim.max,
                     male.fledge.n.mean = male.fledge.n.mean,
@@ -42,8 +42,9 @@ SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     all = FALSE))
 
 #Specify and call `h.test()`
+ts=years
 target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW
-h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=1:years, target.data=target.data)
+h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=target.data)
 
 # The output data list includes two measures of accuracy: the proportion of
 # observed points that fall within the confidence intervals of the simulated
