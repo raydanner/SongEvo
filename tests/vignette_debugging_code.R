@@ -2,24 +2,16 @@
 
 #Load functions from files, keeping source references for future debugging
 
-#SongEvo <- dget("SongEvo.R", TRUE)
-source("SongEvo.R")
-par.sens <- dget("par.sens.R", TRUE)
-par.opt <- dget("par.opt.R", TRUE)
-mod.val <- dget("mod.val.R", TRUE)
-h.test <- dget("h.test.R", TRUE)
-
-# Load the example data: WCSP 
+library(SongEvo)
+# Load the example model for WCSP 
 # To explore the SongEvo package, we will use a database of songs from 
 # Nuttall’s white-crowned sparrow (Zonotrichia leucophrys nuttalli) 
 # recorded at three locations in 1969 and 2005.
+# example data: song.data
+data(song.data)
 
-data("WCSP")
-
-## discard malformed glo.parms entry "global.parms$learning.error.d"
-
-glo.parms=glo.parms[ ! names(glo.parms) %in% "global.parms$learning.error.d" ]
-
+# Preselected global parameters: glo.parms
+data(glo.parms)
 # direct load into global envrionment
 list2env(glo.parms, globalenv()) 
 
@@ -27,7 +19,6 @@ list2env(glo.parms, globalenv())
 # the population name (Bear Valley, PRBO, or Schooner), 
 # the year of song recording (1969 or 2005), and 
 # the frequency bandwidth of the trill.
-
 str(song.data)
 # RStudio alternative: View(song.data)
 
