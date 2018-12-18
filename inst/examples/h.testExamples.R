@@ -1,6 +1,11 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
 #Prepare initial song data for Bear Valley.
+data(glo.parms)
+years=2005-1969
+iteration=1
+timestep=1
+n.territories <- glo.parms$n.territories
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
 starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait),
                                            mean=mean(starting.trait), sd=sd(starting.trait)))
@@ -9,14 +14,15 @@ init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), d
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
 #Specify and call SongEvo() with test data
-SongEvo3 <- SongEvo(init.inds = init.inds,
+
+SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     iteration = iteration,
                     steps = years,
                     timestep = timestep,
                     n.territories = n.territories,
                     terr.turnover = terr.turnover,
-                    learning.method = learning.method,
-                    integrate.dist = integrate.dist,
+                    learning.method = "father",
+                    integrate.dist = NULL,
                     learning.error.d = learning.error.d,
                     learning.error.sd = learning.error.sd,
                     mortality.a = mortality.a,
@@ -30,13 +36,13 @@ SongEvo3 <- SongEvo(init.inds = init.inds,
                     disp.age = disp.age,
                     disp.distance.mean = disp.distance.mean,
                     disp.distance.sd = disp.distance.sd,
-                    mate.comp = mate.comp,
-                    prin = prin,
-                    all)
+                    mate.comp = "No",
+                    prin = F,
+                    all))
 
 #Specify and call `h.test()`
 target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW
-h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=target.data)
+h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=1:years, target.data=target.data)
 
 # The output data list includes two measures of accuracy: the proportion of
 # observed points that fall within the confidence intervals of the simulated
