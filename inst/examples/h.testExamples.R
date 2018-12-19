@@ -4,7 +4,7 @@
 data("song.data")
 data("glo.parms")
 years=2005-1969
-iteration=1
+iteration=10
 timestep=1
 n.territories <- glo.parms$n.territories
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
@@ -38,7 +38,7 @@ SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
                     disp.distance.mean = disp.distance.mean,
                     disp.distance.sd = disp.distance.sd,
                     mate.comp = FALSE,
-                    prin = TRUE,
+                    prin = FALSE,
                     all = FALSE))
 
 #Specify and call `h.test()`
