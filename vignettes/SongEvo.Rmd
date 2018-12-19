@@ -388,9 +388,9 @@ lines(par.range, res.var.quants[2,], col="purple", lty=2)
 
 #### Visual inspection of accuracy and precision: plot trait values for range of parameters
 ```{r par.opt() visual inspection of simulated data}
-par(mfcol=c(3,2))
-par(mar=c(4.1, 4.1, 1, 1))
-par(cex=1.2)
+par(mfcol=c(3,2),
+    mar=c(2.1, 2.1, 0.1, 0.1),
+    cex=0.8)
 for(i in 1:length(par.range)){
 plot(par.sens1$sens.results[ , , "trait.pop.mean", ], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, years), ylim=c(min(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE), max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)))
 	for(p in 1:iteration){
