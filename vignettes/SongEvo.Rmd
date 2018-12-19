@@ -3,13 +3,13 @@ title: '''SongEvo'' package'
 author: "Raymond M. Danner, Elizabeth P. Derryberry, Graham E. Derryberry, Julie E. Danner, David A. Luther"
 date: '`r Sys.Date()`'
 output:
-  rmarkdown::html_vignette: default
   rmarkdown::pdf_document: default
+  rmarkdown::html_vignette: default
 vignette: |
   %\VignetteIndexEntry{SongEvo package}
   %\usepackage[utf8]{inputenc}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
 ---
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", tidy = FALSE)

@@ -14,9 +14,15 @@ sens.results <- NULL
 data("song.data")
 data("glo.parms")
 years=2005-1969
-iteration=10
+iteration=5
 timestep=1
 n.territories <- glo.parms$n.territories
+starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait),
+                                           mean=mean(starting.trait), sd=sd(starting.trait)))
+init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
+init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
+init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
 # Now we call the par.sens function with our specifications.
 extra_parms <- list(init.inds = init.inds, 

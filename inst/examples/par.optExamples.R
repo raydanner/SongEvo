@@ -1,10 +1,20 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-#Prepare initial song data for Bear Valley.
+#### Specify and call `par.sens()`
+
+# Here we test the sensitivity of the Acquire a Territory submodel to variation
+# in territory turnover rates, ranging from 0.8–1.2 times the published rate
+# (40–60% of territories turned over). The call for the par.sens function has a
+# format similar to SongEvo. The user specifies the parameter to test and the
+# range of values for that parameter. The function currently allows examination
+# of only one parameter at a time and requires at least two iterations.
+parm <- "terr.turnover"
+par.range = seq(from=0.4, to=0.6, by=0.05)
+sens.results <- NULL
 data("song.data")
 data("glo.parms")
 years=2005-1969
-iteration=10
+iteration=5
 timestep=1
 n.territories <- glo.parms$n.territories
 starting.trait <- subset(song.data, Population=="PRBO" & Year==1969)$Trill.FBW
@@ -14,32 +24,22 @@ init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.tra
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
-#Specify and call SongEvo() with test data
-
-SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
-                                   iteration = iteration,
-                                   steps = years,
-                                   timestep = timestep,
-                                   n.territories = n.territories,
-                                   terr.turnover = terr.turnover,
-                                   learning.method = "integrate",
-                                   integrate.dist = 50,
-                                   learning.error.d = learning.error.d,
-                                   learning.error.sd = learning.error.sd,
-                                   mortality.a = mortality.a,
-                                   mortality.j = mortality.j,
-                                   lifespan = NA,
-                                   phys.lim.min = phys.lim.min,
-                                   phys.lim.max = phys.lim.max,
-                                   male.fledge.n.mean = male.fledge.n.mean,
-                                   male.fledge.n.sd = male.fledge.n.sd,
-                                   male.fledge.n = male.fledge.n,
-                                   disp.age = disp.age,
-                                   disp.distance.mean = disp.distance.mean,
-                                   disp.distance.sd = disp.distance.sd,
-                                   mate.comp = FALSE,
-                                   prin = FALSE,
-                                   all = FALSE))
+# Now we call the par.sens function with our specifications.
+extra_parms <- list(init.inds = init.inds, 
+                    timestep = 1, 
+                    n.territories = nrow(init.inds), 
+                    learning.method = "integrate", 
+                    integrate.dist = 0.1, 
+                    lifespan = NA, 
+                    terr.turnover = 0.5, 
+                    mate.comp = FALSE, 
+                    prin = FALSE,
+                    all = TRUE)
+global_parms_key <- which(!names(glo.parms) %in% names(extra_parms))
+extra_parms[names(glo.parms[global_parms_key])]=glo.parms[global_parms_key]
+par.sens1 <- par.sens(parm = parm, par.range = par.range, 
+                      iteration = iteration, steps = years, mate.comp = FALSE, 
+                      fixed_parms=extra_parms[names(extra_parms)!=parm], all = TRUE)
 
 #### Prepare current song values
 target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
