@@ -11,6 +11,12 @@
 parm <- "terr.turnover"
 par.range = seq(from=0.4, to=0.6, by=0.05)
 sens.results <- NULL
+data("song.data")
+data("glo.parms")
+years=2005-1969
+iteration=10
+timestep=1
+n.territories <- glo.parms$n.territories
 
 # Now we call the par.sens function with our specifications.
 extra_parms <- list(init.inds = init.inds, 

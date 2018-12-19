@@ -24,6 +24,47 @@ This function follows par.sens to help users optimize values for imperfectly kno
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
+#Prepare initial song data for Bear Valley.
+data("song.data")
+data("glo.parms")
+years=2005-1969
+iteration=10
+timestep=1
+n.territories <- glo.parms$n.territories
+starting.trait <- subset(song.data, Population=="PRBO" & Year==1969)$Trill.FBW
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait),
+                                           mean=mean(starting.trait), sd=sd(starting.trait)))
+init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
+init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
+init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
+
+#Specify and call SongEvo() with test data
+
+SongEvo3 <- with(glo.parms,SongEvo(init.inds = init.inds,
+                                   iteration = iteration,
+                                   steps = years,
+                                   timestep = timestep,
+                                   n.territories = n.territories,
+                                   terr.turnover = terr.turnover,
+                                   learning.method = "integrate",
+                                   integrate.dist = 50,
+                                   learning.error.d = learning.error.d,
+                                   learning.error.sd = learning.error.sd,
+                                   mortality.a = mortality.a,
+                                   mortality.j = mortality.j,
+                                   lifespan = NA,
+                                   phys.lim.min = phys.lim.min,
+                                   phys.lim.max = phys.lim.max,
+                                   male.fledge.n.mean = male.fledge.n.mean,
+                                   male.fledge.n.sd = male.fledge.n.sd,
+                                   male.fledge.n = male.fledge.n,
+                                   disp.age = disp.age,
+                                   disp.distance.mean = disp.distance.mean,
+                                   disp.distance.sd = disp.distance.sd,
+                                   mate.comp = FALSE,
+                                   prin = FALSE,
+                                   all = FALSE))
+
 #### Prepare current song values
 target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
 
@@ -83,9 +124,9 @@ lines(par.range, res.var.quants[1,], col="purple", lty=2)
 lines(par.range, res.var.quants[2,], col="purple", lty=2)
 
 #### Visual inspection of accuracy and precision: plot trait values for range of parameters
-par(mfcol=c(3,2))
-par(mar=c(4.1, 4.1, 1, 1))
-par(cex=1.2)
+par(mfcol=c(3,2),
+    mar=c(4.1, 4.1, 1, 1),
+    cex=1.2)
 for(i in 1:length(par.range)){
 plot(par.sens1$sens.results[ , , "trait.pop.mean", ], 
      xlab="Year", ylab="Bandwidth (Hz)", 
