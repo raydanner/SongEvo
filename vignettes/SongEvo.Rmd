@@ -9,6 +9,7 @@ vignette: |
   %\VignetteIndexEntry{SongEvo package}
   %\usepackage[utf8]{inputenc}
   %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
 ---
 ```{r, echo = FALSE}
 knitr::opts_chunk$set(collapse = TRUE, comment = "#>", tidy = FALSE)

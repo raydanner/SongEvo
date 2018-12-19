@@ -24,7 +24,8 @@ Suggests:
     reshape2,
     lattice,
     Hmisc,
-    knitr
+    knitr,
+    rmarkdown
 License: GPL-3
 LazyData: true
 VignetteBuilder: knitr
