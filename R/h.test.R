@@ -5,17 +5,17 @@
 #' @name h.test
 #' @param summary.results The summary.results array (i.e. a multi-dimensional table) from SongEvo(), which includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  
 #' @param ts The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).
-#' @param empir.trait Trait values from the test population to compare to simulated results. May be measured (i.e. empirical) or hypothetical. 
+#' @param target.data Trait values from the test population to compare to simulated results. May be measured (i.e. empirical) or hypothetical. 
 #' 
 #' @return a list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.
 #' 
 #' @example inst/examples/h.testExamples.R
 #' 
-#' @references
 #' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], 'browseVignettes("SongEvo")'
 #' @export
+#' @importFrom stats quantile
 h.test <- function(summary.results, ts, target.data) {
- 
+  iteration <- dim(summary.results)[1]
   #Calculate residuals
 h.test.res <- array(NA, dim=c(iteration, 2), dimnames=list(paste("Iteration", seq(1:iteration), sep=" "), c("Residuals of mean", "Residuals of variance")))
 		h.test.res[,1] <- abs(mean(target.data)-summary.results[, ts, "trait.pop.mean"])

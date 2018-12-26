@@ -9,11 +9,9 @@ mod.val(summary.results, ts, target.data)
 \arguments{
 \item{summary.results}{The summary.results array (i.e. a multi-dimensional table) from SongEvo(), which includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.}
 
-\item{ts}{The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).}
+\item{ts}{The timestep (“ts”) at which to compare simulated trait values to empirical trait values (“target.data”).}
 
-\item{empir.trait}{Trait values from the validation population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
-
-\item{empirical}{values from a specified timestep}
+\item{target.data}{Trait values from the validation population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
 }
 \value{
 Three measurements of accuracy: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model). Users specify the timestep (“ts”) at which to compare simulated trait values to empirical trait values (“empir.trait”).
@@ -24,11 +22,18 @@ This function allows users to assess the validity of the specified model by test
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-#Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and then compare simulated data to target (i.e. observed) data in 2005.
+#Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
+#then compare simulated data to target (i.e. observed) data in 2005.
 
+data("song.data")
+data("glo.parms")
+
+list2env(glo.parms, globalenv()) 
 #Prepare initial song data for Schooner Bay.
 starting.trait <- subset(song.data, Population=="Schooner" & Year==1969)$Trill.FBW
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 
+                                           mean=mean(starting.trait), 
+                                           sd=sd(starting.trait)))
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
@@ -38,7 +43,30 @@ iteration <- 10
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
-SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo2 <- SongEvo(init.inds = init.inds,
+                    iteration = iteration,
+                    steps = years,
+                    timestep = timestep,
+                    n.territories = n.territories,
+                    terr.turnover = terr.turnover,
+                    learning.method = "integrate",
+                    integrate.dist = 50,
+                    learning.error.d = learning.error.d,
+                    learning.error.sd = learning.error.sd,
+                    mortality.a = mortality.a,
+                    mortality.j = mortality.j,
+                    lifespan = NA,
+                    phys.lim.min = phys.lim.min,
+                    phys.lim.max = phys.lim.max,
+                    male.fledge.n.mean = male.fledge.n.mean,
+                    male.fledge.n.sd = male.fledge.n.sd,
+                    male.fledge.n = male.fledge.n, 
+                    disp.age = disp.age, 
+                    disp.distance.mean = disp.distance.mean, 
+                    disp.distance.sd = disp.distance.sd, 
+                    mate.comp = TRUE, 
+                    prin = TRUE,
+                    all=FALSE)
 
 #Specify and call mod.val
 ts <- 36
@@ -46,7 +74,9 @@ target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, target.data=target.data)
 
 #Plot results from `mod.val()`
-plot(SongEvo2$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36.5), ylim=c(min(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo2$summary.results[1, , "trait.pop.mean"], 
+     xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", 
+     xlim=c(-0.5, 36.5), ylim=range(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE))
 	for(p in 1:iteration){
 		lines(SongEvo2$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}
@@ -54,7 +84,8 @@ freq.mean <- apply(SongEvo2$summary.results[, , "trait.pop.mean"], 2, mean, na.r
 lines(freq.mean, col="blue")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
 #Plot 95\% quantiles 
-quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, 
+                      quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 #plot mean and CI for historic songs.  
@@ -88,4 +119,7 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
  #text and arrows
 text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
+}
+\seealso{
+[SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 }

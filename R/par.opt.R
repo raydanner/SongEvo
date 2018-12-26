@@ -11,11 +11,13 @@
 #' @return Three measurements of accuracy and one measure of precision.  Accuracy is quantified by three different approaches: i) the mean of absolute residuals of the predicted population mean values in relation to observed values (smaller absolute residuals indicate a more accurate model), ii) the difference between the bootstrapped mean of predicted population means and the mean of the observed values, and iii) the proportion of simulated population trait means that fall within confidence intervals of the observed data (a higher proportion indicates greater accuracy). Precision is measured with the residuals of the predicted population variance to the variance of observed values (smaller residuals indicate a more precise model).
 #'
 #' @example inst/examples/par.optExamples.R
-#' @references
 #' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' @export
-
+#' @importFrom stats var
+#' @importFrom boot boot boot.ci
 par.opt <- function(sens.results, ts, target.data, par.range) {
+  
+  iteration <- dim(sens.results)[1]
   #Calculate residuals
 res <- array(NA, dim=c(length(par.range), iteration, 2), dimnames=list(paste("par.val", par.range), paste("Iteration", seq(1:iteration), sep=" "), c("Residuals of mean", "Residuals of variance")))
 	for(p in 1:length(par.range)){
@@ -24,10 +26,7 @@ res <- array(NA, dim=c(length(par.range), iteration, 2), dimnames=list(paste("pa
 		}
 
   #Calculate i) distance between mean of predicted means and the observed population mean and ii) proportion of predicted data points within confidence limits of observed data.
-library("boot")
-sample.mean <- function(d, x) {
-	mean(d[x])
-}
+
 boot_curr <- boot(target.data, statistic=sample.mean, R=100)
 ci.curr <- boot.ci(boot_curr, conf=0.95, type="basic")
 low <- ci.curr$basic[4]

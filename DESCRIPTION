@@ -19,13 +19,15 @@ Depends:
 Imports: 
     boot, 
     geosphere, 
-    sp 
+    sp
 Suggests:
     reshape2,
     lattice,
-    Hmisc
-License: GNU General Public License v3.0
+    Hmisc,
+    knitr,
+    rmarkdown
+License: GPL-3
 LazyData: true
 VignetteBuilder: knitr
 Encoding: UTF-8
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1

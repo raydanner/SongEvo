@@ -1,0 +1,5 @@
+^.*\.Rproj$
+^\.Rproj\.user$
+^LICENSE$
+^vignettes/figure/
+^vignettes/SongEvo\.html$

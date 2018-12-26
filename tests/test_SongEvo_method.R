@@ -1,12 +1,12 @@
 # Basic tests for SongEvo correctness
 
-source("SongEvo.R")
+library(SongEvo)
 # glo.parms=glo.parms[ ! names(glo.parms) %in% "global.parms$learning.error.d" ]
 reg.count=40
 
 # Make starting population for prbo in 1969
 local({
-  data("WCSP")
+  data(song.data)
   starting.trait.obs <- subset(song.data, Population %in% "PRBO" & Year %in% 1969)$Trill.FBW
   
   # Generate additional individuals to reach number of territories for this vignette (40)
@@ -26,7 +26,7 @@ local({
 
 # Make starting population for Schooner in 1969
 local({
-  data("WCSP")
+  data(song.data)
   starting.trait.obs <- subset(song.data, Population %in% "Schooner" & Year %in% 1969)$Trill.FBW
   
   # Generate additional individuals to reach number of territories for this vignette (40)
@@ -46,7 +46,7 @@ local({
 
 # Make starting population for Bear Valley in 1969
 local({
-  data("WCSP")
+  data(song.data)
   starting.trait.obs <- subset(song.data, Population %in% "Bear Valley" & Year %in% 1969)$Trill.FBW
   
   # Generate additional individuals to reach number of territories for this vignette (40)
@@ -116,7 +116,9 @@ str(trill.prbo.test)
 str(trill.sb.test)
 str(trill.bear.test)
 
-save(trill.prbo.test,trill.sb.test,trill.bear.test,
-     file=(most_recent_SongEvo_test<-paste0("test_SongEvo",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
+
+# Save results if you wish to do explore the results more:
+# save(trill.prbo.test,trill.sb.test,trill.bear.test,
+#      file=(most_recent_SongEvo_test<-paste0("test_SongEvo",format(Sys.time(),format="%Y%m%d%H%M"),".RData")))
 
 

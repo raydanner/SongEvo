@@ -1,6 +1,6 @@
 # Benchmarking / stress test code
 
-source("SongEvo.R")
+library(SongEvo)
 reg.count=40
 fledge_counts=c(1, 1, 2, 1, 0, 2, 2, 2, 2, 1, 1, 2, 1, 
                 1, 1, 1, 1, 1, 0, 2, 1, 2, 1, 2, 2, 2, 
@@ -26,7 +26,7 @@ for(r_count in 1:10 ){
   
   # Make starting population for prbo in 1969
   local({
-    data("WCSP")
+    data("song.data")
     starting.trait.obs <- subset(song.data, Population %in% "PRBO" & Year %in% 1969)$Trill.FBW
     
     # Generate additional individuals to reach number of territories for this vignette (40)
@@ -46,7 +46,7 @@ for(r_count in 1:10 ){
   
   # Make starting population for Schooner in 1969
   local({
-    data("WCSP")
+    data("song.data")
     starting.trait.obs <- subset(song.data, Population %in% "Schooner" & Year %in% 1969)$Trill.FBW
     
     # Generate additional individuals to reach number of territories for this vignette (40)
@@ -66,7 +66,7 @@ for(r_count in 1:10 ){
   
   # Make starting population for Bear Valley in 1969
   local({
-    data("WCSP")
+    data("song.data")
     starting.trait.obs <- subset(song.data, Population %in% "Bear Valley" & Year %in% 1969)$Trill.FBW
     
     # Generate additional individuals to reach number of territories for this vignette (40)

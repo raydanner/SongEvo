@@ -8,7 +8,7 @@
 #' @param steps The number of steps per iteration.
 #' @param timestep The length of time that passes in each step. For annually breeding species, timestep = 1 year.
 #' @param terr.turnover The proportion of territories that change ownership during a step.
-#' @param mate.comp Female preference for mates. Currently specified as “Yes” or “No”. 
+#' @param mate.comp Female preference for mates. Options are TRUE or FALSE.
 #' @param learning.method If an individual learns from their (“father”) or all males within a specified radius (“integrate”).
 #' @param integrate.dist Distance over which song learning is integrated.
 #' @param learning.error.d Direction of learning error.
@@ -34,30 +34,12 @@
 #' 
 #' @seealso [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
 #' 
-#' @references
 #'
-#' @import boot
+#' @importFrom boot boot boot.ci
 #' @import sp
 #' @import geosphere
+#' @importFrom stats runif rnorm sd
 #' @export
-library("boot")
-sample.mean <- function(d, x) {
-  mean(d[x])
-}
-
-library("geosphere")
-library("sp")
-
-fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
-  coor.cols=c(which(colnames(data.src)%in% x.col),
-              which(colnames(data.src)%in% y.col));
-  SpatialPointsDataFrame(coords = data.src[,coor.cols],
-                         data = data.src[,-coor.cols],
-                         coords.nrs = coor.cols,
-                         match.ID = FALSE,
-                         proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) 
-}
-
 SongEvo <- function(init.inds, 
                     iteration, 
                     steps,
@@ -167,7 +149,7 @@ if (learning.method=="father") {
       map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$male.fledglings, SIMPLIFY = FALSE))
       # stopifnot(children$father==tutors$id[map.key])
       # child=which(inds$age==1)
-      # singing.inds <- subset(inds, age>1)
+      # singing.inds <- subset(inds, inds$age>1)
       key=spDists(as.matrix(tutors[,c("x","y")]),longlat = TRUE)[map.key,] <= integrate.dist
       children$trait=
         key%*%tutors$trait /rowSums(key) +
@@ -184,15 +166,15 @@ if (learning.method=="father") {
 if (is.na(lifespan)) {
   die <- function(inds) {
     ninds<-nrow(inds)
-    subset(inds,  runif(ninds) > ifelse(age > 1,
+    subset(inds,  runif(ninds) > ifelse(inds$age > 1,
                                         rep(mortality.a,ninds),
                                         rep(mortality.j,ninds)))
   }
 } else {
   die <- function(inds) {
     ninds<-nrow(inds)
-    subset(inds,  age <= lifespan & 
-             runif(ninds) > ifelse(age > 1,
+    subset(inds,  inds$age <= lifespan & 
+             runif(ninds) > ifelse(inds$age > 1,
                                    rep(mortality.a,ninds),
                                    rep(mortality.j,ninds)))
   }
@@ -274,7 +256,7 @@ inds
 
 compete.for.mates <- function(inds){
 	ninds <- length(inds$age)
-	prev.songs <- subset(inds, age > 1)$trait
+	prev.songs <- subset(inds, inds$age > 1)$trait
 	# avg.song <- mean(prev.songs)
 	comp.res<- (!mate.comp | abs(inds$trait-mean(prev.songs)) < (2*sd(prev.songs)))
 	inds$male.fledglings <- (inds$territory==1) * comp.res * round(rnorm(ninds, mean=male.fledge.n.mean, sd=male.fledge.n.sd))
@@ -348,8 +330,8 @@ inds <- compete.for.mates(inds)
 
 #Calculate summary values
 summary.results[b, , "sample.n"][k] <- length(inds$age)
-summary.results[b, , "trait.pop.mean"][k] <- mean(subset(inds, age==2)$trait)
-summary.results[b, , "trait.pop.variance"][k] <- var(subset(inds, age==2)$trait)
+summary.results[b, , "trait.pop.mean"][k] <- mean(subset(inds, inds$age==2)$trait)
+summary.results[b, , "trait.pop.variance"][k] <- var(subset(inds, inds$age==2)$trait)
 
 boot_obj <- boot(inds$trait, statistic=sample.mean, R=100)#, strata=mn.res$iteration)	
 ci.res <- boot.ci(boot_obj, conf=0.95, type="basic")
@@ -391,3 +373,16 @@ z
 }
 #End of I. SongEvo function
 #########################
+
+fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
+  coor.cols=c(which(colnames(data.src)%in% x.col),
+              which(colnames(data.src)%in% y.col));
+  SpatialPointsDataFrame(coords = data.src[,coor.cols],
+                         data = data.src[,-coor.cols],
+                         coords.nrs = coor.cols,
+                         match.ID = FALSE,
+                         proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) 
+}
+sample.mean <- function(d, x) {
+  mean(d[x])
+}
