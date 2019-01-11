@@ -60,7 +60,7 @@ To explore the SongEvo package, we will use a database of songs from Nuttall’s
 data("song.data")
 ```
 
-Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data` or Danner et al. (year)
+Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data`.
 
 ```r
 str(glo.parms)
