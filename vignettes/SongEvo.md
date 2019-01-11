@@ -13,7 +13,7 @@ vignette: |
 ---
 
 
-##Introduction
+## Introduction
 
 SongEvo simulates the cultural evolution of quantitative traits of bird song. SongEvo is an individual- (agent-) based model. SongEvo is spatially-explicit and can be parameterized with, and tested against, measured song data. Functions are available for model implementation, sensitivity analyses, parameter optimization, model validation, and hypothesis testing. 
 
