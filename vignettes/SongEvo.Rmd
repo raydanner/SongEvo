@@ -35,6 +35,7 @@ In order to install the vignette along with the package use the following code w
 
 ```{r eval = FALSE}
 install.packages("devtools")
+library(devtools)
 devtools::install_github("raydanner/SongEvo", build_vignettes = TRUE)
 library(SongEvo)
 ```
@@ -61,7 +62,7 @@ To explore the SongEvo package, we will use a database of songs from Nuttall’s
 data("song.data")
 ```
 
-Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data` or Danner et al. (year)
+Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data`.
 ```{r global parameters}
 str(glo.parms)
 ```
@@ -85,7 +86,8 @@ starting.trait <- subset(song.data, Population=="PRBO" & Year==1969)$Trill.FBW
 ```
 We want a starting population of 40 individuals, so we generate additional trait values to complement those from the existing 30 individuals. Then we create a data frame that includes a row for each individual; we add identification numbers, ages, and geographical coordinates for each individual.  
 ```{r define initial individuals}
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 
+	mean=mean(starting.trait), sd=sd(starting.trait)))
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
@@ -107,7 +109,16 @@ all <- TRUE
 ```
 Now we call SongEvo with our specifications and save it in an object called SongEvo1.
 ```{r Call SongEvo model, echo=TRUE}
-SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
+	learning.method = learning.method, integrate.dist = integrate.dist, 
+	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
+	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
+	male.fledge.n = male.fledge.n, disp.age = disp.age, 
+	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all)
 ```
 
 #### Examine results from SongEvo model
@@ -134,7 +145,8 @@ head(SongEvo1$all.inds, 5)
 #### Simulated population size
 We see that the simulated population size remains relatively stable over the course of 36 years. This code uses the summary.results array.
 ```{r Examine population size over time}
-plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
+plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", 
+	xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
 axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
 	for(p in 1:iteration){
 		lines(SongEvo1$summary.results[p, , "sample.n"], col="light gray")
@@ -143,7 +155,8 @@ n.mean <- apply(SongEvo1$summary.results[, , "sample.n"], 2, mean, na.rm=TRUE)
 lines(n.mean, col="red")
 
 #Plot 95% quantiles
-quant.means <- apply (SongEvo1$summary.results[, , "sample.n"], MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo1$summary.results[, , "sample.n"], MARGIN=2, quantile, 
+	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="red", lty=2)
 lines(quant.means[2,], col="red", lty=2)
 ```
@@ -156,7 +169,10 @@ library("Hmisc")
 #### Simulated trait values
 We see that the mean trait values per iteration varied widely, though mean trait values over all iterations remained relatively stable. This code uses the summary.results array.
 ```{r Examine simulated trait evolution}
-plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36), ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
+	xaxt="n", type="n", xlim=c(-0.5, 36), 
+	ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), 
+	max(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
 	for(p in 1:iteration){
 		lines(SongEvo1$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}
@@ -165,7 +181,8 @@ lines(freq.mean, col="blue")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
 
 #Plot 95% quantiles
-quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, 
+	probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 
@@ -190,7 +207,10 @@ arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 We see that variance for each iteration per year increased in the first few years and then stabilized. This code uses the summary.results array.
 ```{r Examine simulated trait variance}
  #plot variance for each iteration per year
-plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", ylim=c(min(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE), max(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE)))
+plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", 
+	ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", 
+	ylim=c(min(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE), 
+	max(SongEvo1$summary.results[, , "trait.pop.variance"], na.rm=TRUE)))
 axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
 	for(p in 1:iteration){
 		lines(SongEvo1$summary.results[p, , "trait.pop.variance"], col="light gray")
@@ -199,7 +219,8 @@ n.mean <- apply(SongEvo1$summary.results[, , "trait.pop.variance"], 2, mean, na.
 lines(n.mean, col="green")
 
 #Plot 95% quantiles
-quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.variance"], MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo1$summary.results[, , "trait.pop.variance"], MARGIN=2, quantile, 
+	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="green", lty=2)
 lines(quant.means[2,], col="green", lty=2)
 ```
@@ -229,7 +250,10 @@ rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a cont
 
 Plot maps, including a separate panel for each timestep (each of 36 years). Our example shows that individuals move across the landscape and that regional dialects evolve and move. The x-axis is longitude, the y-axis is latitude, and the color ramp indicates trill bandwidth in Hz.
 ```{r Plot map}
-spplot(all.inds1w[,-c(1:ncol(all.inds1))], as.table=TRUE, cuts=c(0, seq(from=1500, to=4500, by=10)), ylab="", col.regions=c("transparent", rbPal(1000)), #cuts specifies that the first level (e.g. <1500) is transparent.
+spplot(all.inds1w[,-c(1:ncol(all.inds1))], as.table=TRUE, 
+	cuts=c(0, seq(from=1500, to=4500, by=10)), ylab="", 
+	col.regions=c("transparent", rbPal(1000)), 
+	#cuts specifies that the first level (e.g. <1500) is transparent.
 colorkey=list(
 	right=list(
 		  fun=draw.colorkey,
@@ -254,7 +278,8 @@ In addition, you can plot simpler multi-panel maps that do not take advantage of
 it1 <- subset(SongEvo1$all.inds, iteration==1)
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
 it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
-xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, xlab="Longitude", ylab="Latitude")
+xyplot(it1$y1~it1$x1 | it1$timestep, groups=it1$trait, asp="iso", col=it1$Col, 
+	xlab="Longitude", ylab="Latitude")
 ```
 
 ### Test model sensitivity with `par.sens()`
@@ -304,7 +329,9 @@ To assess sensitivity of SongEvo to a range of parameter values, plot the range 
 In the figure, solid gray and black lines show the quantile range of song frequency per year over all iterations as parameterized with the published territory turnover rate (0.5; thick black line) and a range of values from 0.4 to 0.6 (in steps of 0.05, light to dark gray). Orange lines show the mean and 2.5th and 97.5th quantiles of all quantile ranges.
 ```{r plot of range in trait quantiles by year by parameter value}
  #plot of range in trait quantiles by year by parameter value
-plot(1:years, par.sens1$sens.results.diff[1,], ylim=c(min(par.sens1$sens.results.diff, na.rm=TRUE), max(par.sens1$sens.results.diff, na.rm=TRUE)), type="l", ylab="Quantile range (Hz)", xlab="Year", col="transparent", xaxt="n")
+plot(1:years, par.sens1$sens.results.diff[1,], ylim=c(min(par.sens1$sens.results.diff, 
+	na.rm=TRUE), max(par.sens1$sens.results.diff, na.rm=TRUE)), type="l", 
+	ylab="Quantile range (Hz)", xlab="Year", col="transparent", xaxt="n")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))
 
   #Make a continuous color ramp from gray to black
@@ -312,7 +339,8 @@ grbkPal <- colorRampPalette(c('gray','black'))
   
   #Plot a line for each parameter value
 for(i in 1:length(par.range)){
-lines(1:years, par.sens1$sens.results.diff[i,], type="l", col=grbkPal(length(par.range))[i])
+lines(1:years, par.sens1$sens.results.diff[i,], type="l", 
+	col=grbkPal(length(par.range))[i])
 }
 
   #Plot values from published parameter values
@@ -324,7 +352,8 @@ lines(quant.mean, col="orange")
 
 #Plot 95% quantiles (which are similar to credible intervals)
   #95% quantiles of population means (narrower)
-quant.means <- apply (par.sens1$sens.results.diff, MARGIN=2, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+quant.means <- apply (par.sens1$sens.results.diff, MARGIN=2, quantile, 
+	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
 ```
@@ -341,7 +370,8 @@ target.data <- subset(song.data, Population=="PRBO" & Year==2005)$Trill.FBW
 Users specify the timestep (“ts”) at which to compare simulated trait values to target trait data (“target.data”) and save the results in an object (called `par.opt1` here).
 ```{r Specify and call par.opt()}
 ts <- years
-par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts, target.data=target.data, par.range=par.range)
+par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts, 
+	target.data=target.data, par.range=par.range)
 ```
 
 Examine results objects (residuals and target match).  
@@ -355,19 +385,25 @@ par.opt1$Target.match
 
   1. Difference in means.
 ```{r par.opt() difference in means}
-plot(par.range, par.opt1$Target.match[,1], type="l", xlab="Parameter range", ylab="Difference in means (Hz)")
+plot(par.range, par.opt1$Target.match[,1], type="l", xlab="Parameter range", 
+	ylab="Difference in means (Hz)")
 ```
 
   2. Plot proportion contained.
 ```{r par.opt() proportion contained}
-plot(par.range, par.opt1$Prop.contained, type="l", xlab="Parameter range", ylab="Proportion contained")
+plot(par.range, par.opt1$Prop.contained, type="l", xlab="Parameter range", 
+	ylab="Proportion contained")
 ```
 
   3. Calculate and plot mean and quantiles of residuals of mean trait values.
 ```{r par.opt() residuals of the mean}
 res.mean.means <- apply(par.opt1$Residuals[, , 1], MARGIN=1, mean, na.rm=TRUE)
-res.mean.quants <- apply (par.opt1$Residuals[, , 1], MARGIN=1, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
-plot(par.range, res.mean.means, col="orange", ylim=c(min(par.opt1$Residuals[,,1], na.rm=TRUE), max(par.opt1$Residuals[,,1], na.rm=TRUE)), type="b", xlab="Parameter value (territory turnover rate)", ylab="Residual of trait mean (trill bandwidth, Hz)")
+res.mean.quants <- apply (par.opt1$Residuals[, , 1], MARGIN=1, quantile, 
+	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+plot(par.range, res.mean.means, col="orange", ylim=c(min(par.opt1$Residuals[,,1], 
+	na.rm=TRUE), max(par.opt1$Residuals[,,1], na.rm=TRUE)), type="b", 
+	xlab="Parameter value (territory turnover rate)", 
+	ylab="Residual of trait mean (trill bandwidth, Hz)")
 points(par.range, res.mean.quants[1,], col="orange")
 points(par.range, res.mean.quants[2,], col="orange")
 lines(par.range, res.mean.quants[1,], col="orange", lty=2)
@@ -378,8 +414,13 @@ lines(par.range, res.mean.quants[2,], col="orange", lty=2)
 ```{r par.opt() residuals of the variance}
 #Calculate and plot mean and quantiles of residuals of variance of trait values
 res.var.mean <- apply(par.opt1$Residuals[, , 2], MARGIN=1, mean, na.rm=TRUE)
-res.var.quants <- apply (par.opt1$Residuals[, , 2], MARGIN=1, quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
-plot(par.range, res.var.mean, col="purple", ylim=c(min(par.opt1$Residuals[,,2], na.rm=TRUE), max(par.opt1$Residuals[,,2], na.rm=TRUE)), type="b", xlab="Parameter value (territory turnover rate)", ylab="Residual of trait variance (trill bandwidth, Hz)")
+res.var.quants <- apply (par.opt1$Residuals[, , 2], MARGIN=1, quantile, 
+	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
+plot(par.range, res.var.mean, col="purple", 
+	ylim=c(min(par.opt1$Residuals[,,2], na.rm=TRUE), 
+	max(par.opt1$Residuals[,,2], na.rm=TRUE)), type="b", 
+	xlab="Parameter value (territory turnover rate)", 
+	ylab="Residual of trait variance (trill bandwidth, Hz)")
 points(par.range, res.var.quants[1,], col="purple")
 points(par.range, res.var.quants[2,], col="purple")
 lines(par.range, res.var.quants[1,], col="purple", lty=2)
@@ -392,16 +433,20 @@ par(mfcol=c(3,2),
     mar=c(2.1, 2.1, 0.1, 0.1),
     cex=0.8)
 for(i in 1:length(par.range)){
-plot(par.sens1$sens.results[ , , "trait.pop.mean", ], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, years), ylim=c(min(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE), max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)))
+plot(par.sens1$sens.results[ , , "trait.pop.mean", ], xlab="Year", ylab="Bandwidth (Hz)", 
+	xaxt="n", type="n", xlim=c(-0.5, years), 
+	ylim=c(min(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE), 
+	max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)))
 	for(p in 1:iteration){
 		lines(par.sens1$sens.results[p, , "trait.pop.mean", i], col="light gray")
 		}
 freq.mean <- apply(par.sens1$sens.results[, , "trait.pop.mean", i], 2, mean, na.rm=TRUE)
 lines(freq.mean, col="blue")
-axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
+axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))
 
 #Plot 95% quantiles
-quant.means <- apply (par.sens1$sens.results[, , "trait.pop.mean", i], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (par.sens1$sens.results[, , "trait.pop.mean", i], MARGIN=2, quantile, 
+	probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 
@@ -433,7 +478,8 @@ library("Hmisc")
 errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 
   #plot panel title
-text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100, labels=paste("Par = ", par.range[i], sep=""))  
+text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100, 
+	labels=paste("Par = ", par.range[i], sep=""))  
 }
 ```
 
@@ -445,7 +491,8 @@ We parameterized SongEvo with initial song data from Schooner Bay, CA in 1969, a
 Prepare initial song data for Schooner Bay.
 ```{r Prepare initial song data for Schooner Bay}
 starting.trait <- subset(song.data, Population=="Schooner" & Year==1969)$Trill.FBW
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 
+	mean=mean(starting.trait), sd=sd(starting.trait)))
 
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
@@ -460,28 +507,42 @@ years <- 36
 timestep <- 1
 terr.turnover <- 0.5
 
-SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
+	learning.method = learning.method, integrate.dist = integrate.dist, 
+	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
+	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
+	male.fledge.n = male.fledge.n, disp.age = disp.age, 
+	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all)
 ```
 
 Specify and call mod.val
 ```{r Specify and call mod.val()}
 ts <- 36
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
-mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, target.data=target.data)
+mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, 
+	target.data=target.data)
 ```
 
 Plot results from `mod.val()`
 ```{r Plot results from mod.val()}
-plot(SongEvo2$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 36.5), ylim=c(min(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo2$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
+	xaxt="n", type="n", xlim=c(-0.5, 36.5), 
+	ylim=c(min(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE), 
+	max(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
 	for(p in 1:iteration){
 		lines(SongEvo2$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}
 freq.mean <- apply(SongEvo2$summary.results[, , "trait.pop.mean"], 2, mean, na.rm=TRUE)
 lines(freq.mean, col="blue")
-axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
+axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))
 
 #Plot 95% quantiles 
-quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo2$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, 
+	probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 
@@ -529,7 +590,8 @@ This function allows hypothesis testing with SongEvo.  To test if measured songs
 Prepare initial song data for Bear Valley.
 ```{r Prepare initial song data for Bear Valley}
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
-starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), mean=mean(starting.trait), sd=sd(starting.trait)))
+starting.trait2 <- c(starting.trait, rnorm(n.territories-length(starting.trait), 
+	mean=mean(starting.trait), sd=sd(starting.trait)))
 
 init.inds <- data.frame(id = seq(1:n.territories), age = 2, trait = starting.trait2)
 init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), digits=8)
@@ -538,13 +600,23 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 
 Specify and call SongEvo() with test data
 ```{r Specify and call SongEvo() with test data}
-SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, learning.method = learning.method, integrate.dist = integrate.dist, learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, mate.comp = mate.comp, prin = prin, all)
+SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
+	learning.method = learning.method, integrate.dist = integrate.dist, 
+	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
+	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
+	male.fledge.n = male.fledge.n, disp.age = disp.age, 
+	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all)
 ```
 
 Specify and call `h.test()`
 ```{r Specify and call h.test()}
 target.data <- subset(song.data, Population=="Bear Valley" & Year==2005)$Trill.FBW
-h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=target.data)
+h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, 
+	target.data=target.data)
 ```
 
 The output data list includes two measures of accuracy: the proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means. Precision is measured as the residuals between simulated and observed population trait variances.
@@ -557,7 +629,10 @@ h.test1
 We can plot simulated data in relation to measured data.
 ```{r Plot song simulation data}
 #Plot
-plot(SongEvo3$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", xlim=c(-0.5, 35.5), ylim=c(min(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE), max(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
+plot(SongEvo3$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
+	xaxt="n", type="n", xlim=c(-0.5, 35.5), 
+	ylim=c(min(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE), 
+	max(SongEvo3$summary.results[, , "trait.pop.mean"], na.rm=TRUE)))
 	for(p in 1:iteration){
 		lines(SongEvo3$summary.results[p, , "trait.pop.mean"], col="light gray")
 		}
@@ -566,7 +641,8 @@ lines(freq.mean, col="blue")
 axis(side=1, at=seq(0, 35, by=5), labels=seq(1970, 2005, by=5))#, tcl=-0.25, mgp=c(2,0.5,0))
 
 #Plot 95% quantiles (which are similar to credible intervals)
-quant.means <- apply (SongEvo3$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, probs=c(0.95, 0.05), R=600, na.rm=TRUE)
+quant.means <- apply (SongEvo3$summary.results[, , "trait.pop.mean"], MARGIN=2, quantile, 
+	probs=c(0.95, 0.05), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="blue", lty=2)
 lines(quant.means[2,], col="blue", lty=2)
 
