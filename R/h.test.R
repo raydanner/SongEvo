@@ -11,7 +11,7 @@
 #' 
 #' @example inst/examples/h.testExamples.R
 #' 
-#' @seealso [SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], 'browseVignettes("SongEvo")'
+#' @seealso \code{\link{SongEvo}}, \code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{mod.val}}
 #' @export
 #' @importFrom stats quantile
 h.test <- function(summary.results, ts, target.data) {
