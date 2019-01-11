@@ -34,6 +34,7 @@ In order to install the vignette along with the package use the following code w
 
 ```r
 install.packages("devtools")
+library(devtools)
 devtools::install_github("raydanner/SongEvo", build_vignettes = TRUE)
 library(SongEvo)
 ```
