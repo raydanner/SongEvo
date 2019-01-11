@@ -32,7 +32,7 @@
 #' 
 #' @example inst/examples/SongEvoExamples.R
 #' 
-#' @seealso \code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{mod.val}}, \code{\link{h.test}}, 'browseVignettes("SongEvo")' 
+#' @seealso \code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{mod.val}}, \code{\link{h.test}} 
 #' 
 #'
 #' @importFrom boot boot boot.ci
