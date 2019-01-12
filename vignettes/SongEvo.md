@@ -26,20 +26,6 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
 1. `h.test` allows hypothesis testing
 
 ## Getting Started  
-### Installing 'SongEvo' from GitHub
-
-In order to install the vignette along with the package use the following code with `build_vignettes = TRUE`. 
-**Note** it takes quite a bit longer to download the package when `build_vignettes = TRUE`.
-
-
-```r
-install.packages("devtools")
-library(devtools)
-devtools::install_github("raydanner/SongEvo", build_vignettes = TRUE)
-library(SongEvo)
-```
-
-
 
 ### Functions    
 
