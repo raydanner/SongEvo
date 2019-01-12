@@ -39,7 +39,7 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
 
 ### EXAMPLE 1
 
-### Load the example data: song.data
+### Load the example data: song.data and global parameters
 To explore the SongEvo package, we will use a database of songs from Nuttall’s white-crowned sparrow (*Zonotrichia leucophrys nuttalli*) recorded at three locations in 1969 and 2005. 
 
 ```r
@@ -49,6 +49,7 @@ data("song.data")
 Examine global parameters.Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data`.
 
 ```r
+data("glo.parms")
 str(glo.parms)
 #> List of 15
 #>  $ learning.error.d  : num 0
