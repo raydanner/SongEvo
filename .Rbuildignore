@@ -3,3 +3,4 @@
 ^LICENSE$
 ^vignettes/figure/
 ^vignettes/SongEvo\.html$
+^cran-comments.md$
