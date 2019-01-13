@@ -27,6 +27,12 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
 
 ## Getting Started  
 
+### Load and attach SongEvo package    
+
+```{r, warning=FALSE, message=FALSE, echo=FALSE}
+library(SongEvo)
+```
+
 ### Functions    
 
 `SongEvo` implements the model
