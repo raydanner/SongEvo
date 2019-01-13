@@ -10,9 +10,6 @@
   \item{Year}{Year in which samples were taken}
   \item{Trill.FBW}{Mean observed trill bandwidth}
 }}
-\source{
-\url{http://FIXME/}
-}
 \usage{
 song.data
 }

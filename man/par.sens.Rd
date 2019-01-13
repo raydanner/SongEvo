@@ -126,5 +126,5 @@ lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
 }
 \seealso{
-[SongEvo::SongEvo()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+\code{\link{SongEvo}}, \code{\link{par.opt}}, \code{\link{mod.val}}, \code{\link{h.test}}
 }

@@ -68,13 +68,13 @@ This function simulates bird song evolution. Submodels are performed once per ti
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-### Load the example data: WCSP
+### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
 # white-crowned sparrow (*Zonotrichia leucophrys nuttalli*) recorded at three
 # locations in 1969 and 2005.
 
-data("WCSP")
+data("song.data")
 
 # Examine global parameters.Global parameters describe our understanding of the
 # system and may be measured or hypothesized. They are called "global" because
@@ -340,5 +340,5 @@ xyplot(it1$y1~it1$x1 | it1$timestep,
        xlab="Longitude", ylab="Latitude")
 }
 \seealso{
-[SongEvo::par.sens()], [SongEvo::par.opt()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+\code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{mod.val}}, \code{\link{h.test}}
 }

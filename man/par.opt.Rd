@@ -170,5 +170,5 @@ text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100
 }
 }
 \seealso{
-[SongEvo::SongEvo()], [SongEvo::par.sens()], [SongEvo::mod.val()], [SongEvo::h.test()], 'browseVignettes("SongEvo")'
+\code{\link{SongEvo}}, \code{\link{par.sens}}, \code{\link{mod.val}}, \code{\link{h.test}}
 }
