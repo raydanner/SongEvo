@@ -8,7 +8,6 @@
 #'   \item{Year}{Year in which samples were taken}
 #'   \item{Trill.FBW}{Mean observed trill bandwidth}
 #' }
-#' @source \url{http://FIXME/}
 "song.data"
 
 #' Default model parameters
