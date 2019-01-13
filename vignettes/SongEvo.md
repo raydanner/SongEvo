@@ -29,7 +29,7 @@ SongEvo simulates the cultural evolution of quantitative traits of bird song. So
 
 ### Load and attach SongEvo package    
 
-```{r, warning=FALSE, message=FALSE, echo=FALSE}
+```r
 library(SongEvo)
 ```
 
