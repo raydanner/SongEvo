@@ -7,7 +7,7 @@
 * For OS, there were no NOTEs. 
 * For win-builder, there were 3 NOTEs:
 
-* checking CRAN incoming feasibility ... NOTE
+1. * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Raymond Danner <dannerR@uncw.edu>'
 
 New submission
@@ -15,14 +15,14 @@ New submission
 Possibly mis-spelled words in DESCRIPTION:
   SongEvo (11:14, 12:26, 13:5)
 
-** running examples for arch 'i386' ... [40s] NOTE
+2. ** running examples for arch 'i386' ... [40s] NOTE
 Examples with CPU or elapsed time > 10s
           user system elapsed
 par.sens 10.31   0.00   10.33
 SongEvo   9.86   0.39   10.68
 par.opt  10.05   0.05   10.11
 
-** running examples for arch 'x64' ... [56s] NOTE
+3. ** running examples for arch 'x64' ... [56s] NOTE
 Examples with CPU or elapsed time > 10s
           user system elapsed
 SongEvo  15.94   0.67   16.77
