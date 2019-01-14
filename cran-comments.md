@@ -1,5 +1,6 @@
 ## Test environments
-* local OS X install, R 3.5.1
+* local OS install (MacOS Mojave version 10.14.2), R 3.5.2
+* win-builder (devel and release)
 
 ## R CMD check results
-There were no ERRORs or WARNINGs. 
+There were no ERRORs, WARNINGs, or NOTEs. 
