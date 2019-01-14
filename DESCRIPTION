@@ -1,6 +1,6 @@
 Package: SongEvo
 Title: An Individual-Based Model of Bird Song Evolution
-Version: 0.0.1
+Version: 1.0.0
 Authors@R: c(
     person("Raymond", "Danner", email = "dannerR@uncw.edu", role = c("aut", "cre")),
     person("Elizabeth", "Derryberry", role = "aut"),
