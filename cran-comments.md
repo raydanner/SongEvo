@@ -15,7 +15,7 @@ New submission
 Possibly mis-spelled words in DESCRIPTION:
   SongEvo (11:14, 12:26, 13:5)
 
->Response from maintainer (RMD): this NOTE accurately describes that this is a new submission.  SongEvo is not mis-spelled.
+>Response from author (RMD): this NOTE accurately describes that this is a new submission.  SongEvo is not mis-spelled.
 
 2. ** running examples for arch 'i386' ... [40s] NOTE
 Examples with CPU or elapsed time > 10s
@@ -24,7 +24,7 @@ par.sens 10.31   0.00   10.33
 SongEvo   9.86   0.39   10.68
 par.opt  10.05   0.05   10.11
 
->Response from maintainer (RMD): the examples are time-consuming, as expected.
+>Response from author (RMD): the examples are time-consuming, as expected.
 
 3. ** running examples for arch 'x64' ... [56s] NOTE
 Examples with CPU or elapsed time > 10s
@@ -33,4 +33,4 @@ SongEvo  15.94   0.67   16.77
 par.opt  15.63   0.07   15.69
 par.sens 11.61   0.01   11.62
 
->Response from maintainer (RMD): the examples are time-consuming, as expected.
+>Response from author (RMD): the examples are time-consuming, as expected.
