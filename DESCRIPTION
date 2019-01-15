@@ -8,7 +8,7 @@ Authors@R: c(
     person("Julie", "Danner", role = "aut"),
     person("David", "Luther", role = "aut"))
 BugReports: https://github.com/raydanner/SongEvo/issues
-Description: SongEvo simulates the cultural evolution of quantitative 
+Description: Simulates the cultural evolution of quantitative 
     traits of bird song. SongEvo is an individual- (agent-) based model.
     SongEvo is spatially-explicit and can be parameterized with, 
     and tested against, measured song data. Functions are available 
