@@ -1,6 +1,5 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-## Not run
 \donttest{
 #### Specify and call `par.sens()`
 
