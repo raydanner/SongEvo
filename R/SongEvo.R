@@ -36,6 +36,7 @@
 #' 
 #'
 #' @importFrom boot boot boot.ci
+#' @import lattice
 #' @import sp
 #' @import geosphere
 #' @importFrom stats runif rnorm sd
