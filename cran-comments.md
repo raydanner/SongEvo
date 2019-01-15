@@ -1,11 +1,12 @@
 ## Test environments
 * local OS install (MacOS Mojave version 10.14.2), R 3.5.2
 * win-builder (i.e. win_check) (devel and release)
-* R-Hub
+* R-Hub (Windows Server 2008 R2 SP1, R-devel, 32/64 bit)
+* R-Hub (Fedora Linux, R-devel, clang, gfortran)
 
 ## R CMD check results
 * There were no ERRORs or WARNINGs.
-* For OS and R-Hub, there were no NOTEs. 
+* For OS, there were no NOTEs. 
 * For win-builder, there was 1 NOTE:
 
 * checking CRAN incoming feasibility ... NOTE
