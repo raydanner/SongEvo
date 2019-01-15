@@ -1,5 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
+\donttest{
 #Prepare initial song data for Bear Valley.
 data("song.data")
 data("glo.parms")
@@ -104,3 +105,4 @@ text(x=11, y=2850, labels="Historical songs", pos=1)
 arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 text(x=25, y=2900, labels="Current songs", pos=1)
 arrows(x0=25, y0=2920, x1=years, y1=mean(target.data), length=0.1)
+}
