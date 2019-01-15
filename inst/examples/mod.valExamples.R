@@ -1,6 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\donttest{
+\dontrun{
 #Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
 #then compare simulated data to target (i.e. observed) data in 2005.
 
