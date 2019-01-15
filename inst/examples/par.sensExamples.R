@@ -1,5 +1,7 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
+## Not run
+\donttest{
 #### Specify and call `par.sens()`
 
 # Here we test the sensitivity of the Acquire a Territory submodel to variation
@@ -92,3 +94,4 @@ quant.means <- apply(par.sens1$sens.results.diff, MARGIN=2,
                      quantile, probs=c(0.975, 0.025), R=600, na.rm=TRUE)
 lines(quant.means[1,], col="orange", lty=2)
 lines(quant.means[2,], col="orange", lty=2)
+}
