@@ -1,5 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
+\donttest{
 ### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
@@ -270,3 +271,4 @@ it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
 xyplot(it1$y1~it1$x1 | it1$timestep, 
        groups=it1$trait, asp="iso", col=it1$Col, 
        xlab="Longitude", ylab="Latitude")
+}
