@@ -1,6 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\donttest{
+\dontrun{
 #Prepare initial song data for Bear Valley.
 data("song.data")
 data("glo.parms")
