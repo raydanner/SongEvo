@@ -1,7 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-## Not run
-#'\dontrun{
+\donttest{
 
 #### Specify and call `par.sens()`
 
@@ -147,4 +146,4 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
 text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100, 
      labels=paste("Par = ", par.range[i], sep=""))  
 }
-#'}
+}
