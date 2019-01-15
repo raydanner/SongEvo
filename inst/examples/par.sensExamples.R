@@ -1,6 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\donttest{
+\dontrun{
 #### Specify and call `par.sens()`
 
 # Here we test the sensitivity of the Acquire a Territory submodel to variation
