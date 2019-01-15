@@ -1,6 +1,6 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\donttest{
+\dontrun{
 ### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
