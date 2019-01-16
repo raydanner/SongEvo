@@ -68,6 +68,7 @@ This function simulates bird song evolution. Submodels are performed once per ti
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
+\dontrun{
 ### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
@@ -338,6 +339,7 @@ it1$Col <- rbPal(10)[as.numeric(cut(it1$trait, breaks = 10))]
 xyplot(it1$y1~it1$x1 | it1$timestep, 
        groups=it1$trait, asp="iso", col=it1$Col, 
        xlab="Longitude", ylab="Latitude")
+}
 }
 \seealso{
 \code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{mod.val}}, \code{\link{h.test}}
