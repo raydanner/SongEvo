@@ -22,6 +22,7 @@ This function allows users to assess the validity of the specified model by test
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
+\dontrun{
 #Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
 #then compare simulated data to target (i.e. observed) data in 2005.
 
@@ -119,6 +120,7 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
  #text and arrows
 text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
+}
 }
 \seealso{
 \code{\link{SongEvo}}, \code{\link{par.sens}}, \code{\link{par.opt}}, \code{\link{h.test}}

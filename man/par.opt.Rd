@@ -24,6 +24,8 @@ This function follows par.sens to help users optimize values for imperfectly kno
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
+\dontrun{
+
 #### Specify and call `par.sens()`
 
 # Here we test the sensitivity of the Acquire a Territory submodel to variation
@@ -167,6 +169,7 @@ errbar(x=years, y=mean(target.data), high, low, add=TRUE)
   #plot panel title
 text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100, 
      labels=paste("Par = ", par.range[i], sep=""))  
+}
 }
 }
 \seealso{
