@@ -6,8 +6,8 @@
 
 ## R CMD check results
 * There were no ERRORs or WARNINGs.
-* For OS, there were no NOTEs. 
-* For win-builder and both environments through R-Hub, there was 1 NOTE:
+* For OS and Windows Server 2008 through R-Hub, there were no NOTEs. 
+* For win-builder and Ubuntu Linux through R-Hub, there was 1 NOTE:
 
 * checking CRAN incoming feasibility ... NOTE
 Maintainer: 'Raymond Danner <dannerR@uncw.edu>'
