@@ -1,6 +1,5 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 ### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
@@ -106,6 +105,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds,
 # The model required the following time to run on your computer:
 SongEvo1$time
 
+\donttest{
 # Three main objects hold data regarding the SongEvo model.  Additional objects
 # are used temporarily within modules of the model.
 
