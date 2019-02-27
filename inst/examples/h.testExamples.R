@@ -4,7 +4,7 @@
 data("song.data")
 data("glo.parms")
 years=2005-1969
-iteration=10
+iteration=5
 timestep=1
 n.territories <- glo.parms$n.territories
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
