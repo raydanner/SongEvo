@@ -17,7 +17,7 @@ init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), d
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
 #Specify and call SongEvo() with validation data
-iteration <- 10
+iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
