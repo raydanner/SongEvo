@@ -62,7 +62,7 @@ init.inds$y1 <- round(runif(n.territories, min=37.787768, max=37.805645), digits
 # individual because we will use those data later for mapping. If we do not need
 # data for each individual, we set all to FALSE because the all.inds data.frame
 # becomes very large!
-iteration <- 10
+iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
