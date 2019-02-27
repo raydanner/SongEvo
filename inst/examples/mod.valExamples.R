@@ -1,6 +1,5 @@
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 #Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
 #then compare simulated data to target (i.e. observed) data in 2005.
 
@@ -52,6 +51,7 @@ ts <- 36
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, target.data=target.data)
 
+\donttest{
 #Plot results from `mod.val()`
 plot(SongEvo2$summary.results[1, , "trait.pop.mean"], 
      xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", 
