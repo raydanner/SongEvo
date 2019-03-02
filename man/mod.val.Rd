@@ -22,7 +22,6 @@ This function allows users to assess the validity of the specified model by test
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 #Parameterize SongEvo with initial song data from Schooner Bay, CA in 1969, and
 #then compare simulated data to target (i.e. observed) data in 2005.
 
@@ -40,7 +39,7 @@ init.inds$x1 <-  round(runif(n.territories, min=-122.481858, max=-122.447270), d
 init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digits=8)
 
 #Specify and call SongEvo() with validation data
-iteration <- 10
+iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
@@ -74,6 +73,7 @@ ts <- 36
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, target.data=target.data)
 
+\donttest{
 #Plot results from `mod.val()`
 plot(SongEvo2$summary.results[1, , "trait.pop.mean"], 
      xlab="Year", ylab="Bandwidth (Hz)", xaxt="n", type="n", 

@@ -22,12 +22,11 @@ Test if cultural traits evolve through specific mechanisms (e.g. drift or select
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 #Prepare initial song data for Bear Valley.
 data("song.data")
 data("glo.parms")
 years=2005-1969
-iteration=10
+iteration=5
 timestep=1
 n.territories <- glo.parms$n.territories
 starting.trait <- subset(song.data, Population=="Bear Valley" & Year==1969)$Trill.FBW
@@ -81,6 +80,7 @@ h.test1 <- h.test(summary.results=SongEvo3$summary.results, ts=ts, target.data=t
 # frequency bandwidth in this population.
 h.test1
 
+\dontrun{
 #Plot simulated data in relation to measured data.
 #Plot
 plot(SongEvo3$summary.results[1, , "trait.pop.mean"], 
