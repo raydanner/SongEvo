@@ -4,37 +4,39 @@
 #'
 #' @name SongEvo
 #' @param init.inds Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude). 
-#' @param females Either sex ratio, expressed in terms of females to males, or female dataframe
+#' @param females Either sex ratio expressed in terms of females to males (e.g. 2 would represent 2 females : 1 male), or female dataframe.
 #' @param iteration The number of iterations that the model will run. 
 #' @param steps The number of steps per iteration.
 #' @param timestep The length of time that passes in each step. For annually breeding species, timestep = 1 year.
 #' @param terr.turnover The proportion of territories that change ownership during a step.
 #' @param mate.comp Female preference for mates. Options are TRUE, FALSE, or the name of a user defined function. User functions must paramatize male id number and return number of total offspring for that step.
-#' @param selectivity The ability of females to choose males according to their preference. Expressed in number of standard deviations from her prefered trait value.
-#' @param content.bias Reduces the heritability of individuals with affected traits. Options are FALSE or a vector of lowest and highest fitness reductions, bias strength (ex: c(.9,.45))
-#' @param n.content.bias.loc Number of content bias locations, options are either an integer, 'random' (1:5 locations), or 'all' where content bias is delocalized
-#' @param content.bias.loc Location centers of content bias effects, options are a user defined dataframe with x and y positions, 'random' (random points on spacial plane), or FALSE
-#' @param content.bias.loc.ranges Radius of content bias effects at each location. options are a user defined vector, 'random' (.5:10), or FALSE 
-#' @param affected.traits Either dataframe containging max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE
-#' @param conformity.bias If an individual learns from their (“father”), all males within a specified radius (“integrate”), or FALSE if no conformity bias.
-#' @param integrate.dist Distance over which song learning is integrated.
-#' @param prestige.bias Males with more offspring will be learned from more. Options are a user defined vector of fitness reduction, bias strength (ex: c(.95,.25)), or FALSE
-#' @param learn.m How males aquire a trait. Options are 'default', where males take the weighted average of tutors traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits
-#' @param learn.f How females aquire a trait. Options are 'default', where females take the weighted average of tutors traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits
-#' @param learning.error.d Direction of learning error.
+#' @param selectivity The ability of females to choose males according to their preference. Expressed in number of standard deviations from her preferred trait value.
+#' @param content.bias Reduces the heritability of individuals with affected traits. Options are FALSE or a vector of lowest and highest fitness reductions, bias strength (e.g. c(.9,.45)).
+#' @param n.content.bias.loc Number of content bias locations, options are either an integer, 'random' (1:5 locations), or 'all' where content bias is delocalized.
+#' @param content.bias.loc Location centers of content bias effects, options are a user defined dataframe with x and y positions, 'random' (random points on spatial plane), or FALSE.
+#' @param content.bias.loc.ranges Radius of content bias effects at each location. Options are a user defined vector, 'random' (0.5:10), or FALSE.
+#' @param affected.traits Either a dataframe containing max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.
+#' @param conformity.bias If an individual learns from their ('father'), all males within a specified radius ('integrate'), or FALSE if no conformity bias.
+#' @param integrate.dist Distance over which tutor values are integrated for learning.
+#' @param prestige.bias Learners will preferentially learn from males with more offspring. Options are a user defined vector of fitness reduction (e.g. c(.95,.25)), or FALSE.
+#' @param learn.m How males aquire a trait. Options are 'default', where males take the weighted average of tutors' traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits.
+#' @param learn.f How females aquire a trait. Options are 'default', where females take the weighted average of tutors traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits.
+#' @param learning.error.d Direction of learning error (measured in trait units, e.g. Hz).
 #' @param learning.error.sd The standard deviation of imitation error.  
-#' @param mortality.a Annual mortality of adults (after the first time step).
-#' @param mortality.j Annual mortality of juvenile birds (in the first time step).
+#' @param mortality.a.m Annual mortality of adult males.
+#' @param mortality.a.f Annual mortality of adult females.
+#' @param mortality.j.m Annual mortality of juvenile males.
+#' @param mortality.j.f Annual mortality of juvenile females.
 #' @param lifespan Maximum age for individuals; any number is accepted. “NA” causes SongEvo to disregard lifespan and sets population size based on mortality rates alone.
 #' @param phys.lim.min The minimum physical limit of trait production.
 #' @param phys.lim.max The maximum physical limit of trait production.
 #' @param male.fledge.n.mean The mean number of offspring produced per time step per individual breeding male. Includes only offspring raised in that breeding male’s nest (i.e. it does not account for extra-pair offspring in other nests).
 #' @param male.fledge.n.sd Standard deviation of the number of male fledglings.
-#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd
+#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd.
 #' @param disp.age The age at which individual males disperse from their birth location.
 #' @param disp.distance.mean The distance that individual males disperse (meters).
 #' @param disp.distance.sd The standard deviation of dispersal distance.
-#' @param n.territories The number of territories in the population. This number is fixed for all iterations.
+#' @param n.territories The maximum number of potential territories in the population. This number is fixed for all iterations.
 #' @param prin Print summary values after each timestep has completed? Options are TRUE or FALSE. 
 #' @param all Save data for all individuals? Options are TRUE or FALSE. 
 #' 
