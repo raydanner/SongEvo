@@ -255,18 +255,7 @@ SongEvo <- function(init.inds,
       max <- runif(n.content.bias.loc, min = phys.lim.min, max = phys.lim.max)
       freq.range <- runif(n.content.bias.loc, min = 100, max = 1500)
       min <- max - freq.range
-      affected.traits <- list()
-      for (i in 1:length(max)){
-        freq <- c(max,min)
-        affected.traits[[i]] <- freq
-    
-      }
-      traits.affected <- data.frame(max=1,min=0)
-      for (n in 1:length(affected.traits)){
-        freqs <- affected.traits[[n]]
-        traits.affected <- rbind(traits.affected, c(max(freqs),min(freqs)))
-      }
-      traits.affected <- traits.affected[c(-1),]
+      traits.affected = data.frame(max=max,min=min)
       print('affected traits:')
       print(traits.affected)
       
