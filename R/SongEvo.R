@@ -288,7 +288,7 @@ SongEvo <- function(init.inds,
     content.bias.info$range <- content.bias.loc.ranges
     content.bias.info <- cbind(content.bias.info, traits.affected)
   } else if (n.content.bias.loc == 'all') {
-    content.bias.info <- data_frame(max.freq <- max(affected.traits), min.freq <- min(affected.traits))
+    content.bias.info <- data.frame(max.freq <- max(affected.traits), min.freq <- min(affected.traits))
   }
   
   #individuals in content bias zones with affected traits have their fitness and traits adjusted  
