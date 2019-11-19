@@ -1,31 +1,27 @@
 Package: SongEvo
 Title: An Individual-Based Model of Bird Song Evolution
-Version: 1.0.0
+Version: 1.0.0.9000
 Authors@R: c(
-    person("Raymond", "Danner", email = "dannerR@uncw.edu", role = c("aut", "cre")),
-    person("Elizabeth", "Derryberry", role = "aut"),
-    person("Graham", "Derryberry", role = "aut"),
-    person("Julie", "Danner", role = "aut"),
-    person("David", "Luther", role = "aut"))
+  person("Raymond", "Danner", email = "dannerR@uncw.edu", role = c("aut", "cre")),
+  person("Elizabeth", "Derryberry", role = "aut"),
+  person("Graham", "Derryberry", role = "aut"),
+  person("Julie", "Danner", role = "aut"),
+  person("Sara", "Evans", role = "aut"),
+  person("David", "Luther", role = "aut"))
 BugReports: https://github.com/raydanner/SongEvo/issues
-Description: Simulates the cultural evolution of quantitative 
-    traits of bird song. SongEvo is an individual- (agent-) based model.
-    SongEvo is spatially-explicit and can be parameterized with, 
-    and tested against, measured song data. Functions are available 
-    for model implementation, sensitivity analyses, parameter 
-    optimization, model validation, and hypothesis testing. 
+Description: Simulates the cultural evolution of quantitative traits of bird song. 'SongEvo' is an individual- (agent-) based model. 'SongEvo' is spatially-explicit and can be parameterized with, and tested against, measured song data. Functions are available for model implementation, sensitivity analyses, parameter optimization, model validation, and hypothesis testing. 
 Depends: 
-    R (>= 3.1.0)
+  R (>= 3.1.0)
 Imports: 
-    boot, 
-    geosphere,
-    lattice,
-    sp
+  boot, 
+  geosphere,
+  lattice,
+  sp
 Suggests:
-    reshape2,
-    Hmisc,
-    knitr,
-    rmarkdown
+  reshape2,
+  Hmisc,
+  knitr,
+  rmarkdown
 License: GPL-3
 LazyData: true
 VignetteBuilder: knitr

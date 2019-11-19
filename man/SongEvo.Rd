@@ -68,7 +68,6 @@ This function simulates bird song evolution. Submodels are performed once per ti
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 ### Load the example data: song.data
 
 # To explore the SongEvo package, we will use a database of songs from Nuttall’s
@@ -131,7 +130,7 @@ init.inds$y1 <- round(runif(n.territories, min=37.787768, max=37.805645), digits
 # individual because we will use those data later for mapping. If we do not need
 # data for each individual, we set all to FALSE because the all.inds data.frame
 # becomes very large!
-iteration <- 10
+iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
@@ -174,6 +173,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds,
 # The model required the following time to run on your computer:
 SongEvo1$time
 
+\donttest{
 # Three main objects hold data regarding the SongEvo model.  Additional objects
 # are used temporarily within modules of the model.
 

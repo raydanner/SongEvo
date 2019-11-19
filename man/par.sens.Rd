@@ -32,7 +32,6 @@ This function allows testing the sensitivity of SongEvo to different parameter v
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
 #### Specify and call `par.sens()`
 
 # Here we test the sensitivity of the Acquire a Territory submodel to variation
@@ -42,7 +41,7 @@ This function allows testing the sensitivity of SongEvo to different parameter v
 # range of values for that parameter. The function currently allows examination
 # of only one parameter at a time and requires at least two iterations.
 parm <- "terr.turnover"
-par.range = seq(from=0.4, to=0.6, by=0.05)
+par.range = seq(from=0.45, to=0.55, by=0.05)
 sens.results <- NULL
 data("song.data")
 data("glo.parms")
@@ -74,6 +73,8 @@ par.sens1 <- par.sens(parm = parm, par.range = par.range,
                       iteration = iteration, steps = years, mate.comp = FALSE, 
                       fixed_parms=extra_parms[names(extra_parms)!=parm], all = TRUE)
 
+\donttest{
+  
 #### Examine par.sens results
 # Examine results objects, which include two arrays: 
 

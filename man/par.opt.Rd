@@ -24,8 +24,6 @@ This function follows par.sens to help users optimize values for imperfectly kno
 \examples{
 ### See vignette for an example that uses all functions in SongEvo.
 
-\dontrun{
-
 #### Specify and call `par.sens()`
 
 # Here we test the sensitivity of the Acquire a Territory submodel to variation
@@ -35,7 +33,7 @@ This function follows par.sens to help users optimize values for imperfectly kno
 # range of values for that parameter. The function currently allows examination
 # of only one parameter at a time and requires at least two iterations.
 parm <- "terr.turnover"
-par.range = seq(from=0.4, to=0.6, by=0.05)
+par.range = seq(from=0.45, to=0.55, by=0.05)
 sens.results <- NULL
 data("song.data")
 data("glo.parms")
@@ -83,6 +81,8 @@ par.opt1 <- par.opt(sens.results=par.sens1$sens.results, ts=ts,
 par.opt1$Residuals
 par.opt1$Target.match
 
+\donttest{
+	
 #### Plot results of `par.opt()`
 #### Accuracy
 
