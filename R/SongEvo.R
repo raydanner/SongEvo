@@ -735,26 +735,30 @@ SongEvo <- function(init.inds,
         
       }
     } else if (!mate.comp) { #without mate competition, all males with territories have children
-      n.children <- round(rnorm(nrow(inds[inds$territory==1,]), mean=male.fledge.n.mean, sd=male.fledge.n.sd))
-      male.children <- c()
-      female.children <- c()
-      for (i in 1:length(n.children)){
-        sex.chick <- round(runif(n.children[i],0,1))
-        males <- 0
-        females <- 0
-        for (n in sex.chick) {
-          if (n==1){
-            males <- males+1
-          } else {
-            females <- females+1
-          }
-        }
-        male.children[i] <- males
-        female.children[i] <- females
-      }
+      terr.children <- round(rnorm(sum(inds$territory==1), mean=male.fledge.n.mean, sd=male.fledge.n.sd))
       
-      inds$male.fledglings <- (inds$territory==1) * male.children
-      inds$female.fledglings <- (inds$territory==1) * female.children
+      inds$male.fledglings[inds$territory==1] <- male.children <- 
+        sapply(terr.children, function(n.children) sum(round(runif(n.children,0,1))))
+      inds$female.fledglings[inds$territory==1] <- terr.children - male.children 
+      # male.children <- c()
+      # female.children <- c()
+      # for (i in 1:length(n.children)){
+      #   sex.chick <- round(runif(n.children[i],0,1))
+      #   males <- 0
+      #   females <- 0
+      #   for (n in sex.chick) {
+      #     if (n==1){
+      #       males <- males+1
+      #     } else {
+      #       females <- females+1
+      #     }
+      #   }
+      #   male.children[i] <- males
+      #   female.children[i] <- females
+      # }
+      # 
+      # inds$male.fledglings <- (inds$territory==1) * male.children
+      # inds$female.fledglings <- (inds$territory==1) * female.children
     }
     #competitors <- spDists(as.matrix(inds[,c("x","y")]),longlat = TRUE) <= integrate.dist
     #print(competitors)
