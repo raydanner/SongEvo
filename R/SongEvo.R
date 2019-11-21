@@ -185,7 +185,7 @@ SongEvo <- function(init.inds,
     ninds <- nrow(inds)
     n.hatch<- sum(inds$male.fledglings, inds$female.fledglings)
     if(n.hatch==0) {
-      newinds <- new.bird[-c(1),]
+      newinds <- new.bird[-c(1), , drop=FALSE]
       print(paste('no hatch row n: ', NROW(newinds)))
       #print('no hatch df')
       #print(newinds)
@@ -195,44 +195,51 @@ SongEvo <- function(init.inds,
     else {
       fathers.m <- subset(inds, inds$male.fledglings != 0)
       id.m <- maxid.m
-      newinds <- new.bird
+      newinds <- new.bird  #[-c(1), , drop=FALSE]
       for (i in 1:nrow(fathers.m)){
-        for (n in 1:fathers.m$male.fledglings[i]){
-          id.m <- as.numeric(id.m)+1
+        i_chick=fathers.m$male.fledglings[i] 
+        if (i_chick>0){
+          chick_id = id.m + (1:(i_chick))
+          id.m <- as.numeric(id.m)+i_chick
           father <- fathers.m$id[i]
           x.loc <- fathers.m$x1[i]
           y.loc <- fathers.m$y1[i]
-          newinds <- rbind(newinds, c(id.m, 1, 0, 0, 0, 0, father, 'M', x.loc, y.loc, x.loc, y.loc, 0, 0))
-          newinds$sex <- 'M'
+          
+          newinds <- rbind(newinds, as.data.frame(list(chick_id, 1, 0, 0, 0, 0, father, 'M', x.loc, y.loc, x.loc, y.loc, 0, 0),
+                                                  row.names=paste0('M',chick_id), col.names=colnames(new.bird) ))
         }
       }
       fathers.f <- subset(inds, inds$female.fledglings !=0)
       id.f <- maxid.f
       for (i in 1:nrow(fathers.f)){
-        for (n in 1:fathers.f$female.fledglings[i]){
-          id.f <- as.numeric(id.f)+1
+        
+        i_chick=fathers.f$female.fledglings[i] 
+        if (i_chick>0){
+          chick_id = id.f + (1:(i_chick))
+          id.f <- as.numeric(id.f)+i_chick
           father <- fathers.f$id[i]
           x.loc <- fathers.f$x1[i]
           y.loc <- fathers.f$y1[i]
-          newinds <- rbind(newinds, c(id.f, 1, 0, 0, 0, 0, father, 'F', x.loc, y.loc, x.loc, y.loc, 0, 0))
+          newinds <- rbind(newinds, as.data.frame(list(chick_id, 1, 0, 0, 0, 0, father, 'F', x.loc, y.loc, x.loc, y.loc, 0, 0),
+                                                  row.names=paste0('F',chick_id), col.names=colnames(new.bird) ))
         }
       }
-      newinds <- newinds[c(-1),]
+      newinds <- newinds[c(-1), , drop=FALSE]
       newinds$fitness <- 1
       newinds$learn.dir <- 0
       return(newinds)
-      'newinds <- new.bird[rep(1,n.hatch),]
-      newinds$id <- maxid +(1:n.hatch)
-      row.names(newinds)<-as.character(newinds$id)
-      map.key<-do.call(c,mapply(rep,1:ninds,inds$male.fledglings, SIMPLIFY = FALSE))
-      newinds$father <- inds$id[map.key]
-      newinds$x <- newinds$x0 <- inds$x1[map.key] 
-      newinds$y <- newinds$y0 <- inds$y1[map.key]
-      return(newinds)
-      # coordinates(newinds) = ~x+y 
-      # proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-      # inds$male.fledglings <- 0
-      # rbind(inds, newinds)'
+      # 'newinds <- new.bird[rep(1,n.hatch),]
+      # newinds$id <- maxid +(1:n.hatch)
+      # row.names(newinds)<-as.character(newinds$id)
+      # map.key<-do.call(c,mapply(rep,1:ninds,inds$male.fledglings, SIMPLIFY = FALSE))
+      # newinds$father <- inds$id[map.key]
+      # newinds$x <- newinds$x0 <- inds$x1[map.key] 
+      # newinds$y <- newinds$y0 <- inds$y1[map.key]
+      # return(newinds)
+      # # coordinates(newinds) = ~x+y 
+      # # proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+      # # inds$male.fledglings <- 0
+      # # rbind(inds, newinds)'
     }
   }
   
