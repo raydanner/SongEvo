@@ -578,7 +578,7 @@ SongEvo <- function(init.inds,
     disp.dist <- rnorm(ninds, mean=disp.distance.mean, sd=disp.distance.sd) 
     disp.direction <- runif(ninds, min=0, max=360) #Assume 0 is due North.
     coords <- inds[, c("x", "y")]
-    coords <- sapply(coords, as.numeric)
+    coords <- sapply(coords, as.numeric, simplify = "array")
     inds[, c("x", "y")] <- 
       inds[, c("x1", "y1")] <- 
       destPoint(coords, disp.direction, disp.dist)
