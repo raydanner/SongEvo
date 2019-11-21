@@ -842,8 +842,11 @@ SongEvo <- function(init.inds,
         chicks.m <-grow(chicks.m)
         chicks.f <- grow(chicks.f)
         fems <- rbind(fems, chicks.f)
-        fems <- disperse(fems)
-        chicks.m <- disperse(chicks.m)
+        if(nrow(fems)>0)
+          fems <- disperse(fems)
+        else warning("No females to disperse!")
+        if(nrow(chicks.m)>0)
+          chicks.m <- disperse(chicks.m)
         inds <- rbind(inds, chicks.m)
         inds <- compete.for.territories(inds)
         if (typeof(mate.comp)=='logical'){
