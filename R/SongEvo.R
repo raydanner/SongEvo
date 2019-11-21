@@ -188,7 +188,7 @@ SongEvo <- function(init.inds,
       
     }
     else {
-      fathers.m <- subset(inds, male.fledglings != 0)
+      fathers.m <- subset(inds, inds$male.fledglings != 0)
       id.m <- maxid.m
       newinds <- new.bird
       for (i in 1:nrow(fathers.m)){
@@ -201,7 +201,7 @@ SongEvo <- function(init.inds,
           newinds$sex <- 'M'
         }
       }
-      fathers.f <- subset(inds, female.fledglings !=0)
+      fathers.f <- subset(inds, inds$female.fledglings !=0)
       id.f <- maxid.f
       for (i in 1:nrow(fathers.f)){
         for (n in 1:fathers.f$female.fledglings[i]){
@@ -298,7 +298,7 @@ SongEvo <- function(init.inds,
         min.freq <- as.numeric(content.bias.info$min[i])
         males$disturbance.dist <- spDistsN1(pts = as.matrix(males[,c('x','y')]), pt = disturbance, longlat = TRUE)
         #males within disturbance range and have traits within the affected range are affected
-        affected.inds <- subset(males, disturbance.dist <= range & trait < max.freq & trait > min.freq)
+        affected.inds <- subset(males, males$disturbance.dist <= range & males$trait < max.freq & males$trait > min.freq)
         if (nrow(affected.inds)==0){
           #if no individuals are affected do nothing
         } else{
@@ -340,14 +340,15 @@ SongEvo <- function(init.inds,
         }
         
       }
-      males <- subset(males,select = -c(disturbance.dist))
+      #FIXME Not sure what this line was supposed to do. Drop certain males? Reorder based on distance?
+      males <- subset(males,select = colnames(males) %in% c("disturbance.dist"))
     } else if (n.content.bias.loc=='all'){
       #all males with traits within the afected range will be affected in the same way
       max.freq <- max(affected.freqs)
       min.freq <- min(affected.freqs)
       middle.point <- mean(affected.freqs)
       half.range <- max.freq-middle.point
-      affected.inds <- affected.inds <- subset(males, trait < max.freq & trait > min.freq)
+      affected.inds <- affected.inds <- subset(males,  affected.inds$trait < max.freq &  affected.inds$trait > min.freq)
       if (nrow(affected.inds)==0){
         
       } else{
@@ -443,8 +444,9 @@ SongEvo <- function(init.inds,
       fitness.adj <- fitness.effects$bias[fitness.effects$children == tutors[i,]$children]
       tutors$fitness[i] <- tutors$fitness[i] * fitness.adj
     }
-    tutors <- subset(tutors, select = -c(children))
-    return(tutors)
+    # Is this meant to drop children from tutor list?
+    tutors <- subset(tutors, select = colnames(tutors)[colnames(tutors) %in% c("children")])
+    return(tutors) #[-c(tutors$children),,drop=FALSE])
   }
   
   #conformity.bias <- conformity.bias
@@ -633,15 +635,15 @@ SongEvo <- function(init.inds,
         fem.loc.y <- fems$y[i]
         fem.loc <- c(fem.loc.x, fem.loc.y)
         #males who can mate with females, those with territories and are near her
-        competitors <- subset(inds, territory==1)
+        competitors <- subset(inds, competitors$territory==1)
         competitors$dist <- spDistsN1(pts = as.matrix(competitors[,c("x","y")]), pt = fem.loc, longlat = TRUE)
-        competitors.near <- subset(competitors, dist <= integrate.dist*10)
+        competitors.near <- subset(competitors, competitors$dist <= integrate.dist*10)
         if (nrow(competitors.near)==0){ #if no potential mates female will disperse up to 10 times to find a mate
           ndisp <- 0
           while (nrow(competitors.near)==0 & ndisp < 10) {
             move <- disperse(fems[i,])
             competitors$dist <- spDistsN1(pts = as.matrix(competitors[,c("x","y")]), pt = c(move$x[1],move$y[1]), longlat = TRUE)
-            competitors.near <- subset(competitors, dist <= integrate.dist)
+            competitors.near <- subset(competitors, competitors$dist <= integrate.dist)
             ndisp <- ndisp + 1
           #print(fems[i],)
           }
@@ -675,7 +677,7 @@ SongEvo <- function(init.inds,
           selective.level <- comp.traits.sd*selectivity
           fem.pref <-as.numeric(fems$trait[i]) #females prefer the traits they learned
           competitors.near$trait.var <- abs(as.numeric(competitors.near$trait)-fem.pref)
-          close.competitors <- subset(competitors.near, trait.var <= selective.level)
+          close.competitors <- subset(competitors.near, competitors.near$trait.var <= selective.level)
           if (nrow(close.competitors)==0){ #if none are within her selective ability, she'll mate with the closest to her preference
             winner.id <- competitors.near$id[competitors.near$trait.var == min(competitors.near$trait.var)]
             prev.fledge.m <- inds[inds$id == winner.id,]$male.fledglings
@@ -695,7 +697,7 @@ SongEvo <- function(init.inds,
             }
           }
           else { #if there are competitors that fall within her selective ability she choses one at random
-            winner <- sample_n(close.competitors, 1)
+            winner <- close.competitors[sample.int(nrow(close.competitors), 1),]
             winner.id <- winner$id
             prev.fledge.m <- inds[inds$id == winner.id,]$male.fledglings
             prev.fledge.f <- inds[inds$id == winner.id,]$female.fledglings
@@ -788,8 +790,9 @@ SongEvo <- function(init.inds,
       inds.all_list[[b]][[k]]<-timestep.inds
       inds$fitness <- 1
       chicks <- hatch(inds = inds)
-      chicks.m <- subset(chicks, sex=='M')
-      chicks.f <- subset(chicks, sex=='F', select = -c(male.fledglings,female.fledglings, territory, fitness, learn.dir))
+      chicks.m <- subset(chicks, chicks$sex=='M')
+      chicks.f <- subset(chicks, chicks$sex=='F', 
+                         select = colnames(chicks)[! colnames(chicks) %in% c("male.fledglings","female.fledglings", "territory", "fitness", "learn.dir")])
       if (typeof(content.bias)=='double'){
         inds <- content(inds, content.bias.loc, content.bias.loc.ranges,affected.traits, content.bias)
       }
