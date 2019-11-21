@@ -32,7 +32,6 @@
 #' @param phys.lim.max The maximum physical limit of trait production.
 #' @param male.fledge.n.mean The mean number of offspring produced per time step per individual breeding male. Includes only offspring raised in that breeding male’s nest (i.e. it does not account for extra-pair offspring in other nests).
 #' @param male.fledge.n.sd Standard deviation of the number of male fledglings.
-#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd.
 #' @param disp.age The age at which individual males disperse from their birth location.
 #' @param disp.distance.mean The distance that individual males disperse (meters).
 #' @param disp.distance.sd The standard deviation of dispersal distance.
@@ -82,7 +81,6 @@ SongEvo <- function(init.inds,
                         phys.lim.max = 8000,
                         male.fledge.n.mean = 2,
                         male.fledge.n.sd = 0.5,
-                        male.fledge.n,
                         disp.age = 1,
                         disp.distance.mean = 100,
                         disp.distance.sd = 50,
