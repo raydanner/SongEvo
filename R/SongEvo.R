@@ -412,19 +412,21 @@ SongEvo <- function(init.inds,
       for (i in 1:nrow(children))
         fathers[[i]] <- tutors$id[tutors$id==children$father[i]]
       return(fathers)
-      'children$trait=sapply(children$father, function(x) tutors[tutors$id==x, ]$trait ) + 
-          rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
-        #restrict learned song values such that they cannot exceed range of physical possibility: 
-        children$trait[children$trait < phys.lim.min] <- phys.lim.min
-        children$trait[children$trait > phys.lim.max] <- phys.lim.max
-        return(children)'
+      # 'children$trait=sapply(children$father, function(x) tutors[tutors$id==x, ]$trait ) + 
+      #     rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
+      #   #restrict learned song values such that they cannot exceed range of physical possibility: 
+      #   children$trait[children$trait < phys.lim.min] <- phys.lim.min
+      #   children$trait[children$trait > phys.lim.max] <- phys.lim.max
+      #   return(children)'
     } else if (conformity.bias=="integrate") {
       #2. Young learn by integrating songs from the neighborhood within a specified distance:
-      if (children$sex=='M'){
+      if (all(children$sex=='M')){
         map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$male.fledglings, SIMPLIFY = FALSE))
-      } else if (children$sex=='F'){
+      } else if (all(children$sex=='F')){
         #print(paste('m chicks: ', sum(tutors$male.fledglings[tutors$male.fledglings != 0]), ' m key: ', length(map.key.m)))
         map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$female.fledglings, SIMPLIFY = FALSE))
+      } else {
+        stop("The conformity function will only work on tables of children of the same sex.")
       }
       #print(paste('f chicks: ', sum(tutors$female.fledglings[tutors$female.fledglings != 0]), ' f key: ', length(map.key.f)))
       #map.key <- c(map.key.m,map.key.f)
@@ -464,11 +466,11 @@ SongEvo <- function(init.inds,
   #conformity.bias <- conformity.bias
   
   learn <- function(tutors, children, conformity.bias, integrate.dist, prestige.bias.strength){
+    chick.num <- min(as.numeric(children$id))
     if (typeof(conformity.bias)=='character'){ #with conformity bias
       tutors.close <- conformity(children = children, tutors = tutors, conformity.bias = conformity.bias)
       #print(tutors)
       #print(tutors[[3]])
-      chick.num <- min(as.numeric(children$id))
       for (chick in tutors.close){
         tutors.id <- chick
         tutors.df <- tutors[1,]
@@ -529,16 +531,18 @@ SongEvo <- function(init.inds,
     }
     children$trait[children$trait < phys.lim.min] <- phys.lim.min
     children$trait[children$trait > phys.lim.max] <- phys.lim.max
-    if (children$sex=='M'){
+    if (all(children$sex=='M')){
       id.start <- maxid.m+1
       id.end <- maxid.m+nrow(children)
       ids <- seq(id.start,id.end, by = 1)
       children$id <- ids
-    } else if (children$sex=='F'){
+    } else if (all(children$sex=='F')){
       id.start <- maxid.f+1
       id.end <- maxid.f+nrow(children)
       ids <- seq(id.start,id.end, by = 1)
       children$id <- ids
+    }else {
+      stop("The learn function will only work on tables of children of the same sex.")
     }
     return(children)
   }
