@@ -32,6 +32,7 @@
 #' @param phys.lim.max The maximum physical limit of trait production.
 #' @param male.fledge.n.mean The mean number of offspring produced per time step per individual breeding male. Includes only offspring raised in that breeding male’s nest (i.e. it does not account for extra-pair offspring in other nests).
 #' @param male.fledge.n.sd Standard deviation of the number of male fledglings.
+#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd if NULL.
 #' @param disp.age The age at which individual males disperse from their birth location.
 #' @param disp.distance.mean The distance that individual males disperse (meters).
 #' @param disp.distance.sd The standard deviation of dispersal distance.
@@ -81,6 +82,7 @@ SongEvo <- function(init.inds,
                         phys.lim.max = 8000,
                         male.fledge.n.mean = 2,
                         male.fledge.n.sd = 0.5,
+                        male.fledge.n = NULL,
                         disp.age = 1,
                         disp.distance.mean = 100,
                         disp.distance.sd = 50,
@@ -98,8 +100,11 @@ SongEvo <- function(init.inds,
   trait.results <- NULL
   
   #Further prepare initial individuals 
-  init.inds$male.fledglings <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
-  init.inds$female.fledglings <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
+  if(is.null(male.fledge.n)) {
+    male.fledge.n <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
+  }
+  init.inds$male.fledglings <- sapply(male.fledge.n, function(n.children) sum(round(runif(n.children,0,1))))
+  init.inds$female.fledglings <- male.fledge.n - init.inds$male.fledglings 
   init.inds$territory <- rep(1, n.territories)
   init.inds$father <- 0
   init.inds$sex <- 'M'

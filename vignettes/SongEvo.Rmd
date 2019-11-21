@@ -107,7 +107,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,
 	mortality.a.m = mortality.a, mortality.a.f = mortality.a,
 	mortality.j.m = mortality.j, mortality.j.f = mortality.j, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
 	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
 	mate.comp = mate.comp, prin = prin, all)
 ```
