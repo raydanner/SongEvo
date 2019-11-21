@@ -193,9 +193,11 @@ SongEvo <- function(init.inds,
       
     }
     else {
+      #print(summary(inds))
       fathers.m <- subset(inds, inds$male.fledglings != 0)
       id.m <- maxid.m
       newinds <- new.bird  #[-c(1), , drop=FALSE]
+      if(nrow(fathers.m) >0)
       for (i in 1:nrow(fathers.m)){
         i_chick=fathers.m$male.fledglings[i] 
         if (i_chick>0){
@@ -211,6 +213,7 @@ SongEvo <- function(init.inds,
       }
       fathers.f <- subset(inds, inds$female.fledglings !=0)
       id.f <- maxid.f
+      if(nrow(fathers.f) >0)
       for (i in 1:nrow(fathers.f)){
         
         i_chick=fathers.f$female.fledglings[i] 
