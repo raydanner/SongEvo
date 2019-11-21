@@ -52,7 +52,6 @@
 #' @import sp
 #' @import geosphere
 #' @importFrom stats runif rnorm sd
-#' @import tidyverse
 #' @export
 SongEvo <- function(init.inds, 
                         females,
@@ -62,16 +61,16 @@ SongEvo <- function(init.inds,
                         terr.turnover,
                         mate.comp,
                         selectivity,
-                        content.bias, 
-                        n.content.bias.loc, 
-                        content.bias.loc, 
-                        content.bias.loc.ranges, 
-                        affected.traits, 
+                        content.bias = FALSE, 
+                        n.content.bias.loc = 'all', 
+                        content.bias.loc = FALSE, 
+                        content.bias.loc.ranges = FALSE, 
+                        affected.traits = FALSE,
                         conformity.bias, 
                         integrate.dist, 
-                        prestige.bias, 
-                        learn.m, 
-                        learn.f, 
+                        prestige.bias = FALSE, 
+                        learn.m = 'default', 
+                        learn.f = 'default', 
                         learning.error.d,
                         learning.error.sd,
                         mortality.a.m,
