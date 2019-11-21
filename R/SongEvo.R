@@ -140,8 +140,8 @@ SongEvo <- function(init.inds,
       n.fem <- as.integer(females*nrow(inds))
       f.trait <- rnorm(n.fem, mean = mean(inds$trait), sd = sd(inds$trait))
       init.fem <- data.frame(id = seq(1:n.fem), age = 2, trait = f.trait)
-      init.fem$x1 <- round(runif(n.fem, min=-122.481858, max=-122.447270), digits=8)
-      init.fem$y1 <- round(runif(n.fem, min=37.787768, max=37.805645), digits=8)
+      init.fem$x1 <- round(runif(n.fem, min=min(inds$x1), max=max(inds$x1)), digits=8)
+      init.fem$y1 <- round(runif(n.fem, min=min(inds$y1), max=max(inds$y1)), digits=8)
       init.fem$father <- 0
       init.fem$sex <- 'F'
       init.fem$x0 <- 0
@@ -161,7 +161,7 @@ SongEvo <- function(init.inds,
       
     }
     else{
-      print("user input error females must be either a ratio (f:m) or a dataframe")
+      stop("User input error: females must be either a ratio (f/m) or a dataframe")
     }
   }
   
