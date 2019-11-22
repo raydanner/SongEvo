@@ -531,7 +531,7 @@ SongEvo <- function(init.inds,
       chick.learn.dir <- sum(adj.learn.dir)
       new.learn.dir <- learning.error.d + chick.learn.dir
       
-      children$trait <- chick.trait + rnorm(1, mean = new.learn.dir, sd = learning.error.sd)
+      children$trait <- chick.trait + rnorm(nrow(children), mean = new.learn.dir, sd = learning.error.sd)
       
       chick.num <- chick.num+1
     }
