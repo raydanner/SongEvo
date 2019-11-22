@@ -684,6 +684,8 @@ SongEvo <- function(init.inds,
           if (n.children < 0) {
             n.children = 0
           }
+          if (n.children > 0) {
+            
           sex.chick <- round(runif(n.children,0,1))
           for (i in sex.chick) {
             if (i==1){
@@ -692,6 +694,7 @@ SongEvo <- function(init.inds,
             else {
               inds[inds$id == winner.id,]$female.fledglings <- prev.fledge.f + 1
             }
+          }
           }
           }
           #if more potential mates those that fall within her selective ability have an equal chance of mating
@@ -708,6 +711,8 @@ SongEvo <- function(init.inds,
             if (n.children < 0) {
               n.children = 0
             }
+            if (n.children > 0) {
+              
             sex.chick <- round(runif(n.children,0,1))
             for (i in sex.chick) {
               if (i==1){
@@ -716,6 +721,7 @@ SongEvo <- function(init.inds,
               else {
                 inds[inds$id == winner.id,]$female.fledglings <- prev.fledge.f + 1
               }
+            }
             }
           }
           else { #if there are competitors that fall within her selective ability she choses one at random
@@ -727,7 +733,8 @@ SongEvo <- function(init.inds,
             if (n.children < 0) {
               n.children = 0
             }
-            sex.chick <- round(runif(n.children,0,1))
+            if (n.children > 0) {
+              sex.chick <- round(runif(n.children,0,1))
             for (i in sex.chick) {
               if (i==1){
                 inds[inds$id == winner.id,]$male.fledglings <- prev.fledge.m + 1
@@ -736,13 +743,15 @@ SongEvo <- function(init.inds,
                 inds[inds$id == winner.id,]$female.fledglings <- prev.fledge.f + 1
               }
             }
+            }
           }
         }
         
       }
     } else if (!mate.comp) { #without mate competition, all males with territories have children
       terr.children <- round(rnorm(sum(inds$territory==1), mean=male.fledge.n.mean, sd=male.fledge.n.sd))
-      
+      terr.children[terr.children < 0] <- 0
+      #print(terr.children)
       inds$male.fledglings[inds$territory==1] <- male.children <- 
         sapply(terr.children, function(n.children) sum(round(runif(n.children,0,1))))
       inds$female.fledglings[inds$territory==1] <- terr.children - male.children 
