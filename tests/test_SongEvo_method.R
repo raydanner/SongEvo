@@ -77,9 +77,9 @@ fledge_counts=c(1, 1, 2, 1, 0, 2, 2, 2, 2, 1, 1, 2, 1,
 default.parms <- list(init.inds = NULL, iteration = 10, steps = NULL,  # years / timestep
                       timestep = 1, #steps in years by default
                       n.territories = reg.count, terr.turnover = 0.5, 
-                      learning.method = "integrate", integrate.dist = 0.1, 
+                      integrate.dist = 0.1, 
                       learning.error.d = 0, learning.error.sd = 430, 
-                      mortality.a = 0.468, mortality.j = 0.5, lifespan = NA, 
+                      mortality.a.m = 0.468, mortality.j.m = 0.5, lifespan = NA, 
                       phys.lim.min = 1559, phys.lim.max = 4364, 
                       male.fledge.n.mean = 1.35, male.fledge.n.sd = 0.5,
                       male.fledge.n = fledge_counts, disp.age = 2, 

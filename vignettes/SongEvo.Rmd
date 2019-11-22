@@ -100,7 +100,7 @@ all <- TRUE
 ```
 Now we call SongEvo with our specifications and save it in an object called SongEvo1.
 ```{r Call SongEvo model, echo=TRUE}
-SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo1 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
 	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
@@ -109,7 +109,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
 	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
 	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 #### Examine results from SongEvo model
@@ -498,16 +498,16 @@ years <- 36
 timestep <- 1
 terr.turnover <- 0.5
 
-SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
-	learning.method = learning.method, integrate.dist = integrate.dist, 
+	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a, mortality.a.f = mortality.a,
+	mortality.j.m = mortality.j, mortality.j.f = mortality.j, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
-	male.fledge.n = male.fledge.n, disp.age = disp.age, 
-	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
+	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 Specify and call mod.val
@@ -591,16 +591,16 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 
 Specify and call SongEvo() with test data
 ```{r Specify and call SongEvo() with test data}
-SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo3 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
-	learning.method = learning.method, integrate.dist = integrate.dist, 
+	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a, mortality.a.f = mortality.a,
+	mortality.j.m = mortality.j, mortality.j.f = mortality.j, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
-	male.fledge.n = male.fledge.n, disp.age = disp.age, 
-	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
+	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 Specify and call `h.test()`

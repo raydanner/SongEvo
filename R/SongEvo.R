@@ -469,6 +469,9 @@ SongEvo <- function(init.inds,
   #conformity.bias <- conformity.bias
   
   learn <- function(tutors, children, conformity.bias, integrate.dist, prestige.bias.strength){
+    if(nrow(children)==0) return(children)
+    if(nrow(tutors)==0) stop("No tutors supplied in learn method!")
+    
     chick.num <- min(as.numeric(children$id))
     if (typeof(conformity.bias)=='character'){ #with conformity bias
       tutors.close <- conformity(children = children, tutors = tutors, conformity.bias = conformity.bias)
