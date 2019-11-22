@@ -657,7 +657,7 @@ SongEvo <- function(init.inds,
         fem.loc.y <- fems$y[i]
         fem.loc <- c(fem.loc.x, fem.loc.y)
         #males who can mate with females, those with territories and are near her
-        competitors <- subset(inds, competitors$territory==1)
+        competitors <- subset(inds, inds$territory==1)
         competitors$dist <- spDistsN1(pts = as.matrix(competitors[,c("x","y")]), pt = fem.loc, longlat = TRUE)
         competitors.near <- subset(competitors, competitors$dist <= integrate.dist*10)
         if (nrow(competitors.near)==0){ #if no potential mates female will disperse up to 10 times to find a mate
