@@ -798,8 +798,8 @@ SongEvo <- function(init.inds,
   for (b in 1:iteration){
   inds <- init.inds
   fems <- create.females(inds = init.inds, females = females)
-  maxid.m <- max(inds$id) #store max id, which determines new id numbers in Hatch
-  maxid.f <- max(fems$id)
+  maxid.m <- max(inds$id,0) #store max id, which determines new id numbers in Hatch
+  maxid.f <- max(fems$id,0)
   
   
   k <- 1
@@ -835,8 +835,8 @@ SongEvo <- function(init.inds,
         ids <- chicks.f$id
         chicks.f$trait <- sapply(ids,learn.f)
       }
-      maxid.m <- max(chicks.m$id)
-      maxid.f <- max(chicks.f$id)
+      maxid.m <- max(chicks.m$id, 0)
+      maxid.f <- max(chicks.f$id, 0)
       inds <- die(inds)
       fems <- die(fems)
       chicks.m <- die(chicks.m)
