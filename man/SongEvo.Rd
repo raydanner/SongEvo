@@ -4,14 +4,24 @@
 \alias{SongEvo}
 \title{Model bird song evolution}
 \usage{
-SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
-  learning.method, integrate.dist, learning.error.d, learning.error.sd,
-  mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max,
-  male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, disp.age,
-  disp.distance.mean, disp.distance.sd, n.territories, prin, all)
+SongEvo(init.inds, females = 1, iteration = 3, steps = 10,
+  timestep = 1, terr.turnover = 0.5, mate.comp = FALSE,
+  selectivity = 3, content.bias = FALSE, n.content.bias.loc = "all",
+  content.bias.loc = FALSE, content.bias.loc.ranges = FALSE,
+  affected.traits = FALSE, conformity.bias = FALSE,
+  integrate.dist = 0.1, prestige.bias = FALSE, learn.m = "default",
+  learn.f = "default", learning.error.d = 0, learning.error.sd = 200,
+  mortality.a.m = 0.5, mortality.a.f = mortality.a.m,
+  mortality.j.m = 0.5, mortality.j.f = mortality.j.m, lifespan = 2,
+  phys.lim.min = 1000, phys.lim.max = 8000, male.fledge.n.mean = 2,
+  male.fledge.n.sd = 0.5, male.fledge.n = NULL, disp.age = 1,
+  disp.distance.mean = 100, disp.distance.sd = 50, n.territories = 4
+  * nrow(init.inds), prin = FALSE, all = FALSE)
 }
 \arguments{
 \item{init.inds}{Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude).}
+
+\item{females}{Either sex ratio expressed in terms of females to males (e.g. 2 would represent 2 females : 1 male), or female dataframe.}
 
 \item{iteration}{The number of iterations that the model will run.}
 
@@ -21,19 +31,41 @@ SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
 
 \item{terr.turnover}{The proportion of territories that change ownership during a step.}
 
-\item{mate.comp}{Female preference for mates. Options are TRUE or FALSE.}
+\item{mate.comp}{Female preference for mates. Options are TRUE, FALSE, or the name of a user defined function. User functions must paramatize male id number and return number of total offspring for that step.}
 
-\item{learning.method}{If an individual learns from their (“father”) or all males within a specified radius (“integrate”).}
+\item{selectivity}{The ability of females to choose males according to their preference. Expressed in number of standard deviations from her preferred trait value.}
 
-\item{integrate.dist}{Distance over which song learning is integrated.}
+\item{content.bias}{Reduces the heritability of individuals with affected traits. Options are FALSE or a vector of lowest and highest fitness reductions, bias strength (e.g. c(.9,.45)).}
 
-\item{learning.error.d}{Direction of learning error.}
+\item{n.content.bias.loc}{Number of content bias locations, options are either an integer, 'random' (1:5 locations), or 'all' where content bias is delocalized.}
+
+\item{content.bias.loc}{Location centers of content bias effects, options are a user defined dataframe with x and y positions, 'random' (random points on spatial plane), or FALSE.}
+
+\item{content.bias.loc.ranges}{Radius of content bias effects at each location. Options are a user defined vector, 'random' (0.5:10), or FALSE.}
+
+\item{affected.traits}{Either a dataframe containing max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.}
+
+\item{conformity.bias}{If an individual learns from their ('father'), all males within a specified radius ('integrate'), or FALSE if no conformity bias.}
+
+\item{integrate.dist}{Distance over which tutor values are integrated for learning.}
+
+\item{prestige.bias}{Learners will preferentially learn from males with more offspring. Options are a user defined vector of fitness reduction (e.g. c(.95,.25)), or FALSE.}
+
+\item{learn.m}{How males aquire a trait. Options are 'default', where males take the weighted average of tutors' traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits.}
+
+\item{learn.f}{How females aquire a trait. Options are 'default', where females take the weighted average of tutors traits according to their fitness values, or the name of a user defined function that takes id as a parameter and returns traits.}
+
+\item{learning.error.d}{Direction of learning error (measured in trait units, e.g. Hz).}
 
 \item{learning.error.sd}{The standard deviation of imitation error.}
 
-\item{mortality.a}{Annual mortality of adults (after the first time step).}
+\item{mortality.a.m}{Annual mortality of adult males.}
 
-\item{mortality.j}{Annual mortality of juvenile birds (in the first time step).}
+\item{mortality.a.f}{Annual mortality of adult females.}
+
+\item{mortality.j.m}{Annual mortality of juvenile males.}
+
+\item{mortality.j.f}{Annual mortality of juvenile females.}
 
 \item{lifespan}{Maximum age for individuals; any number is accepted. “NA” causes SongEvo to disregard lifespan and sets population size based on mortality rates alone.}
 
@@ -45,7 +77,7 @@ SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
 
 \item{male.fledge.n.sd}{Standard deviation of the number of male fledglings.}
 
-\item{male.fledge.n}{A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd}
+\item{male.fledge.n}{A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd if NULL.}
 
 \item{disp.age}{The age at which individual males disperse from their birth location.}
 
@@ -53,7 +85,7 @@ SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp,
 
 \item{disp.distance.sd}{The standard deviation of dispersal distance.}
 
-\item{n.territories}{The number of territories in the population. This number is fixed for all iterations.}
+\item{n.territories}{The maximum number of potential territories in the population. This number is fixed for all iterations.}
 
 \item{prin}{Print summary values after each timestep has completed? Options are TRUE or FALSE.}
 
@@ -134,7 +166,6 @@ iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
-learning.method <- "integrate"
 integrate.dist <- 0.1
 lifespan <- NA
 mate.comp <- FALSE
@@ -143,18 +174,18 @@ all <- TRUE
 
 # Now we call SongEvo with our specifications and save it in an object called
 # SongEvo1.
-SongEvo1 <- SongEvo(init.inds = init.inds, 
+SongEvo1 <- SongEvo(init.inds = init.inds,
+                    females = 1.0,
                     iteration = iteration, 
                     steps = years,  
                     timestep = timestep, 
                     n.territories = n.territories, 
                     terr.turnover = terr.turnover, 
-                    learning.method = learning.method, 
                     integrate.dist = integrate.dist, 
                     learning.error.d = learning.error.d, 
                     learning.error.sd = learning.error.sd, 
-                    mortality.a = mortality.a, 
-                    mortality.j = mortality.j, 
+                    mortality.a.m = mortality.a, 
+                    mortality.j.m = mortality.j, 
                     lifespan = lifespan, 
                     phys.lim.min = phys.lim.min, 
                     phys.lim.max = phys.lim.max, 
@@ -166,7 +197,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds,
                     disp.distance.sd = disp.distance.sd, 
                     mate.comp = mate.comp, 
                     prin = prin, 
-                    all)
+                    all = all)
 
 #### Examine results from SongEvo model
 
