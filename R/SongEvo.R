@@ -913,7 +913,7 @@ SongEvo <- function(init.inds,
     }
   k <- k+1}
   }
-
+  formals(fast.coords.frame)$fallback.bbox <- bbox(fast.coords.frame(init.inds,x.col = "x1",y.col="y1"))
   if (all==TRUE){
     all.inds=rbind(init=all.inds0,  do.call(rbind,do.call(c,inds.all_list)))
     # coordinates(all.inds) = ~x+y 
@@ -921,7 +921,7 @@ SongEvo <- function(init.inds,
     all.inds=fast.coords.frame(all.inds)
     # coordinates(inds) = ~x+y 
     # proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-    inds=fast.coords.frame(inds)
+    inds=fast.coords.frame(inds, fallback.bbox = bbox(all.inds))
     z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "content.bias.info"=content.bias.info, "time"=proc.time()-ptm)
   }else if (all=="sparse"){
     # all.inds0=fast.coords.frame(all.inds0)
@@ -949,9 +949,23 @@ SongEvo <- function(init.inds,
 #End of I. SongEvo function
 #########################
 
-fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
+fast.coords.frame <- function(data.src,x.col="x",y.col="y", fallback.bbox=NULL){
   coor.cols=c(which(colnames(data.src)%in% x.col),
               which(colnames(data.src)%in% y.col));
+  # cat(" FCF",dim(data.src),dim(data.src[,coor.cols]),dim(data.src[,-coor.cols]),coor.cols)
+  if(nrow(data.src) == 0){
+    #structure(logical(0), .Dim = c(0L, 2L), .Dimnames = list(NULL,      c("V1", "V2")))
+    if(is.null(fallback.bbox)) stop("Fallback boundary box not available. SongEvo requires at least 1 individual, so this is a bug in the code.")
+    rownames(fallback.bbox) <-  c(x.col, y.col)
+    emptyCoords=SpatialPoints(coords=structure(numeric(0), .Dim = c(0L, 2L), .Dimnames=list(NULL, c(x.col, y.col))),
+                              proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"),
+                              bbox=fallback.bbox)
+    return(SpatialPointsDataFrame(coords = emptyCoords,
+                                  data = data.src[,-coor.cols],
+                                  coords.nrs = coor.cols,
+                                  match.ID = FALSE,
+                                  proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) )
+  }
   SpatialPointsDataFrame(coords = data.src[,coor.cols],
                          data = data.src[,-coor.cols],
                          coords.nrs = coor.cols,
