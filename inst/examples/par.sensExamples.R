@@ -18,6 +18,7 @@ data("glo.parms")
 glo.parms$mortality.a.m <- glo.parms$mortality.a.f <- glo.parms$mortality.a
 glo.parms$mortality.j.m <- glo.parms$mortality.j.f <- glo.parms$mortality.j
 glo.parms <- glo.parms[!names(glo.parms) %in% c("mortality.a","mortality.j")]
+
 years=2005-1969
 iteration=5
 timestep=1
@@ -33,6 +34,12 @@ extra_parms <- list(init.inds = init.inds,
                     females = 1,  # New in SongEvo v2
                     timestep = 1, 
                     n.territories = nrow(init.inds),
+                    integrate.dist = 0.1,
+                    lifespan = NA, 
+                    terr.turnover = 0.5, 
+                    mate.comp = FALSE, 
+                    prin = FALSE,
+                    all = TRUE,
                     # New in SongEvo v2
                     selectivity = 3,
                     content.bias = FALSE,
@@ -41,12 +48,11 @@ extra_parms <- list(init.inds = init.inds,
                     content.bias.loc.ranges = FALSE,
                     affected.traits = FALSE,
                     conformity.bias = FALSE,
-                    integrate.dist = 0.1, 
-                    lifespan = NA, 
-                    terr.turnover = 0.5, 
-                    mate.comp = FALSE, 
-                    prin = FALSE,
-                    all = TRUE)
+                    prestige.bias=FALSE,
+                    learn.m="default",
+                    learn.f="default",
+                    learning.error.d=0,
+                    learning.error.sd=200)
 global_parms_key <- which(!names(glo.parms) %in% names(extra_parms))
 extra_parms[names(glo.parms[global_parms_key])]=glo.parms[global_parms_key]
 par.sens1 <- par.sens(parm = parm, par.range = par.range, 
