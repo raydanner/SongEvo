@@ -31,14 +31,31 @@ par.sens <- function(parm, par.range, iteration, steps, mate.comp, fixed_parms, 
 		learning.error.sd=par.range[p]			
 			}
 		if (parm=="mortality.a") {
-		mortality.a=par.range[p]			
+		mortality.a.m=par.range[p]		
+		mortality.a.f=par.range[p]		
 			}
 		if (parm=="mortality.j") {
-		mortality.j=par.range[p]			
-			}
+		mortality.j.m=par.range[p]
+		mortality.j.f=par.range[p]				
+		}
+	  if (parm=="mortality.a.m") {
+	    mortality.a.m=par.range[p]			
+	  }
+	  if (parm=="mortality.j.m") {
+	    mortality.j.m=par.range[p]			
+	  }
+	  if (parm=="mortality.a.f") {
+	    mortality.a.f=par.range[p]			
+	  }
+	  if (parm=="mortality.j.f") {
+	    mortality.j.f=par.range[p]			
+	  }
 		if (parm=="lifespan") {
 		lifespan=par.range[p]			
-			}
+		}
+	  if (parm=="females") {
+	    females=par.range[p]			
+	  }
 		if (parm=="phys.lim.min") {
 		phys.lim.min=par.range[p]			
 			}
@@ -62,11 +79,21 @@ par.sens <- function(parm, par.range, iteration, steps, mate.comp, fixed_parms, 
 			}
 		print(paste(parm, "= ", par.range[p]))			
 		z <- with(fixed_parms[!names(fixed_parms) %in% c(parm,"iteration","steps","mate.comp","all")],
-		          SongEvo(init.inds, iteration, steps, timestep, terr.turnover, mate.comp, 
-		                  learning.method, integrate.dist, learning.error.d, learning.error.sd, 
-		                  mortality.a, mortality.j, lifespan, phys.lim.min, phys.lim.max, 
-		                  male.fledge.n.mean, male.fledge.n.sd, male.fledge.n, 
-		                  disp.age, disp.distance.mean, disp.distance.sd, n.territories, prin, all))
+		          SongEvo(init.inds = init.inds, females = females, iteration = iteration, 
+		                  steps = steps, timestep = timestep, terr.turnover = terr.turnover, 
+		                  mate.comp = mate.comp, selectivity = selectivity, content.bias = content.bias, 
+		                  n.content.bias.loc = n.content.bias.loc, content.bias.loc = content.bias.loc, 
+		                  content.bias.loc.ranges = content.bias.loc.ranges, affected.traits = affected.traits, 
+		                  conformity.bias = conformity.bias, integrate.dist = integrate.dist, 
+		                  prestige.bias = prestige.bias, learn.m = learn.m, learn.f = learn.f, 
+		                  learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
+		                  mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f, 
+		                  mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, 
+		                  lifespan = lifespan, phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
+		                  male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
+		                  male.fledge.n = male.fledge.n, disp.age = disp.age, disp.distance.mean = disp.distance.mean, 
+		                  disp.distance.sd = disp.distance.sd, n.territories = n.territories, 
+		                  prin = prin, all = all))
 		#Add summary.results to sens.results array. 
 		sens.results[ , , , p] <- z$summary.results
 		}
