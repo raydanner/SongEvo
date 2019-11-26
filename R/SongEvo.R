@@ -900,9 +900,11 @@ SongEvo <- function(init.inds,
 
         ci.res <- boot.ci(boot_obj, conf=0.95, type="basic")
         if(length(ci.res$basic[4]) == 0){
+          cat(" CINA\n")
           summary.results[b, , "lci"][k] <- NA
           summary.results[b, , "uci"][k] <- NA
         } else {
+          cat(" CIPS\n")
         summary.results[b, , "lci"][k] <- ci.res$basic[4]
         summary.results[b, , "uci"][k] <- ci.res$basic[5]
         }
