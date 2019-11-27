@@ -519,8 +519,8 @@ SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
 	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a.m = mortality.a, mortality.a.f = mortality.a,
-	mortality.j.m = mortality.j, mortality.j.f = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f,
+	mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
 	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
 	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
@@ -529,7 +529,7 @@ SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
 
 Specify and call mod.val
 ```{r Specify and call mod.val()}
-ts <- 36
+ts <- 11 # Calling early due to model issues
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, 
 	target.data=target.data)
@@ -612,8 +612,8 @@ SongEvo3 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
 	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a.m = mortality.a, mortality.a.f = mortality.a,
-	mortality.j.m = mortality.j, mortality.j.f = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f,
+	mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
 	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
 	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
