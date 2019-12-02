@@ -531,7 +531,7 @@ SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
 
 Specify and call mod.val
 ```{r Specify and call mod.val()}
-ts <- 11 # Calling early due to model issues
+ts <- 36
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, 
 	target.data=target.data)
