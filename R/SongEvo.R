@@ -895,16 +895,16 @@ SongEvo <- function(init.inds,
         summary.results[b, , "trait.pop.mean"][k] <- mean(as.numeric(subset(inds, inds$age==2)$trait))
         summary.results[b, , "trait.pop.variance"][k] <- var(as.numeric(subset(inds, inds$age==2)$trait))
 
-        cat(c(b,k,dim(inds),dim(summary.results),quantile(as.numeric(inds$trait))))
+        # cat(c(b,k,dim(inds),dim(summary.results),quantile(as.numeric(inds$trait))))
         boot_obj <- boot(as.numeric(inds$trait), statistic=sample.mean, R=100)#, strata=mn.res$iteration)	
 
         ci.res <- boot.ci(boot_obj, conf=0.95, type="basic")
         if(length(ci.res$basic[4]) == 0){
-          cat(" CINA\n")
+          # cat(" CINA\n")
           summary.results[b, , "lci"][k] <- NA
           summary.results[b, , "uci"][k] <- NA
         } else {
-          cat(" CIPS\n")
+          # cat(" CIPS\n")
         summary.results[b, , "lci"][k] <- ci.res$basic[4]
         summary.results[b, , "uci"][k] <- ci.res$basic[5]
         }
