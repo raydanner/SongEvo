@@ -56,6 +56,11 @@ data("song.data")
 Examine global parameters. Global parameters describe our understanding of the system and may be measured or hypothesized. They are called "global" because they are used by many many functions and subroutines within functions. For descriptions of all adjustable parameters, see `?song.data`.
 ```{r global parameters}
 data("glo.parms")
+glo.parms$mortality.a.m <- glo.parms$mortality.a.f <- glo.parms$mortality.a
+glo.parms$mortality.j.m <- glo.parms$mortality.j.f <- glo.parms$mortality.j
+glo.parms$male.fledge.n.mean <- glo.parms$male.fledge.n.mean*2
+glo.parms$male.fledge.n.sd <- glo.parms$male.fledge.n.sd*2
+glo.parms <- glo.parms[!names(glo.parms) %in% c("mortality.a","mortality.j")]
 str(glo.parms)
 ```
 Share global parameters with the global environment. We make these parameters available in the global environment so that we can access them with minimal code.
@@ -92,7 +97,6 @@ iteration <- 10
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
-learning.method <- "integrate"
 integrate.dist <- 0.1
 lifespan <- NA
 mate.comp <- FALSE
@@ -101,16 +105,16 @@ all <- TRUE
 ```
 Now we call SongEvo with our specifications and save it in an object called SongEvo1.
 ```{r Call SongEvo model, echo=TRUE}
-SongEvo1 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo1 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
-	learning.method = learning.method, integrate.dist = integrate.dist, 
+	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f,
+	mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
-	male.fledge.n = male.fledge.n, disp.age = disp.age, 
-	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
+	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 #### Examine results from SongEvo model
@@ -123,7 +127,7 @@ Three main objects hold data regarding the SongEvo model.  Additional objects ar
 
 First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.
 ```{r Examine inds}
-head(SongEvo1$inds, 5)
+head(SongEvo1$inds, min(5,nrow(SongEvo1$inds)))
 ```
 Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  
 ```{r Examine summary.results}
@@ -131,7 +135,7 @@ dimnames(SongEvo1$summary.results)
 ```
 Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired. 
 ```{r Examine all.inds}
-head(SongEvo1$all.inds, 5)
+head(SongEvo1$all.inds,  min(5,nrow(SongEvo1$all.inds)))
 ```
 
 #### Simulated population size
@@ -229,10 +233,11 @@ library("lattice")
 
 Convert data frame from long to wide format. This is necessary for making a multi-panel plot. 
 ```{r Convert data frame from long to wide format}
-all.inds1 <- subset(SongEvo1$all.inds, iteration==1)
+all.inds1 <- subset(SongEvo1$all.inds, SongEvo1$all.inds$iteration==1)
 w <- dcast(as.data.frame(all.inds1), id ~ timestep, value.var="trait", fill=0)
 all.inds1w <- merge(all.inds1, w, by="id")
-names(all.inds1w) <- c(names(all.inds1), paste("Ts", seq(1:years), sep=""))
+years.SongEvo1 <- (dim(w)[2]-1 )
+names(all.inds1w@data)[-(1:length(all.inds1@data))] <-paste("Ts", 1:(dim(w)[2]-1 ), sep="")
 ```
 
 Create a function to generate a continuous color palette--we will use the palette in the next call to make color ramp to represent the trait value.
@@ -281,22 +286,35 @@ This function allows testing the sensitivity of SongEvo to different parameter v
 Here we test the sensitivity of the Acquire a Territory submodel to variation in territory turnover rates, ranging from 0.8–1.2 times the published rate (40–60% of territories turned over). The call for the par.sens function has a format similar to SongEvo. The user specifies the parameter to test and the range of values for that parameter. The function currently allows examination of only one parameter at a time and requires at least two iterations.
 ```{r Specify the par.sens model}
 parm <- "terr.turnover"
-par.range = seq(from=0.4, to=0.6, by=0.05)
+par.range = seq(from=0.4, to=0.6, by=0.025)
 sens.results <- NULL
 ```
 
 Now we call the par.sens function with our specifications.
 ```{r Call par.sens function, message=FALSE}
 extra_parms <- list(init.inds = init.inds, 
+                    females = 1,  # New in SongEvo v2
                     timestep = 1, 
-                    n.territories = nrow(init.inds), 
-                    learning.method = "integrate", 
-                    integrate.dist = 0.1, 
+                    n.territories = nrow(init.inds),
+                    integrate.dist = 0.1,
                     lifespan = NA, 
                     terr.turnover = 0.5, 
                     mate.comp = FALSE, 
                     prin = FALSE,
-                    all = TRUE)
+                    all = TRUE,
+                    # New in SongEvo v2
+                    selectivity = 3,
+                    content.bias = FALSE,
+                    n.content.bias.loc = "all",
+                    content.bias.loc = FALSE,
+                    content.bias.loc.ranges = FALSE,
+                    affected.traits = FALSE,
+                    conformity.bias = FALSE,
+                    prestige.bias=FALSE,
+                    learn.m="default",
+                    learn.f="default",
+                    learning.error.d=0,
+                    learning.error.sd=200)
 global_parms_key <- which(!names(glo.parms) %in% names(extra_parms))
 extra_parms[names(glo.parms[global_parms_key])]=glo.parms[global_parms_key]
 par.sens1 <- par.sens(parm = parm, par.range = par.range, 
@@ -499,16 +517,16 @@ years <- 36
 timestep <- 1
 terr.turnover <- 0.5
 
-SongEvo2 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
-	learning.method = learning.method, integrate.dist = integrate.dist, 
+	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f,
+	mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
-	male.fledge.n = male.fledge.n, disp.age = disp.age, 
-	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
+	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 Specify and call mod.val
@@ -592,16 +610,16 @@ init.inds$y1 <-  round(runif(n.territories, min=37.787768, max=37.805645), digit
 
 Specify and call SongEvo() with test data
 ```{r Specify and call SongEvo() with test data}
-SongEvo3 <- SongEvo(init.inds = init.inds, iteration = iteration, steps = years,  
+SongEvo3 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration, steps = years,  
 	timestep = timestep, n.territories = n.territories, terr.turnover = terr.turnover, 
-	learning.method = learning.method, integrate.dist = integrate.dist, 
+	integrate.dist = integrate.dist, 
 	learning.error.d = learning.error.d, learning.error.sd = learning.error.sd, 
-	mortality.a = mortality.a, mortality.j = mortality.j, lifespan = lifespan, 
+	mortality.a.m = mortality.a.m, mortality.a.f = mortality.a.f,
+	mortality.j.m = mortality.j.m, mortality.j.f = mortality.j.f, lifespan = lifespan, 
 	phys.lim.min = phys.lim.min, phys.lim.max = phys.lim.max, 
-	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, 
-	male.fledge.n = male.fledge.n, disp.age = disp.age, 
-	disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
-	mate.comp = mate.comp, prin = prin, all)
+	male.fledge.n.mean = male.fledge.n.mean, male.fledge.n.sd = male.fledge.n.sd, male.fledge.n = male.fledge.n,
+	disp.age = disp.age, disp.distance.mean = disp.distance.mean, disp.distance.sd = disp.distance.sd, 
+	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
 Specify and call `h.test()`

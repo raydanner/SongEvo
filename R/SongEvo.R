@@ -32,7 +32,7 @@
 #' @param phys.lim.max The maximum physical limit of trait production.
 #' @param male.fledge.n.mean The mean number of offspring produced per time step per individual breeding male. Includes only offspring raised in that breeding male’s nest (i.e. it does not account for extra-pair offspring in other nests).
 #' @param male.fledge.n.sd Standard deviation of the number of male fledglings.
-#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd.
+#' @param male.fledge.n A vector of the number of offspring for the initial population, optionally calculated with male.fledge.n.mean and male.fledge.n.sd if NULL.
 #' @param disp.age The age at which individual males disperse from their birth location.
 #' @param disp.distance.mean The distance that individual males disperse (meters).
 #' @param disp.distance.sd The standard deviation of dispersal distance.
@@ -52,44 +52,43 @@
 #' @import sp
 #' @import geosphere
 #' @importFrom stats runif rnorm sd
-#' @import tidyverse
 #' @export
 SongEvo <- function(init.inds, 
-                        females,
-                        iteration, 
-                        steps,
-                        timestep,
-                        terr.turnover,
-                        mate.comp,
-                        selectivity,
-                        content.bias, 
-                        n.content.bias.loc, 
-                        content.bias.loc, 
-                        content.bias.loc.ranges, 
-                        affected.traits, 
-                        conformity.bias, 
-                        integrate.dist, 
-                        prestige.bias, 
-                        learn.m, 
-                        learn.f, 
-                        learning.error.d,
-                        learning.error.sd,
-                        mortality.a.m,
-                        mortality.a.f,
-                        mortality.j.m,
-                        mortality.j.f,
-                        lifespan,
-                        phys.lim.min,
-                        phys.lim.max,
-                        male.fledge.n.mean,
-                        male.fledge.n.sd,
-                        male.fledge.n,
-                        disp.age,
-                        disp.distance.mean,
-                        disp.distance.sd,
-                        n.territories,
-                        prin,
-                        all){
+                        females = 1.0,
+                        iteration = 3, 
+                        steps = 10,
+                        timestep = 1,
+                        terr.turnover = 0.5,
+                        mate.comp = FALSE,
+                        selectivity = 3,
+                        content.bias = FALSE, 
+                        n.content.bias.loc = 'all', 
+                        content.bias.loc = FALSE, 
+                        content.bias.loc.ranges = FALSE, 
+                        affected.traits = FALSE,
+                        conformity.bias = FALSE, 
+                        integrate.dist = 0.1, 
+                        prestige.bias = FALSE, 
+                        learn.m = 'default', 
+                        learn.f = 'default', 
+                        learning.error.d = 0,
+                        learning.error.sd = 200,
+                        mortality.a.m = 0.5,
+                        mortality.a.f = mortality.a.m,
+                        mortality.j.m = 0.5,
+                        mortality.j.f = mortality.j.m,
+                        lifespan = 2,
+                        phys.lim.min = 1000,
+                        phys.lim.max = 8000,
+                        male.fledge.n.mean = 2,
+                        male.fledge.n.sd = 0.5,
+                        male.fledge.n = NULL,
+                        disp.age = 1,
+                        disp.distance.mean = 100,
+                        disp.distance.sd = 50,
+                        n.territories = 4 * nrow(init.inds),
+                        prin = FALSE,
+                        all = FALSE){
   
   ptm <- proc.time()
   # m_pnt(2)
@@ -101,8 +100,11 @@ SongEvo <- function(init.inds,
   trait.results <- NULL
   
   #Further prepare initial individuals 
-  init.inds$male.fledglings <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
-  init.inds$female.fledglings <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
+  if(is.null(male.fledge.n)) {
+    male.fledge.n <- as.integer(rnorm(nrow(init.inds), male.fledge.n.mean, male.fledge.n.sd))
+  }
+  init.inds$male.fledglings <- sapply(male.fledge.n, function(n.children) sum(round(runif(n.children,0,1))))
+  init.inds$female.fledglings <- male.fledge.n - init.inds$male.fledglings 
   init.inds$territory <- rep(1, n.territories)
   init.inds$father <- 0
   init.inds$sex <- 'M'
@@ -138,8 +140,8 @@ SongEvo <- function(init.inds,
       n.fem <- as.integer(females*nrow(inds))
       f.trait <- rnorm(n.fem, mean = mean(inds$trait), sd = sd(inds$trait))
       init.fem <- data.frame(id = seq(1:n.fem), age = 2, trait = f.trait)
-      init.fem$x1 <- round(runif(n.fem, min=-122.481858, max=-122.447270), digits=8)
-      init.fem$y1 <- round(runif(n.fem, min=37.787768, max=37.805645), digits=8)
+      init.fem$x1 <- round(runif(n.fem, min=min(inds$x1), max=max(inds$x1)), digits=8)
+      init.fem$y1 <- round(runif(n.fem, min=min(inds$y1), max=max(inds$y1)), digits=8)
       init.fem$father <- 0
       init.fem$sex <- 'F'
       init.fem$x0 <- 0
@@ -159,7 +161,7 @@ SongEvo <- function(init.inds,
       
     }
     else{
-      print("user input error females must be either a ratio (f:m) or a dataframe")
+      stop("User input error: females must be either a ratio (f/m) or a dataframe")
     }
   }
   
@@ -183,7 +185,7 @@ SongEvo <- function(init.inds,
     ninds <- nrow(inds)
     n.hatch<- sum(inds$male.fledglings, inds$female.fledglings)
     if(n.hatch==0) {
-      newinds <- new.bird[-c(1),]
+      newinds <- new.bird[-c(1), , drop=FALSE]
       print(paste('no hatch row n: ', NROW(newinds)))
       #print('no hatch df')
       #print(newinds)
@@ -191,46 +193,56 @@ SongEvo <- function(init.inds,
       
     }
     else {
-      fathers.m <- subset(inds, male.fledglings != 0)
+      #print(summary(inds))
+      fathers.m <- subset(inds, inds$male.fledglings != 0)
       id.m <- maxid.m
-      newinds <- new.bird
+      newinds <- new.bird  #[-c(1), , drop=FALSE]
+      if(nrow(fathers.m) >0)
       for (i in 1:nrow(fathers.m)){
-        for (n in 1:fathers.m$male.fledglings[i]){
-          id.m <- as.numeric(id.m)+1
+        i_chick=fathers.m$male.fledglings[i] 
+        if (i_chick>0){
+          chick_id = id.m + (1:(i_chick))
+          id.m <- as.numeric(id.m)+i_chick
           father <- fathers.m$id[i]
           x.loc <- fathers.m$x1[i]
           y.loc <- fathers.m$y1[i]
-          newinds <- rbind(newinds, c(id.m, 1, 0, 0, 0, 0, father, 'M', x.loc, y.loc, x.loc, y.loc, 0, 0))
-          newinds$sex <- 'M'
+          
+          newinds <- rbind(newinds, as.data.frame(list(chick_id, 1, 0, 0, 0, 0, father, 'M', x.loc, y.loc, x.loc, y.loc, 0, 0),
+                                                  row.names=paste0('M',chick_id), col.names=colnames(new.bird) ))
         }
       }
-      fathers.f <- subset(inds, female.fledglings !=0)
+      fathers.f <- subset(inds, inds$female.fledglings !=0)
       id.f <- maxid.f
+      if(nrow(fathers.f) >0)
       for (i in 1:nrow(fathers.f)){
-        for (n in 1:fathers.f$female.fledglings[i]){
-          id.f <- as.numeric(id.f)+1
+        
+        i_chick=fathers.f$female.fledglings[i] 
+        if (i_chick>0){
+          chick_id = id.f + (1:(i_chick))
+          id.f <- as.numeric(id.f)+i_chick
           father <- fathers.f$id[i]
           x.loc <- fathers.f$x1[i]
           y.loc <- fathers.f$y1[i]
-          newinds <- rbind(newinds, c(id.f, 1, 0, 0, 0, 0, father, 'F', x.loc, y.loc, x.loc, y.loc, 0, 0))
+          newinds <- rbind(newinds, as.data.frame(list(chick_id, 1, 0, 0, 0, 0, father, 'F', x.loc, y.loc, x.loc, y.loc, 0, 0),
+                                                  row.names=paste0('F',chick_id), col.names=colnames(new.bird) ))
         }
       }
-      newinds <- newinds[c(-1),]
+      newinds <- newinds[c(-1), , drop=FALSE]
       newinds$fitness <- 1
       newinds$learn.dir <- 0
       return(newinds)
-      'newinds <- new.bird[rep(1,n.hatch),]
-      newinds$id <- maxid +(1:n.hatch)
-      row.names(newinds)<-as.character(newinds$id)
-      map.key<-do.call(c,mapply(rep,1:ninds,inds$male.fledglings, SIMPLIFY = FALSE))
-      newinds$father <- inds$id[map.key]
-      newinds$x <- newinds$x0 <- inds$x1[map.key] 
-      newinds$y <- newinds$y0 <- inds$y1[map.key]
-      return(newinds)
-      # coordinates(newinds) = ~x+y 
-      # proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-      # inds$male.fledglings <- 0
-      # rbind(inds, newinds)'
+      # 'newinds <- new.bird[rep(1,n.hatch),]
+      # newinds$id <- maxid +(1:n.hatch)
+      # row.names(newinds)<-as.character(newinds$id)
+      # map.key<-do.call(c,mapply(rep,1:ninds,inds$male.fledglings, SIMPLIFY = FALSE))
+      # newinds$father <- inds$id[map.key]
+      # newinds$x <- newinds$x0 <- inds$x1[map.key] 
+      # newinds$y <- newinds$y0 <- inds$y1[map.key]
+      # return(newinds)
+      # # coordinates(newinds) = ~x+y 
+      # # proj4string(newinds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
+      # # inds$male.fledglings <- 0
+      # # rbind(inds, newinds)'
     }
   }
   
@@ -301,7 +313,7 @@ SongEvo <- function(init.inds,
         min.freq <- as.numeric(content.bias.info$min[i])
         males$disturbance.dist <- spDistsN1(pts = as.matrix(males[,c('x','y')]), pt = disturbance, longlat = TRUE)
         #males within disturbance range and have traits within the affected range are affected
-        affected.inds <- subset(males, disturbance.dist <= range & trait < max.freq & trait > min.freq)
+        affected.inds <- subset(males, males$disturbance.dist <= range & males$trait < max.freq & males$trait > min.freq)
         if (nrow(affected.inds)==0){
           #if no individuals are affected do nothing
         } else{
@@ -343,14 +355,15 @@ SongEvo <- function(init.inds,
         }
         
       }
-      males <- subset(males,select = -c(disturbance.dist))
+      #FIXME Not sure what this line was supposed to do. Drop certain males? Reorder based on distance?
+      males <- subset(males,select = colnames(males) %in% c("disturbance.dist"))
     } else if (n.content.bias.loc=='all'){
       #all males with traits within the afected range will be affected in the same way
       max.freq <- max(affected.freqs)
       min.freq <- min(affected.freqs)
       middle.point <- mean(affected.freqs)
       half.range <- max.freq-middle.point
-      affected.inds <- affected.inds <- subset(males, trait < max.freq & trait > min.freq)
+      affected.inds <- affected.inds <- subset(males,  affected.inds$trait < max.freq &  affected.inds$trait > min.freq)
       if (nrow(affected.inds)==0){
         
       } else{
@@ -402,19 +415,21 @@ SongEvo <- function(init.inds,
       for (i in 1:nrow(children))
         fathers[[i]] <- tutors$id[tutors$id==children$father[i]]
       return(fathers)
-      'children$trait=sapply(children$father, function(x) tutors[tutors$id==x, ]$trait ) + 
-          rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
-        #restrict learned song values such that they cannot exceed range of physical possibility: 
-        children$trait[children$trait < phys.lim.min] <- phys.lim.min
-        children$trait[children$trait > phys.lim.max] <- phys.lim.max
-        return(children)'
+      # 'children$trait=sapply(children$father, function(x) tutors[tutors$id==x, ]$trait ) + 
+      #     rnorm(nrow(children), mean=learning.error.d, sd=learning.error.sd) 
+      #   #restrict learned song values such that they cannot exceed range of physical possibility: 
+      #   children$trait[children$trait < phys.lim.min] <- phys.lim.min
+      #   children$trait[children$trait > phys.lim.max] <- phys.lim.max
+      #   return(children)'
     } else if (conformity.bias=="integrate") {
       #2. Young learn by integrating songs from the neighborhood within a specified distance:
-      if (children$sex=='M'){
+      if (all(children$sex=='M')){
         map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$male.fledglings, SIMPLIFY = FALSE))
-      } else if (children$sex=='F'){
+      } else if (all(children$sex=='F')){
         #print(paste('m chicks: ', sum(tutors$male.fledglings[tutors$male.fledglings != 0]), ' m key: ', length(map.key.m)))
         map.key<-do.call(c,mapply(rep,1:nrow(tutors),tutors$female.fledglings, SIMPLIFY = FALSE))
+      } else {
+        stop("The conformity function will only work on tables of children of the same sex.")
       }
       #print(paste('f chicks: ', sum(tutors$female.fledglings[tutors$female.fledglings != 0]), ' f key: ', length(map.key.f)))
       #map.key <- c(map.key.m,map.key.f)
@@ -446,18 +461,22 @@ SongEvo <- function(init.inds,
       fitness.adj <- fitness.effects$bias[fitness.effects$children == tutors[i,]$children]
       tutors$fitness[i] <- tutors$fitness[i] * fitness.adj
     }
-    tutors <- subset(tutors, select = -c(children))
-    return(tutors)
+    # Is this meant to drop children from tutor list?
+    tutors <- subset(tutors, select = colnames(tutors)[colnames(tutors) %in% c("children")])
+    return(tutors) #[-c(tutors$children),,drop=FALSE])
   }
   
   #conformity.bias <- conformity.bias
   
   learn <- function(tutors, children, conformity.bias, integrate.dist, prestige.bias.strength){
+    if(nrow(children)==0) return(children)
+    if(nrow(tutors)==0) stop("No tutors supplied in learn method!")
+    
+    chick.num <- min(as.numeric(children$id))
     if (typeof(conformity.bias)=='character'){ #with conformity bias
       tutors.close <- conformity(children = children, tutors = tutors, conformity.bias = conformity.bias)
       #print(tutors)
       #print(tutors[[3]])
-      chick.num <- min(as.numeric(children$id))
       for (chick in tutors.close){
         tutors.id <- chick
         tutors.df <- tutors[1,]
@@ -512,22 +531,24 @@ SongEvo <- function(init.inds,
       chick.learn.dir <- sum(adj.learn.dir)
       new.learn.dir <- learning.error.d + chick.learn.dir
       
-      children$trait <- chick.trait + rnorm(1, mean = new.learn.dir, sd = learning.error.sd)
+      children$trait <- chick.trait + rnorm(nrow(children), mean = new.learn.dir, sd = learning.error.sd)
       
       chick.num <- chick.num+1
     }
     children$trait[children$trait < phys.lim.min] <- phys.lim.min
     children$trait[children$trait > phys.lim.max] <- phys.lim.max
-    if (children$sex=='M'){
+    if (all(children$sex=='M')){
       id.start <- maxid.m+1
       id.end <- maxid.m+nrow(children)
       ids <- seq(id.start,id.end, by = 1)
       children$id <- ids
-    } else if (children$sex=='F'){
+    } else if (all(children$sex=='F')){
       id.start <- maxid.f+1
       id.end <- maxid.f+nrow(children)
       ids <- seq(id.start,id.end, by = 1)
       children$id <- ids
+    }else {
+      stop("The learn function will only work on tables of children of the same sex.")
     }
     return(children)
   }
@@ -563,7 +584,7 @@ SongEvo <- function(init.inds,
     disp.dist <- rnorm(ninds, mean=disp.distance.mean, sd=disp.distance.sd) 
     disp.direction <- runif(ninds, min=0, max=360) #Assume 0 is due North.
     coords <- inds[, c("x", "y")]
-    coords <- sapply(coords, as.numeric)
+    coords <- sapply(coords, as.numeric, simplify = "array")
     inds[, c("x", "y")] <- 
       inds[, c("x1", "y1")] <- 
       destPoint(coords, disp.direction, disp.dist)
@@ -636,15 +657,15 @@ SongEvo <- function(init.inds,
         fem.loc.y <- fems$y[i]
         fem.loc <- c(fem.loc.x, fem.loc.y)
         #males who can mate with females, those with territories and are near her
-        competitors <- subset(inds, territory==1)
+        competitors <- subset(inds, inds$territory==1)
         competitors$dist <- spDistsN1(pts = as.matrix(competitors[,c("x","y")]), pt = fem.loc, longlat = TRUE)
-        competitors.near <- subset(competitors, dist <= integrate.dist*10)
+        competitors.near <- subset(competitors, competitors$dist <= integrate.dist*10)
         if (nrow(competitors.near)==0){ #if no potential mates female will disperse up to 10 times to find a mate
           ndisp <- 0
           while (nrow(competitors.near)==0 & ndisp < 10) {
             move <- disperse(fems[i,])
             competitors$dist <- spDistsN1(pts = as.matrix(competitors[,c("x","y")]), pt = c(move$x[1],move$y[1]), longlat = TRUE)
-            competitors.near <- subset(competitors, dist <= integrate.dist)
+            competitors.near <- subset(competitors, competitors$dist <= integrate.dist)
             ndisp <- ndisp + 1
           #print(fems[i],)
           }
@@ -663,6 +684,8 @@ SongEvo <- function(init.inds,
           if (n.children < 0) {
             n.children = 0
           }
+          if (n.children > 0) {
+            
           sex.chick <- round(runif(n.children,0,1))
           for (i in sex.chick) {
             if (i==1){
@@ -673,12 +696,13 @@ SongEvo <- function(init.inds,
             }
           }
           }
+          }
           #if more potential mates those that fall within her selective ability have an equal chance of mating
         } else if (!is.na(comp.traits.sd)){
           selective.level <- comp.traits.sd*selectivity
           fem.pref <-as.numeric(fems$trait[i]) #females prefer the traits they learned
           competitors.near$trait.var <- abs(as.numeric(competitors.near$trait)-fem.pref)
-          close.competitors <- subset(competitors.near, trait.var <= selective.level)
+          close.competitors <- subset(competitors.near, competitors.near$trait.var <= selective.level)
           if (nrow(close.competitors)==0){ #if none are within her selective ability, she'll mate with the closest to her preference
             winner.id <- competitors.near$id[competitors.near$trait.var == min(competitors.near$trait.var)]
             prev.fledge.m <- inds[inds$id == winner.id,]$male.fledglings
@@ -687,6 +711,8 @@ SongEvo <- function(init.inds,
             if (n.children < 0) {
               n.children = 0
             }
+            if (n.children > 0) {
+              
             sex.chick <- round(runif(n.children,0,1))
             for (i in sex.chick) {
               if (i==1){
@@ -696,9 +722,10 @@ SongEvo <- function(init.inds,
                 inds[inds$id == winner.id,]$female.fledglings <- prev.fledge.f + 1
               }
             }
+            }
           }
           else { #if there are competitors that fall within her selective ability she choses one at random
-            winner <- sample_n(close.competitors, 1)
+            winner <- close.competitors[sample.int(nrow(close.competitors), 1),]
             winner.id <- winner$id
             prev.fledge.m <- inds[inds$id == winner.id,]$male.fledglings
             prev.fledge.f <- inds[inds$id == winner.id,]$female.fledglings
@@ -706,7 +733,8 @@ SongEvo <- function(init.inds,
             if (n.children < 0) {
               n.children = 0
             }
-            sex.chick <- round(runif(n.children,0,1))
+            if (n.children > 0) {
+              sex.chick <- round(runif(n.children,0,1))
             for (i in sex.chick) {
               if (i==1){
                 inds[inds$id == winner.id,]$male.fledglings <- prev.fledge.m + 1
@@ -715,31 +743,37 @@ SongEvo <- function(init.inds,
                 inds[inds$id == winner.id,]$female.fledglings <- prev.fledge.f + 1
               }
             }
+            }
           }
         }
         
       }
     } else if (!mate.comp) { #without mate competition, all males with territories have children
-      n.children <- round(rnorm(nrow(inds[inds$territory==1,]), mean=male.fledge.n.mean, sd=male.fledge.n.sd))
-      male.children <- c()
-      female.children <- c()
-      for (i in 1:length(n.children)){
-        sex.chick <- round(runif(n.children[i],0,1))
-        males <- 0
-        females <- 0
-        for (n in sex.chick) {
-          if (n==1){
-            males <- males+1
-          } else {
-            females <- females+1
-          }
-        }
-        male.children[i] <- males
-        female.children[i] <- females
-      }
-      
-      inds$male.fledglings <- (inds$territory==1) * male.children
-      inds$female.fledglings <- (inds$territory==1) * female.children
+      terr.children <- round(rnorm(sum(inds$territory==1), mean=male.fledge.n.mean, sd=male.fledge.n.sd))
+      terr.children[terr.children < 0] <- 0
+      #print(terr.children)
+      inds$male.fledglings[inds$territory==1] <- male.children <- 
+        sapply(terr.children, function(n.children) sum(round(runif(n.children,0,1))))
+      inds$female.fledglings[inds$territory==1] <- terr.children - male.children 
+      # male.children <- c()
+      # female.children <- c()
+      # for (i in 1:length(n.children)){
+      #   sex.chick <- round(runif(n.children[i],0,1))
+      #   males <- 0
+      #   females <- 0
+      #   for (n in sex.chick) {
+      #     if (n==1){
+      #       males <- males+1
+      #     } else {
+      #       females <- females+1
+      #     }
+      #   }
+      #   male.children[i] <- males
+      #   female.children[i] <- females
+      # }
+      # 
+      # inds$male.fledglings <- (inds$territory==1) * male.children
+      # inds$female.fledglings <- (inds$territory==1) * female.children
     }
     #competitors <- spDists(as.matrix(inds[,c("x","y")]),longlat = TRUE) <= integrate.dist
     #print(competitors)
@@ -773,8 +807,8 @@ SongEvo <- function(init.inds,
   for (b in 1:iteration){
   inds <- init.inds
   fems <- create.females(inds = init.inds, females = females)
-  maxid.m <- max(inds$id) #store max id, which determines new id numbers in Hatch
-  maxid.f <- max(fems$id)
+  maxid.m <- max(inds$id,0) #store max id, which determines new id numbers in Hatch
+  maxid.f <- max(fems$id,0)
   
   
   k <- 1
@@ -791,8 +825,9 @@ SongEvo <- function(init.inds,
       inds.all_list[[b]][[k]]<-timestep.inds
       inds$fitness <- 1
       chicks <- hatch(inds = inds)
-      chicks.m <- subset(chicks, sex=='M')
-      chicks.f <- subset(chicks, sex=='F', select = -c(male.fledglings,female.fledglings, territory, fitness, learn.dir))
+      chicks.m <- subset(chicks, chicks$sex=='M')
+      chicks.f <- subset(chicks, chicks$sex=='F', 
+                         select = colnames(chicks)[! colnames(chicks) %in% c("male.fledglings","female.fledglings", "territory", "fitness", "learn.dir")])
       if (typeof(content.bias)=='double'){
         inds <- content(inds, content.bias.loc, content.bias.loc.ranges,affected.traits, content.bias)
       }
@@ -809,8 +844,8 @@ SongEvo <- function(init.inds,
         ids <- chicks.f$id
         chicks.f$trait <- sapply(ids,learn.f)
       }
-      maxid.m <- max(chicks.m$id)
-      maxid.f <- max(chicks.f$id)
+      maxid.m <- max(chicks.m$id, 0)
+      maxid.f <- max(chicks.f$id, 0)
       inds <- die(inds)
       fems <- die(fems)
       chicks.m <- die(chicks.m)
@@ -822,8 +857,11 @@ SongEvo <- function(init.inds,
         chicks.m <-grow(chicks.m)
         chicks.f <- grow(chicks.f)
         fems <- rbind(fems, chicks.f)
-        fems <- disperse(fems)
-        chicks.m <- disperse(chicks.m)
+        if(nrow(fems)>0)
+          fems <- disperse(fems)
+        else warning("No females to disperse!")
+        if(nrow(chicks.m)>0)
+          chicks.m <- disperse(chicks.m)
         inds <- rbind(inds, chicks.m)
         inds <- compete.for.territories(inds)
         if (typeof(mate.comp)=='logical'){
@@ -857,19 +895,25 @@ SongEvo <- function(init.inds,
         summary.results[b, , "trait.pop.mean"][k] <- mean(as.numeric(subset(inds, inds$age==2)$trait))
         summary.results[b, , "trait.pop.variance"][k] <- var(as.numeric(subset(inds, inds$age==2)$trait))
 
-        
+        # cat(c(b,k,dim(inds),dim(summary.results),quantile(as.numeric(inds$trait))))
         boot_obj <- boot(as.numeric(inds$trait), statistic=sample.mean, R=100)#, strata=mn.res$iteration)	
 
         ci.res <- boot.ci(boot_obj, conf=0.95, type="basic")
-
+        if(length(ci.res$basic[4]) == 0){
+          # cat(" CINA\n")
+          summary.results[b, , "lci"][k] <- NA
+          summary.results[b, , "uci"][k] <- NA
+        } else {
+          # cat(" CIPS\n")
         summary.results[b, , "lci"][k] <- ci.res$basic[4]
         summary.results[b, , "uci"][k] <- ci.res$basic[5]
+        }
 
       }
     }
   k <- k+1}
   }
-
+  formals(fast.coords.frame)$fallback.bbox <- bbox(fast.coords.frame(init.inds,x.col = "x1",y.col="y1"))
   if (all==TRUE){
     all.inds=rbind(init=all.inds0,  do.call(rbind,do.call(c,inds.all_list)))
     # coordinates(all.inds) = ~x+y 
@@ -877,7 +921,7 @@ SongEvo <- function(init.inds,
     all.inds=fast.coords.frame(all.inds)
     # coordinates(inds) = ~x+y 
     # proj4string(inds) <- CRS("+proj=longlat +ellps=WGS84 +datum=WGS84") 
-    inds=fast.coords.frame(inds)
+    inds=fast.coords.frame(inds, fallback.bbox = bbox(all.inds))
     z <- list("summary.results"=summary.results, "inds"=inds, "all.inds"=all.inds, "content.bias.info"=content.bias.info, "time"=proc.time()-ptm)
   }else if (all=="sparse"){
     # all.inds0=fast.coords.frame(all.inds0)
@@ -905,9 +949,23 @@ SongEvo <- function(init.inds,
 #End of I. SongEvo function
 #########################
 
-fast.coords.frame <- function(data.src,x.col="x",y.col="y"){
+fast.coords.frame <- function(data.src,x.col="x",y.col="y", fallback.bbox=NULL){
   coor.cols=c(which(colnames(data.src)%in% x.col),
               which(colnames(data.src)%in% y.col));
+  # cat(" FCF",dim(data.src),dim(data.src[,coor.cols]),dim(data.src[,-coor.cols]),coor.cols)
+  if(nrow(data.src) == 0){
+    #structure(logical(0), .Dim = c(0L, 2L), .Dimnames = list(NULL,      c("V1", "V2")))
+    if(is.null(fallback.bbox)) stop("Fallback boundary box not available. SongEvo requires at least 1 individual, so this is a bug in the code.")
+    rownames(fallback.bbox) <-  c(x.col, y.col)
+    emptyCoords=SpatialPoints(coords=structure(numeric(0), .Dim = c(0L, 2L), .Dimnames=list(NULL, c(x.col, y.col))),
+                              proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84"),
+                              bbox=fallback.bbox)
+    return(SpatialPointsDataFrame(coords = emptyCoords,
+                                  data = data.src[,-coor.cols],
+                                  coords.nrs = coor.cols,
+                                  match.ID = FALSE,
+                                  proj4string = CRS("+proj=longlat +ellps=WGS84 +datum=WGS84")  ) )
+  }
   SpatialPointsDataFrame(coords = data.src[,coor.cols],
                          data = data.src[,-coor.cols],
                          coords.nrs = coor.cols,

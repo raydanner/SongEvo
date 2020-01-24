@@ -66,7 +66,6 @@ iteration <- 5
 years <- 36
 timestep <- 1
 terr.turnover <- 0.5
-learning.method <- "integrate"
 integrate.dist <- 0.1
 lifespan <- NA
 mate.comp <- FALSE
@@ -75,18 +74,18 @@ all <- TRUE
 
 # Now we call SongEvo with our specifications and save it in an object called
 # SongEvo1.
-SongEvo1 <- SongEvo(init.inds = init.inds, 
+SongEvo1 <- SongEvo(init.inds = init.inds,
+                    females = 1.0,
                     iteration = iteration, 
                     steps = years,  
                     timestep = timestep, 
                     n.territories = n.territories, 
                     terr.turnover = terr.turnover, 
-                    learning.method = learning.method, 
                     integrate.dist = integrate.dist, 
                     learning.error.d = learning.error.d, 
                     learning.error.sd = learning.error.sd, 
-                    mortality.a = mortality.a, 
-                    mortality.j = mortality.j, 
+                    mortality.a.m = mortality.a, 
+                    mortality.j.m = mortality.j, 
                     lifespan = lifespan, 
                     phys.lim.min = phys.lim.min, 
                     phys.lim.max = phys.lim.max, 
@@ -98,7 +97,7 @@ SongEvo1 <- SongEvo(init.inds = init.inds,
                     disp.distance.sd = disp.distance.sd, 
                     mate.comp = mate.comp, 
                     prin = prin, 
-                    all)
+                    all = all)
 
 #### Examine results from SongEvo model
 
