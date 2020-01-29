@@ -14,7 +14,7 @@ h.test(summary.results, ts, target.data)
 \item{target.data}{Trait values from the test population to compare to simulated results. May be measured (i.e. empirical) or hypothetical.}
 }
 \value{
-a list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.
+A list with two measures of accuracy: 1. The proportion of observed points that fall within the confidence intervals of the simulated data and the residuals between simulated and observed population trait means; 2. Precision is measured as the residuals between simulated and observed population trait variances.
 }
 \description{
 Test if cultural traits evolve through specific mechanisms (e.g. drift or selection).
