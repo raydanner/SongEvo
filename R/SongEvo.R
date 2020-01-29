@@ -15,7 +15,7 @@
 #' @param n.content.bias.loc Number of content bias locations, options are either an integer, 'random' (1:5 locations), or 'all' where content bias is delocalized.
 #' @param content.bias.loc Location centers of content bias effects, options are a user defined dataframe with x and y positions, 'random' (random points on spatial plane), or FALSE.
 #' @param content.bias.loc.ranges Radius of content bias effects at each location. Options are a user defined vector, 'random' (0.5:10), or FALSE.
-#' @param affected.traits Either a dataframe containing max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.
+#' @param affected.traits Either a dataframe containing the max and min of the affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.
 #' @param conformity.bias If an individual learns from their ('father'), all males within a specified radius ('integrate'), or FALSE if no conformity bias.
 #' @param integrate.dist Distance over which tutor values are integrated for learning.
 #' @param prestige.bias Learners will preferentially learn from males with more offspring. Options are a user defined vector of fitness reduction (e.g. c(.95,.25)), or FALSE.
