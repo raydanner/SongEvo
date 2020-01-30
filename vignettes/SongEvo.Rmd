@@ -1,6 +1,8 @@
 ---
 title: '''SongEvo'' package'
-author: "Raymond M. Danner, Elizabeth P. Derryberry, Graham E. Derryberry, Julie E. Danner, Sara J. Evans, David A. Luther"
+author: |
+        | Raymond M. Danner, Elizabeth P. Derryberry, Graham E. Derryberry
+        | Julie E. Danner, Sara J. Evans, David A. Luther
 date: '`r Sys.Date()`'
 output:
   rmarkdown::pdf_document: default
