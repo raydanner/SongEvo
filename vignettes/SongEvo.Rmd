@@ -142,7 +142,7 @@ head(SongEvo1$all.inds,  min(5,nrow(SongEvo1$all.inds)))
 
 #### Simulated population size
 We see that the simulated population size remains relatively stable over the course of 36 years. This code uses the summary.results array.
-```{r Examine population size over time}
+```{r Examine_population_size_over_time}
 plot(SongEvo1$summary.results[1, , "sample.n"], xlab="Year", ylab="Abundance", type="n", 
 	xaxt="n", ylim=c(0, max(SongEvo1$summary.results[, , "sample.n"], na.rm=TRUE)))
 axis(side=1, at=seq(0, 40, by=5), labels=seq(1970, 2010, by=5))
@@ -166,7 +166,7 @@ library("Hmisc")
 
 #### Simulated trait values
 We see that the mean trait values per iteration varied widely, though mean trait values over all iterations remained relatively stable. This code uses the summary.results array.
-```{r Examine simulated trait evolution}
+```{r Examine_simulated_trait_evolution}
 plot(SongEvo1$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
 	xaxt="n", type="n", xlim=c(-0.5, 36), 
 	ylim=c(min(SongEvo1$summary.results[, , "trait.pop.mean"], na.rm=TRUE), 
@@ -203,7 +203,7 @@ arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 
 #### Trait variance
 We see that variance for each iteration per year increased in the first few years and then stabilized. This code uses the summary.results array.
-```{r Examine simulated trait variance}
+```{r Examine_simulated_trait_variance}
  #plot variance for each iteration per year
 plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", 
 	ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", 
@@ -248,7 +248,7 @@ rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a cont
 ```
 
 Plot maps, including a separate panel for each timestep (each of 36 years). Our example shows that individuals move across the landscape and that regional dialects evolve and move. The x-axis is longitude, the y-axis is latitude, and the color ramp indicates trill bandwidth in Hz.
-```{r Plot map}
+```{r Plot_map}
 spplot(all.inds1w[,-c(1:ncol(all.inds1))], as.table=TRUE, 
 	cuts=c(0, seq(from=1500, to=4500, by=10)), ylab="", 
 	col.regions=c("transparent", rbPal(1000)), 
@@ -272,7 +272,7 @@ colorkey=list(
 ```
 
 In addition, you can plot simpler multi-panel maps that do not take advantage of the spatial data class.
-```{r Plot maps without using the spatial data class}
+```{r Plot_maps_without_using_the_spatial_data_class}
  #Lattice plot (not as a spatial frame)
 it1 <- subset(SongEvo1$all.inds, iteration==1)
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
@@ -339,7 +339,7 @@ dimnames(par.sens1$sens.results.diff)
 To assess sensitivity of SongEvo to a range of parameter values, plot the range in trait quantiles per year by the parameter value. We see that territory turnover values of 0.4--0.6 provided means and quantile ranges of trill bandwidths that are similar to those obtained with the published estimate of 0.5, indicating that the Acquire a Territory submodel is robust to realistic variation in those parameter values.
 
 In the figure, solid gray and black lines show the quantile range of song frequency per year over all iterations as parameterized with the published territory turnover rate (0.5; thick black line) and a range of values from 0.4 to 0.6 (in steps of 0.05, light to dark gray). Orange lines show the mean and 2.5th and 97.5th quantiles of all quantile ranges.
-```{r plot of range in trait quantiles by year by parameter value}
+```{r plot_of_range_in_trait_quantiles_by_year_by_parameter_value}
  #plot of range in trait quantiles by year by parameter value
 plot(1:years, par.sens1$sens.results.diff[1,], ylim=c(min(par.sens1$sens.results.diff, 
 	na.rm=TRUE), max(par.sens1$sens.results.diff, na.rm=TRUE)), type="l", 
@@ -396,19 +396,19 @@ par.opt1$Target.match
 #### Accuracy of `par.opt()`
 
   1. Difference in means.
-```{r difference in means}
+```{r difference_in_means}
 plot(par.range, par.opt1$Target.match[,1], type="l", xlab="Parameter range", 
 	ylab="Difference in means (Hz)")
 ```
 
   2. Plot proportion contained.
-```{r proportion contained}
+```{r proportion_contained}
 plot(par.range, par.opt1$Prop.contained, type="l", xlab="Parameter range", 
 	ylab="Proportion contained")
 ```
 
   3. Calculate and plot mean and quantiles of residuals of mean trait values.
-```{r residuals of the mean}
+```{r residuals_of_the_mean}
 res.mean.means <- apply(par.opt1$Residuals[, , 1], MARGIN=1, mean, na.rm=TRUE)
 res.mean.quants <- apply (par.opt1$Residuals[, , 1], MARGIN=1, quantile, 
 	probs=c(0.975, 0.025), R=600, na.rm=TRUE)
@@ -423,7 +423,7 @@ lines(par.range, res.mean.quants[2,], col="orange", lty=2)
 ```
 
 #### Precision of `par.opt()`
-```{r residuals of the variance}
+```{r residuals_of_the_variance}
 #Calculate and plot mean and quantiles of residuals of variance of trait values
 res.var.mean <- apply(par.opt1$Residuals[, , 2], MARGIN=1, mean, na.rm=TRUE)
 res.var.quants <- apply (par.opt1$Residuals[, , 2], MARGIN=1, quantile, 
@@ -440,7 +440,7 @@ lines(par.range, res.var.quants[2,], col="purple", lty=2)
 ```
 
 #### Visual inspection of accuracy and precision of `par.opt()`: plot trait values for range of parameters
-```{r visual inspection of simulated data}
+```{r visual_inspection_of_simulated_data}
 par(mfcol=c(3,2),
     mar=c(2.1, 2.1, 0.1, 0.1),
     cex=0.8)
@@ -540,7 +540,7 @@ mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts,
 ```
 
 Plot results from `mod.val()`
-```{r Plot results}
+```{r Plot_results}
 plot(SongEvo2$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
 	xaxt="n", type="n", xlim=c(-0.5, 36.5), 
 	ylim=c(min(SongEvo2$summary.results[, , "trait.pop.mean"], na.rm=TRUE), 
@@ -639,7 +639,7 @@ h.test1
 ```
 
 We can plot simulated data in relation to measured data.
-```{r Plot song simulation data}
+```{r Plot_song_simulation_data}
 #Plot
 plot(SongEvo3$summary.results[1, , "trait.pop.mean"], xlab="Year", ylab="Bandwidth (Hz)", 
 	xaxt="n", type="n", xlim=c(-0.5, 35.5), 
