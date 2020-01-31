@@ -188,7 +188,7 @@ The model required the following time to run on your computer:
 ``` r
 SongEvo1$time
 #>    user  system elapsed 
-#>  33.976   0.329  35.430
+#>  36.553   0.660  39.598
 ```
 
 Three main objects hold data regarding the SongEvo model. Additional
@@ -202,23 +202,23 @@ completed.
 ``` r
 head(SongEvo1$inds, min(5,nrow(SongEvo1$inds)))
 #>                 coordinates   id age    trait        x1       y1
-#> M1619  (-122.475, 37.79683) 1619   7 3198.204 -122.4750 37.79683
-#> M1628 (-122.4764, 37.79876) 1628   7 4054.633 -122.4764 37.79876
-#> M1651 (-122.4818, 37.79679) 1651   7 2869.287 -122.4818 37.79679
-#> M1682  (-122.456, 37.79777) 1682   6 4077.346 -122.4560 37.79777
-#> M1685 (-122.4806, 37.79928) 1685   6 3294.283 -122.4806 37.79928
+#> M1586 (-122.4756, 37.79727) 1586   6 3284.121 -122.4756 37.79727
+#> M1593 (-122.4815, 37.80091) 1593   6 3097.741 -122.4815 37.80091
+#> M1596 (-122.4517, 37.80072) 1596   6 3362.291 -122.4517 37.80072
+#> M1631 (-122.4718, 37.79526) 1631   6 2987.358 -122.4718 37.79526
+#> M1638  (-122.482, 37.79895) 1638   5 3444.528 -122.4820 37.79895
 #>       male.fledglings female.fledglings territory father sex fitness learn.dir
-#> M1619               2                 0         1   1323   M       1         0
-#> M1628               0                 0         0   1450   M       1         0
-#> M1651               0                 2         1   1575   M       1         0
-#> M1682               0                 0         0   1557   M       1         0
-#> M1685               0                 2         1   1573   M       1         0
+#> M1586               1                 0         1   1334   M       1         0
+#> M1593               1                 3         1   1459   M       1         0
+#> M1596               0                 0         0   1486   M       1         0
+#> M1631               2                 2         1   1571   M       1         0
+#> M1638               0                 0         0   1346   M       1         0
 #>              x0       y0
-#> M1619 -122.4749 37.79677
-#> M1628 -122.4768 37.79879
-#> M1651 -122.4818 37.79714
-#> M1682 -122.4559 37.79811
-#> M1685 -122.4809 37.79776
+#> M1586 -122.4755 37.79644
+#> M1593 -122.4823 37.79847
+#> M1596 -122.4525 37.80115
+#> M1631 -122.4722 37.79508
+#> M1638 -122.4823 37.79873
 ```
 
 Second, an array (i.e. a multi-dimensional table) entitled
@@ -253,16 +253,16 @@ therefore only recommended if additional data analyses are desired.
 ``` r
 head(SongEvo1$all.inds,  min(5,nrow(SongEvo1$all.inds)))
 #>                   coordinates id age  trait        x1       y1 male.fledglings
-#> I1.T1.1 (-122.4791, 37.78951)  1   2 4004.8 -122.4791 37.78951               1
-#> I1.T1.2  (-122.457, 37.80042)  2   2 3765.0 -122.4570 37.80042               1
-#> I1.T1.3 (-122.4811, 37.80116)  3   2 3237.4 -122.4811 37.80116               1
-#> I1.T1.4 (-122.4716, 37.78787)  4   2 3621.1 -122.4716 37.78787               0
-#> I1.T1.5 (-122.4565, 37.80013)  5   2 3285.4 -122.4565 37.80013               0
+#> I1.T1.1 (-122.4636, 37.80077)  1   2 4004.8 -122.4636 37.80077               0
+#> I1.T1.2  (-122.4812, 37.7882)  2   2 3765.0 -122.4812 37.78820               1
+#> I1.T1.3 (-122.4552, 37.79986)  3   2 3237.4 -122.4552 37.79986               1
+#> I1.T1.4 (-122.4709, 37.79962)  4   2 3621.1 -122.4709 37.79962               1
+#> I1.T1.5 (-122.4473, 37.79041)  5   2 3285.4 -122.4473 37.79041               0
 #>         female.fledglings territory father sex fitness learn.dir x0 y0 timestep
-#> I1.T1.1                 0         1      0   M       1         0  0  0        1
+#> I1.T1.1                 1         1      0   M       1         0  0  0        1
 #> I1.T1.2                 0         1      0   M       1         0  0  0        1
 #> I1.T1.3                 1         1      0   M       1         0  0  0        1
-#> I1.T1.4                 1         1      0   M       1         0  0  0        1
+#> I1.T1.4                 0         1      0   M       1         0  0  0        1
 #> I1.T1.5                 0         1      0   M       1         0  0  0        1
 #>         iteration
 #> I1.T1.1         1
@@ -663,64 +663,64 @@ par.opt1$Residuals
 #> , , Residuals of mean
 #> 
 #>               Iteration 1 Iteration 2 Iteration 3 Iteration 4 Iteration 5
-#> par.val 0.4      157.4057   265.35597   163.30850   356.32620   148.20140
-#> par.val 0.425    210.8201   229.30162   418.08219   263.79351   327.50273
-#> par.val 0.45     138.8258    58.98534   310.97302   389.12524   408.69632
-#> par.val 0.475    248.4492   393.47122    41.83200   265.46028    55.16922
-#> par.val 0.5      364.3222   610.18600   402.38046   441.44762    40.55659
-#> par.val 0.525    238.4570   391.38620    85.65785   108.14034   379.47271
-#> par.val 0.55     108.7008   302.00835   248.90582   239.43104   328.51300
-#> par.val 0.575    414.6518   132.80791   239.09829   261.26249   128.34451
-#> par.val 0.6      411.4301   460.63851   265.22396    93.38938   203.32028
+#> par.val 0.4      375.1796    172.2582   486.93384    293.5727   299.89124
+#> par.val 0.425    393.2643    484.5063   434.94376    250.6562   521.20525
+#> par.val 0.45     208.7989    447.4654   815.17267    328.1507   540.09510
+#> par.val 0.475    461.3758    342.8075   260.04323    388.3182   127.79368
+#> par.val 0.5      375.1772    355.9300    56.42830    284.2852   392.95899
+#> par.val 0.525    372.0067    526.4238     5.27347    232.8296    78.82136
+#> par.val 0.55     296.9348    300.1850   532.16051    209.0245    17.16042
+#> par.val 0.575    110.4704    307.8186   385.18824    135.2806   171.29309
+#> par.val 0.6      437.8608    602.9041   139.47967    331.1494   183.35176
 #>               Iteration 6 Iteration 7 Iteration 8 Iteration 9 Iteration 10
-#> par.val 0.4      192.0487    314.4739   351.41191    497.3713     284.0645
-#> par.val 0.425    437.6489    256.6970   386.03433    408.9152     241.5572
-#> par.val 0.45     263.9256    381.2643   492.24401    362.5490     179.9206
-#> par.val 0.475    682.5670    265.2313    55.36924    340.3045     315.6478
-#> par.val 0.5      299.7968    339.7393    99.51302    207.9658     577.8050
-#> par.val 0.525    438.0870    439.0644   423.60402    190.7235     172.6999
-#> par.val 0.55     292.1015    367.5163   456.00822    241.2692     308.2009
-#> par.val 0.575    358.3749     17.0152   223.68789    236.0524     305.7484
-#> par.val 0.6      438.4535    529.5404   557.40954    478.4682     432.2511
+#> par.val 0.4      363.5481    264.4108   268.74419   318.51976    514.46377
+#> par.val 0.425    213.6552    481.6147   140.15586    29.05265    160.90980
+#> par.val 0.45     667.2729    249.2244   218.55530   480.92863    590.86455
+#> par.val 0.475    344.1920    378.4391    35.62631   258.13527    179.25004
+#> par.val 0.5      143.8095    253.1561   346.94532   185.10014    265.70876
+#> par.val 0.525    250.9261    403.2667   544.05379   337.30352     84.29053
+#> par.val 0.55     192.9230    464.1890   199.02752   364.67413    458.63284
+#> par.val 0.575    248.5390    568.7111   489.62999   337.19055    387.88652
+#> par.val 0.6      225.5181    106.8162   399.71736   520.10971    481.25120
 #> 
 #> , , Residuals of variance
 #> 
 #>               Iteration 1 Iteration 2 Iteration 3 Iteration 4 Iteration 5
-#> par.val 0.4     10627.417    1105.645   16425.371   9789.5720    4949.320
-#> par.val 0.425    7323.687    8536.489   23192.510   8543.1543   16909.403
-#> par.val 0.45     6802.987   19400.600    6204.879    477.1756    3020.283
-#> par.val 0.475   18018.407   18525.880   20931.839   1829.3649   20927.806
-#> par.val 0.5     16113.635   16286.712   18498.920   6060.9999    1638.689
-#> par.val 0.525   11331.029    9594.516    7892.713  15597.6433    1484.198
-#> par.val 0.55    14860.244    6337.924    4311.079  10971.3419    2281.861
-#> par.val 0.575   19331.785    3299.860   11867.906   8922.3081   12343.511
-#> par.val 0.6     13818.383    8351.996    6501.908   3917.9928   15264.674
+#> par.val 0.4      3856.590  10839.0036    858.4907    5480.707    205.0313
+#> par.val 0.425    6974.166   8348.9359  13508.9644    7973.211  17586.8458
+#> par.val 0.45     2906.645  15223.2451    572.3942   24314.537   9449.4499
+#> par.val 0.475    3117.883    323.9328   1128.4665    2849.572   8725.9833
+#> par.val 0.5      6628.449   1630.8279   6447.6606   28137.731   4922.0719
+#> par.val 0.525   14715.638  13755.8743  15204.6969   14808.396  12393.7876
+#> par.val 0.55     3895.445   6389.2736  12818.3057    8390.959    303.3174
+#> par.val 0.575    2049.725   8417.3492    854.6628   22361.477   8541.6948
+#> par.val 0.6      6686.687  14260.9655   7648.5817   10428.393   3074.9688
 #>               Iteration 6 Iteration 7 Iteration 8 Iteration 9 Iteration 10
-#> par.val 0.4      5298.609   26056.720  13016.8748    5283.881    16218.409
-#> par.val 0.425    3751.795    2101.764  13694.5366    4423.992     2163.785
-#> par.val 0.45     5393.745    2545.839   7814.8199   16752.679     7373.232
-#> par.val 0.475    2527.587   14159.451   9340.1060   17030.893     7722.410
-#> par.val 0.5     18009.346   15063.581    758.3305    3060.088     1176.635
-#> par.val 0.525   17976.257   22022.119  17396.7938    2415.767    11122.060
-#> par.val 0.55    12938.322    7552.070  12160.3141   30384.840     6701.136
-#> par.val 0.575    2562.960   20238.658   6986.6966    5370.275    14443.259
-#> par.val 0.6      4949.845    5215.812  14687.5692   21186.715    24051.856
+#> par.val 0.4      1666.563   9958.3390   30733.739    8992.862     9430.897
+#> par.val 0.425    4928.805    126.4336   12577.322    2795.613    20217.278
+#> par.val 0.45    12770.417  15509.8828   23157.496    8153.749     4657.414
+#> par.val 0.475   16489.731   1812.4683    8195.665    3936.264     1834.785
+#> par.val 0.5      1740.912  10386.9964    6686.988   11536.405    18165.757
+#> par.val 0.525   12142.004   2333.7526    2334.686    1349.201     3863.080
+#> par.val 0.55    12469.707   2541.5544    3792.644    1233.921    23819.710
+#> par.val 0.575    6421.378  12710.1271   31545.377    7594.087     2867.104
+#> par.val 0.6     16332.996    523.5722    6339.977    3384.769    10154.483
 par.opt1$Target.match
 #>               Difference in means Proportion contained
-#> par.val 0.4              272.9968                  0.0
-#> par.val 0.425            318.0353                  0.0
-#> par.val 0.45             298.6509                  0.1
-#> par.val 0.475            255.3163                  0.3
-#> par.val 0.5              338.3713                  0.1
-#> par.val 0.525            286.7293                  0.0
-#> par.val 0.55             289.2655                  0.0
-#> par.val 0.575            206.0355                  0.1
-#> par.val 0.6              387.0125                  0.0
+#> par.val 0.4              335.7522                  0.0
+#> par.val 0.425            305.1859                  0.1
+#> par.val 0.45             454.6529                  0.0
+#> par.val 0.475            270.4729                  0.1
+#> par.val 0.5              265.9500                  0.1
+#> par.val 0.525            265.6067                  0.1
+#> par.val 0.55             303.4912                  0.1
+#> par.val 0.575            314.2008                  0.0
+#> par.val 0.6              342.8158                  0.0
 ```
 
 #### Plot results of `par.opt()`
 
-#### Accuracy
+#### Accuracy of `par.opt()`
 
 1.  Difference in
 means.
@@ -732,7 +732,7 @@ plot(par.range, par.opt1$Target.match[,1], type="l", xlab="Parameter range",
     ylab="Difference in means (Hz)")
 ```
 
-![](SongEvo_files/figure-gfm/par.opt\(\)%20difference%20in%20means-1.png)<!-- -->
+![](SongEvo_files/figure-gfm/difference%20in%20means-1.png)<!-- -->
 
 2.  Plot proportion
 contained.
@@ -744,7 +744,7 @@ plot(par.range, par.opt1$Prop.contained, type="l", xlab="Parameter range",
     ylab="Proportion contained")
 ```
 
-![](SongEvo_files/figure-gfm/par.opt\(\)%20proportion%20contained-1.png)<!-- -->
+![](SongEvo_files/figure-gfm/proportion%20contained-1.png)<!-- -->
 
 3.  Calculate and plot mean and quantiles of residuals of mean trait
     values.
@@ -765,9 +765,9 @@ lines(par.range, res.mean.quants[1,], col="orange", lty=2)
 lines(par.range, res.mean.quants[2,], col="orange", lty=2)
 ```
 
-![](SongEvo_files/figure-gfm/par.opt\(\)%20residuals%20of%20the%20mean-1.png)<!-- -->
+![](SongEvo_files/figure-gfm/residuals%20of%20the%20mean-1.png)<!-- -->
 
-#### Precision
+#### Precision of `par.opt()`
 
 ``` r
 #Calculate and plot mean and quantiles of residuals of variance of trait values
@@ -785,9 +785,9 @@ lines(par.range, res.var.quants[1,], col="purple", lty=2)
 lines(par.range, res.var.quants[2,], col="purple", lty=2)
 ```
 
-![](SongEvo_files/figure-gfm/par.opt\(\)%20residuals%20of%20the%20variance-1.png)<!-- -->
+![](SongEvo_files/figure-gfm/residuals%20of%20the%20variance-1.png)<!-- -->
 
-#### Visual inspection of accuracy and precision: plot trait values for range of parameters
+#### Visual inspection of accuracy and precision of `par.opt()`: plot trait values for range of parameters
 
 ``` r
 par(mfcol=c(3,2),
@@ -844,7 +844,7 @@ text(x=3, y=max(par.sens1$sens.results[ , , "trait.pop.mean", ], na.rm=TRUE)-100
 }
 ```
 
-![](SongEvo_files/figure-gfm/par.opt\(\)%20visual%20inspection%20of%20simulated%20data-1.png)<!-- -->![](SongEvo_files/figure-gfm/par.opt\(\)%20visual%20inspection%20of%20simulated%20data-2.png)<!-- -->
+![](SongEvo_files/figure-gfm/visual%20inspection%20of%20simulated%20data-1.png)<!-- -->![](SongEvo_files/figure-gfm/visual%20inspection%20of%20simulated%20data-2.png)<!-- -->
 
 ### Model validation with `mod.val()`
 
@@ -893,7 +893,7 @@ SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
     mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
-Specify and call mod.val
+Specify and call `mod.val()`
 
 ``` r
 ts <- 36
@@ -959,7 +959,7 @@ text(x=25, y=3100, labels="Current songs", pos=3)
 arrows(x0=25, y0=3300, x1=36, y1=mean(target.data), length=0.1)
 ```
 
-![](SongEvo_files/figure-gfm/Plot%20results%20from%20mod.val\(\)-1.png)<!-- -->
+![](SongEvo_files/figure-gfm/Plot%20results-1.png)<!-- -->
 
 The model did reasonably well predicting trait evolution in the
 validation population, suggesting that it is valid for our purposes: the
@@ -1037,16 +1037,16 @@ of trill frequency bandwidth in this population.
 h.test1
 #> $Residuals
 #>              Residuals of mean Residuals of variance
-#> Iteration 1          240.72253             16167.428
-#> Iteration 2          615.80169              6402.572
-#> Iteration 3          588.28226             43479.093
-#> Iteration 4          233.03447            136626.043
-#> Iteration 5           85.33291             25581.675
-#> Iteration 6          391.81237             19924.052
-#> Iteration 7          222.29441              2186.896
-#> Iteration 8          661.57686             59280.779
-#> Iteration 9          315.30946             54696.330
-#> Iteration 10         478.07867             23967.608
+#> Iteration 1          702.12246            25858.5280
+#> Iteration 2          571.31453           137168.0396
+#> Iteration 3          143.36055            10476.1041
+#> Iteration 4          215.02870            35821.5017
+#> Iteration 5          578.96351            13080.5858
+#> Iteration 6           22.45852             7269.0398
+#> Iteration 7          356.71645              821.7307
+#> Iteration 8          855.96356            19854.4851
+#> Iteration 9          719.00214            20768.7905
+#> Iteration 10          84.65474            27935.5851
 #> 
 #> $Prop.contained
 #> [1] 0.4
