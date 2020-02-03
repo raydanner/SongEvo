@@ -1,3 +1,10 @@
+# SongEvo 2.0.0
+## Test environments
+
+## R CMD check results
+
+
+# SongEvo 1.0.0
 ## Test environments
 * local OS install (MacOS Mojave version 10.14.2), R 3.5.2 (using devtools::check)
 * win-builder (i.e. devtools::check_win_devel and devtools::check_win_release)

@@ -1,10 +1,12 @@
 ---
 title: '''SongEvo'' package'
-author: "Raymond M. Danner, Elizabeth P. Derryberry, Graham E. Derryberry, Julie E. Danner, David A. Luther"
+author: |
+        | Raymond M. Danner, Elizabeth P. Derryberry, Graham E. Derryberry,
+        | Julie E. Danner, Sara J. Evans, David A. Luther
 date: '`r Sys.Date()`'
 output:
   rmarkdown::pdf_document: default
-  rmarkdown::html_vignette: default
+  rmarkdown::html_document: default
 vignette: |
   %\VignetteIndexEntry{SongEvo package}
   %\usepackage[utf8]{inputenc}
@@ -201,7 +203,7 @@ arrows(x0=5, y0=2750, x1=0.4, y1=mean(starting.trait), length=0.1)
 
 #### Trait variance
 We see that variance for each iteration per year increased in the first few years and then stabilized. This code uses the summary.results array.
-```{r Examine_simulated_trait_variance}
+```{r Traitvariance}
  #plot variance for each iteration per year
 plot(SongEvo1$summary.results[1, , "trait.pop.variance"], xlab="Year", 
 	ylab="Bandwidth Variance (Hz)", type="n", xaxt="n", 
@@ -270,7 +272,7 @@ colorkey=list(
 ```
 
 In addition, you can plot simpler multi-panel maps that do not take advantage of the spatial data class.
-```{r Plot_maps_without_using_the_spatial_data_class}
+```{r Maps_without_spatial_class}
  #Lattice plot (not as a spatial frame)
 it1 <- subset(SongEvo1$all.inds, iteration==1)
 rbPal <- colorRampPalette(c('blue','red')) #Create a function to generate a continuous color palette
@@ -337,7 +339,7 @@ dimnames(par.sens1$sens.results.diff)
 To assess sensitivity of SongEvo to a range of parameter values, plot the range in trait quantiles per year by the parameter value. We see that territory turnover values of 0.4--0.6 provided means and quantile ranges of trill bandwidths that are similar to those obtained with the published estimate of 0.5, indicating that the Acquire a Territory submodel is robust to realistic variation in those parameter values.
 
 In the figure, solid gray and black lines show the quantile range of song frequency per year over all iterations as parameterized with the published territory turnover rate (0.5; thick black line) and a range of values from 0.4 to 0.6 (in steps of 0.05, light to dark gray). Orange lines show the mean and 2.5th and 97.5th quantiles of all quantile ranges.
-```{r Plot_quantile_region_of_trait_vs_territory_turnover }
+```{r Trait_quantiles}
  #plot of range in trait quantiles by year by parameter value
 plot(1:years, par.sens1$sens.results.diff[1,], ylim=c(min(par.sens1$sens.results.diff, 
 	na.rm=TRUE), max(par.sens1$sens.results.diff, na.rm=TRUE)), type="l", 
@@ -391,7 +393,7 @@ par.opt1$Target.match
 ```
 
 #### Plot results of `par.opt()`
-#### Accuracy
+#### Accuracy of `par.opt()`
 
   1. Difference in means.
 ```{r Difference_in_means}
@@ -420,8 +422,9 @@ lines(par.range, res.mean.quants[1,], col="orange", lty=2)
 lines(par.range, res.mean.quants[2,], col="orange", lty=2)
 ```
 
-#### Precision
-```{r Variance_residuals }
+
+#### Precision of `par.opt()`
+```{r Variance_residuals}
 #Calculate and plot mean and quantiles of residuals of variance of trait values
 res.var.mean <- apply(par.opt1$Residuals[, , 2], MARGIN=1, mean, na.rm=TRUE)
 res.var.quants <- apply (par.opt1$Residuals[, , 2], MARGIN=1, quantile, 
@@ -437,8 +440,9 @@ lines(par.range, res.var.quants[1,], col="purple", lty=2)
 lines(par.range, res.var.quants[2,], col="purple", lty=2)
 ```
 
-#### Visual inspection of accuracy and precision: plot trait values for range of parameters
-```{r Inspect_simulated_data}
+
+#### Visual inspection of accuracy and precision of `par.opt()`: plot trait values for range of parameters
+```{r Visual_inspection}
 par(mfcol=c(3,2),
     mar=c(2.1, 2.1, 0.1, 0.1),
     cex=0.8)
@@ -529,8 +533,8 @@ SongEvo2 <- SongEvo(init.inds = init.inds, females = 1.0, iteration = iteration,
 	mate.comp = mate.comp, prin = prin, all = TRUE)
 ```
 
-Specify and call mod.val
-```{r Specify and call mod.val()}
+Specify and call `mod.val()`
+```{r Specify and call}
 ts <- 36
 target.data <- subset(song.data, Population=="Schooner" & Year==2005)$Trill.FBW
 mod.val1 <- mod.val(summary.results=SongEvo2$summary.results, ts=ts, 

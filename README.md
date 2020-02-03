@@ -1,6 +1,6 @@
 # SongEvo
 
-SongEvo simulates the cultural evolution of quantitative traits of bird song. SongEvo is an individual- (agent-) based model. SongEvo is spatially-explicit and can be parameterized with, and tested against, measured song data. Functions are available for model implementation, sensitivity analyses, parameter optimization, model validation, and hypothesis testing. See the [vignette](https://github.com/raydanner/SongEvo/tree/master/vignettes) for examples. 
+SongEvo simulates the cultural evolution of quantitative traits of bird song. SongEvo is an individual- (agent-) based model. SongEvo is spatially-explicit and can be parameterized with, and tested against, measured song data. Functions are available for model implementation, sensitivity analyses, parameter optimization, model validation, and hypothesis testing. See the [vignette](https://github.com/raydanner/SongEvo/tree/master/vignettes) for examples; to view the vignette in GitHub, select [SongEvo.md](https://github.com/raydanner/SongEvo/tree/master/vignettes/SongEvo.md). 
 
 ## To get the current released version from CRAN:
 ```{r eval = FALSE}
