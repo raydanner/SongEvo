@@ -15,7 +15,7 @@
 #' @param n.content.bias.loc Number of content bias locations, options are either an integer, 'random' (1:5 locations), or 'all' where content bias is delocalized.
 #' @param content.bias.loc Location centers of content bias effects, options are a user defined dataframe with x and y positions, 'random' (random points on spatial plane), or FALSE.
 #' @param content.bias.loc.ranges Radius of content bias effects at each location. Options are a user defined vector, 'random' (0.5:10), or FALSE.
-#' @param affected.traits Either a dataframe containing max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.
+#' @param affected.traits Either a dataframe containing the max and min of the affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.
 #' @param conformity.bias If an individual learns from their ('father'), all males within a specified radius ('integrate'), or FALSE if no conformity bias.
 #' @param integrate.dist Distance over which tutor values are integrated for learning.
 #' @param prestige.bias Learners will preferentially learn from males with more offspring. Options are a user defined vector of fitness reduction (e.g. c(.95,.25)), or FALSE.
@@ -40,7 +40,7 @@
 #' @param prin Print summary values after each timestep has completed? Options are TRUE or FALSE. 
 #' @param all Save data for all individuals? Options are TRUE or FALSE. 
 #' 
-#' @return three objects. First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.  Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired. 
+#' @return Three objects. First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.  Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired. 
 #' 
 #' @example inst/examples/SongEvoExamples.R
 #' 

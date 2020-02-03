@@ -4,19 +4,44 @@
 \alias{SongEvo}
 \title{Model bird song evolution}
 \usage{
-SongEvo(init.inds, females = 1, iteration = 3, steps = 10,
-  timestep = 1, terr.turnover = 0.5, mate.comp = FALSE,
-  selectivity = 3, content.bias = FALSE, n.content.bias.loc = "all",
-  content.bias.loc = FALSE, content.bias.loc.ranges = FALSE,
-  affected.traits = FALSE, conformity.bias = FALSE,
-  integrate.dist = 0.1, prestige.bias = FALSE, learn.m = "default",
-  learn.f = "default", learning.error.d = 0, learning.error.sd = 200,
-  mortality.a.m = 0.5, mortality.a.f = mortality.a.m,
-  mortality.j.m = 0.5, mortality.j.f = mortality.j.m, lifespan = 2,
-  phys.lim.min = 1000, phys.lim.max = 8000, male.fledge.n.mean = 2,
-  male.fledge.n.sd = 0.5, male.fledge.n = NULL, disp.age = 1,
-  disp.distance.mean = 100, disp.distance.sd = 50, n.territories = 4
-  * nrow(init.inds), prin = FALSE, all = FALSE)
+SongEvo(
+  init.inds,
+  females = 1,
+  iteration = 3,
+  steps = 10,
+  timestep = 1,
+  terr.turnover = 0.5,
+  mate.comp = FALSE,
+  selectivity = 3,
+  content.bias = FALSE,
+  n.content.bias.loc = "all",
+  content.bias.loc = FALSE,
+  content.bias.loc.ranges = FALSE,
+  affected.traits = FALSE,
+  conformity.bias = FALSE,
+  integrate.dist = 0.1,
+  prestige.bias = FALSE,
+  learn.m = "default",
+  learn.f = "default",
+  learning.error.d = 0,
+  learning.error.sd = 200,
+  mortality.a.m = 0.5,
+  mortality.a.f = mortality.a.m,
+  mortality.j.m = 0.5,
+  mortality.j.f = mortality.j.m,
+  lifespan = 2,
+  phys.lim.min = 1000,
+  phys.lim.max = 8000,
+  male.fledge.n.mean = 2,
+  male.fledge.n.sd = 0.5,
+  male.fledge.n = NULL,
+  disp.age = 1,
+  disp.distance.mean = 100,
+  disp.distance.sd = 50,
+  n.territories = 4 * nrow(init.inds),
+  prin = FALSE,
+  all = FALSE
+)
 }
 \arguments{
 \item{init.inds}{Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude).}
@@ -43,7 +68,7 @@ SongEvo(init.inds, females = 1, iteration = 3, steps = 10,
 
 \item{content.bias.loc.ranges}{Radius of content bias effects at each location. Options are a user defined vector, 'random' (0.5:10), or FALSE.}
 
-\item{affected.traits}{Either a dataframe containing max and min affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.}
+\item{affected.traits}{Either a dataframe containing the max and min of the affected traits at each content bias center, 'random' (phys.lim.min:phys.lim.max), or FALSE.}
 
 \item{conformity.bias}{If an individual learns from their ('father'), all males within a specified radius ('integrate'), or FALSE if no conformity bias.}
 
@@ -92,7 +117,7 @@ SongEvo(init.inds, females = 1, iteration = 3, steps = 10,
 \item{all}{Save data for all individuals? Options are TRUE or FALSE.}
 }
 \value{
-three objects. First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.  Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired.
+Three objects. First, currently alive individuals are stored in a data frame called “inds.”  Values within “inds” are updated throughout each of the iterations of the model, and “inds” can be viewed after the model is completed.  Second, an array (i.e. a multi-dimensional table) entitled “summary.results” includes population summary values for each time step (dimension 1) in each iteration (dimension 2) of the model.  Population summary values are contained in five additional dimensions: population size for each time step of each iteration (“sample.n”), the population mean and variance of the song feature studied (“trait.pop.mean” and “trait.pop.variance”), with associated lower (“lci”) and upper (“uci”) confidence intervals.  Third, individual values may optionally be concatenated and saved to one data frame entitled “all.inds.”  all.inds can become quite large, and is therefore only recommended if additional data analyses are desired.
 }
 \description{
 This function simulates bird song evolution. Submodels are performed once per time step, and include fledging from the nest, song learning, ageing and death, dispersal, competition for territories, mate attraction, and reproduction.
