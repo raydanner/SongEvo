@@ -4,19 +4,44 @@
 \alias{SongEvo}
 \title{Model bird song evolution}
 \usage{
-SongEvo(init.inds, females = 1, iteration = 3, steps = 10,
-  timestep = 1, terr.turnover = 0.5, mate.comp = FALSE,
-  selectivity = 3, content.bias = FALSE, n.content.bias.loc = "all",
-  content.bias.loc = FALSE, content.bias.loc.ranges = FALSE,
-  affected.traits = FALSE, conformity.bias = FALSE,
-  integrate.dist = 0.1, prestige.bias = FALSE, learn.m = "default",
-  learn.f = "default", learning.error.d = 0, learning.error.sd = 200,
-  mortality.a.m = 0.5, mortality.a.f = mortality.a.m,
-  mortality.j.m = 0.5, mortality.j.f = mortality.j.m, lifespan = 2,
-  phys.lim.min = 1000, phys.lim.max = 8000, male.fledge.n.mean = 2,
-  male.fledge.n.sd = 0.5, male.fledge.n = NULL, disp.age = 1,
-  disp.distance.mean = 100, disp.distance.sd = 50, n.territories = 4
-  * nrow(init.inds), prin = FALSE, all = FALSE)
+SongEvo(
+  init.inds,
+  females = 1,
+  iteration = 3,
+  steps = 10,
+  timestep = 1,
+  terr.turnover = 0.5,
+  mate.comp = FALSE,
+  selectivity = 3,
+  content.bias = FALSE,
+  n.content.bias.loc = "all",
+  content.bias.loc = FALSE,
+  content.bias.loc.ranges = FALSE,
+  affected.traits = FALSE,
+  conformity.bias = FALSE,
+  integrate.dist = 0.1,
+  prestige.bias = FALSE,
+  learn.m = "default",
+  learn.f = "default",
+  learning.error.d = 0,
+  learning.error.sd = 200,
+  mortality.a.m = 0.5,
+  mortality.a.f = mortality.a.m,
+  mortality.j.m = 0.5,
+  mortality.j.f = mortality.j.m,
+  lifespan = 2,
+  phys.lim.min = 1000,
+  phys.lim.max = 8000,
+  male.fledge.n.mean = 2,
+  male.fledge.n.sd = 0.5,
+  male.fledge.n = NULL,
+  disp.age = 1,
+  disp.distance.mean = 100,
+  disp.distance.sd = 50,
+  n.territories = 4 * nrow(init.inds),
+  prin = FALSE,
+  all = FALSE
+)
 }
 \arguments{
 \item{init.inds}{Initial population data. A data frame that includes columns for “id,” “age,” “trait,” “x1” (longitude) and “y1” (latitude).}
