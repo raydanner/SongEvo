@@ -51,7 +51,7 @@ glo.parms$mortality.a.m <- glo.parms$mortality.a.f <- glo.parms$mortality.a
 glo.parms$mortality.j.m <- glo.parms$mortality.j.f <- glo.parms$mortality.j
 glo.parms <- glo.parms[!names(glo.parms) \%in\% c("mortality.a","mortality.j")]
 
-years=2005-1969
+years=18
 iteration=5
 timestep=1
 n.territories <- glo.parms$n.territories
